@@ -21,7 +21,7 @@ Tiny Chronicler is a travelling music robot built with RaspberryPi equipped with
 # Install dependencies
 poetry install
 
-# Run application
+# Run application, open browser at localhost:8000
 poetry run python tinychronicler
 ```
 
