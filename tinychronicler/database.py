@@ -1,7 +1,7 @@
 import databases
 import sqlalchemy
 
-from .constants import DATABASE_URL
+from tinychronicler.constants import DATABASE_URL
 
 database = databases.Database(DATABASE_URL)
 

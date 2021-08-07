@@ -2,7 +2,7 @@ from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
-from .constants import TEMPLATES_DIR
+from tinychronicler.constants import TEMPLATES_DIR
 
 router = APIRouter()
 
