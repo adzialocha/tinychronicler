@@ -6,7 +6,7 @@ import click
 from loguru import logger
 from uvicorn import Config, Server
 
-LOG_LEVEL = logging.getLevelName(os.environ.get("LOG_LEVEL", "INFO"))
+from tinychronicler.constants import LOG_LEVELS
 
 
 class InterceptHandler(logging.Handler):
@@ -29,10 +29,10 @@ class InterceptHandler(logging.Handler):
         )
 
 
-def setup_logging():
+def setup_logging(log_level: str):
     # Intercept everything at the root logger
     logging.root.handlers = [InterceptHandler()]
-    logging.root.setLevel(LOG_LEVEL)
+    logging.root.setLevel(log_level.upper())
 
     # Remove every other logger's handlers and propagate to root logger
     for name in logging.root.manager.loggerDict.keys():
@@ -43,12 +43,12 @@ def setup_logging():
     logger.configure(handlers=[{"sink": sys.stdout, "serialize": False}])
 
 
-def setup_server(host: str, port: int):
+def setup_server(host: str, port: int, log_level: str):
     config = Config(
         "tinychronicler:server",
         host=host,
         port=port,
-        log_level=LOG_LEVEL,
+        log_level=log_level,
     )
     server = Server(config=config)
     return server
@@ -69,12 +69,19 @@ def setup_server(host: str, port: int):
     help="Bind socket to this port.",
     show_default=True,
 )
-def main(host: str, port: int):
+@click.option(
+    "--log-level",
+    type=click.Choice(list(LOG_LEVELS.keys())),
+    default="info",
+    help="Log level. [default: info]",
+    show_default=True,
+)
+def main(host: str, port: int, log_level: str):
     # Start HTTP server hosting web interface for users
-    server = setup_server(host, port)
+    server = setup_server(host, port, log_level)
 
     # Set up logging after server setup to make sure it overrides everything
-    setup_logging()
+    setup_logging(log_level)
 
     # Start server and block thread from here on
     server.run()
