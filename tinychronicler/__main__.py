@@ -2,6 +2,7 @@ import logging
 import os
 import sys
 
+import click
 from loguru import logger
 from uvicorn import Config, Server
 
@@ -42,17 +43,37 @@ def setup_logging():
     logger.configure(handlers=[{"sink": sys.stdout, "serialize": False}])
 
 
-def main():
-    # Start HTTP server hosting web interface for users
-    server = Server(
-        Config(
-            "tinychronicler:server",
-            host="0.0.0.0",
-            log_level=LOG_LEVEL,
-        ),
+def setup_server(host: str, port: int):
+    config = Config(
+        "tinychronicler:server",
+        host=host,
+        port=port,
+        log_level=LOG_LEVEL,
     )
+    server = Server(config=config)
+    return server
 
-    # Log everything!
+
+@click.command()
+@click.option(
+    "--host",
+    type=str,
+    default="0.0.0.0",
+    help="Bind socket to this host.",
+    show_default=True,
+)
+@click.option(
+    "--port",
+    type=int,
+    default=8000,
+    help="Bind socket to this port.",
+    show_default=True,
+)
+def main(host: str, port: int):
+    # Start HTTP server hosting web interface for users
+    server = setup_server(host, port)
+
+    # Set up logging after server setup to make sure it overrides everything
     setup_logging()
 
     # Start server and block thread from here on
