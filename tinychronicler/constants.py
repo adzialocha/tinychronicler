@@ -14,7 +14,7 @@ LOG_LEVELS: Dict[str, int] = {
 }
 
 # Path of SQLite database file
-DATABASE_URL = "sqlite:///:memory:"
+DATABASE_URL = "sqlite:///./tinychronicler-development.sqlite3"
 
 # Path to jinja2 templates directory
 TEMPLATES_DIR = "tinychronicler/web/templates"

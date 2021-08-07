@@ -1,21 +1,14 @@
 import databases
 import sqlalchemy
+from sqlalchemy.ext.declarative import declarative_base
 
-from tinychronicler.constants import DATABASE_URL
+from .constants import DATABASE_URL
 
+# Declare our database handler, this one will execute all queries
 database = databases.Database(DATABASE_URL)
 
-metadata = sqlalchemy.MetaData()
-
-# Define tables
-compositions = sqlalchemy.Table(
-    "compositions",
-    metadata,
-    sqlalchemy.Column("id", sqlalchemy.Integer, primary_key=True),
-)
-
-# Create tables
 engine = sqlalchemy.create_engine(
     DATABASE_URL, connect_args={"check_same_thread": False}
 )
-metadata.create_all(engine)
+
+Base = declarative_base()
