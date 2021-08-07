@@ -1,4 +1,4 @@
-from sqlalchemy import select, insert, update, delete
+from sqlalchemy import delete, insert, select, update
 
 from . import models, schemas
 from .database import database

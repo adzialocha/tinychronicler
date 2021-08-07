@@ -1,10 +1,10 @@
-from fastapi import APIRouter, HTTPException, Request, status, Response
+from fastapi import APIRouter, HTTPException, Request, Response, status
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi_pagination import Page
 from fastapi_pagination.ext.databases import paginate
-from sqlalchemy import select
 from pydantic import BaseModel
+from sqlalchemy import select
 
 from . import crud, models, schemas
 from .constants import TEMPLATES_DIR
