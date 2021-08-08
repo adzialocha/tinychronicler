@@ -88,5 +88,4 @@ def main(host: str, port: int, log_level: str):
     setup_logging(log_level)
 
     # Start server and block thread from here on
-    print("BLA")
     server.run()

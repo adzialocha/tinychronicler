@@ -30,7 +30,11 @@ class File(Base):
     id = Column(Integer, primary_key=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
-    name = Column(String(255))
+    name = Column(String(128))
+    path = Column(String(255))
+    mime = Column(String(64))
+    thumbnail_path = Column(String(255))
+    thumbnail_name = Column(String(128))
     chronicle_id = Column(Integer, ForeignKey("chronicles.id"))
 
     chronicle = relationship("chronicle", back_populates="files")

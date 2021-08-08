@@ -21,3 +21,6 @@ TEMPLATES_DIR = "tinychronicler/web/templates"
 
 # Path to static files served by http server
 STATIC_DIR = "tinychronicler/web/static"
+
+# Path to directory for uploaded user files
+UPLOADS_DIR = "uploads"
