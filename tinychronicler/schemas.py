@@ -17,8 +17,10 @@ class FileIn(BaseModel):
     mime: str
     name: str
     path: str
+    url: str
     thumb_name: str
     thumb_path: str
+    thumb_url: str
 
 
 class File(FileIn, BaseModel):

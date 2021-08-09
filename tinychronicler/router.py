@@ -68,9 +68,7 @@ async def read_chronicle(chronicle_id: int):
         404: {"model": CustomResponse},
     },
 )
-async def update_chronicle(
-    chronicle_id: int, chronicle: schemas.ChronicleIn
-):
+async def update_chronicle(chronicle_id: int, chronicle: schemas.ChronicleIn):
     result = await crud.update_chronicle(chronicle_id, chronicle)
     if not result:
         raise HTTPException(
@@ -107,10 +105,25 @@ async def create_file(chronicle_id: int, file: UploadFile = File(...)):
             status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
             detail="File format {} is not supported".format(file.content_type),
         )
+    # Store and process file first ..
     upload = await store_file(file)
+    # ..then make an entry in the database
+    file_id = await crud.create_file(
+        schemas.FileIn(
+            name=upload["file_name"],
+            path=upload["file_path"],
+            url=upload["file_url"],
+            mime=upload["file_mime"],
+            thumb_name=upload["thumb_name"],
+            thumb_path=upload["thumb_path"],
+            thumb_url=upload["thumb_url"],
+        ),
+        chronicle_id,
+    )
     return {
+        "id": file_id,
         "fileName": upload["file_name"],
-        "fileType": upload["file_type"],
+        "fileMime": upload["file_mime"],
         "fileUrl": upload["file_url"],
         "thumbName": upload["thumb_name"],
         "thumbUrl": upload["thumb_url"],

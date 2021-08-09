@@ -37,12 +37,15 @@ async def delete_chronicle(chronicle_id: int):
     return await database.execute(query)
 
 
-async def create_file(file: schemas.FileIn):
+async def create_file(file: schemas.FileIn, chronicle_id: int):
     query = insert(models.File).values(
         name=file.name,
         path=file.path,
+        url=file.url,
         mime=file.mime,
         thumb_name=file.thumb_name,
         thumb_path=file.thumb_path,
+        thumb_url=file.thumb_url,
+        chronicle_id=chronicle_id,
     )
     return await database.execute(query)
