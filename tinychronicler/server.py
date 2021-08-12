@@ -1,5 +1,5 @@
-from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
+from fastapi_offline import FastAPIOffline
 from fastapi_pagination import add_pagination
 
 from .constants import STATIC_DIR, UPLOADS_DIR
@@ -7,7 +7,7 @@ from .database import database
 from .files import create_uploads_dir
 from .router import router
 
-server = FastAPI()
+server = FastAPIOffline()
 
 # Add static files for webpage
 server.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")

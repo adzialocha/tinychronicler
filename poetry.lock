@@ -113,6 +113,18 @@ doc = ["mkdocs (>=1.1.2,<2.0.0)", "mkdocs-material (>=7.1.9,<8.0.0)", "markdown-
 test = ["pytest (>=6.2.4,<7.0.0)", "pytest-cov (>=2.12.0,<3.0.0)", "pytest-asyncio (>=0.14.0,<0.15.0)", "mypy (==0.812)", "flake8 (>=3.8.3,<4.0.0)", "black (==20.8b1)", "isort (>=5.0.6,<6.0.0)", "requests (>=2.24.0,<3.0.0)", "httpx (>=0.14.0,<0.15.0)", "email_validator (>=1.1.1,<2.0.0)", "sqlalchemy (>=1.3.18,<1.4.0)", "peewee (>=3.13.3,<4.0.0)", "databases[sqlite] (>=0.3.2,<0.4.0)", "orjson (>=3.2.1,<4.0.0)", "ujson (>=4.0.1,<5.0.0)", "async_exit_stack (>=1.0.1,<2.0.0)", "async_generator (>=1.10,<2.0.0)", "python-multipart (>=0.0.5,<0.0.6)", "aiofiles (>=0.5.0,<0.6.0)", "flask (>=1.1.2,<2.0.0)"]
 
 [[package]]
+name = "fastapi-offline"
+version = "1.2.2"
+description = "FastAPI without reliance on CDNs for docs"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+aiofiles = "*"
+fastapi = "*"
+
+[[package]]
 name = "fastapi-pagination"
 version = "0.8.3"
 description = "FastAPI pagination"
@@ -127,13 +139,13 @@ typing-extensions = ">=3.7.4,<4.0.0"
 
 [package.extras]
 gino = ["gino[starlette] (>=1.0.1,<2.0.0)", "SQLAlchemy (>=1.3.20,<2.0.0)", "sqlalchemy-stubs (>=0.4,<0.5)"]
-all = ["gino[starlette] (>=1.0.1,<2.0.0)", "SQLAlchemy (>=1.3.20,<2.0.0)", "sqlalchemy-stubs (>=0.4,<0.5)", "databases[mysql,postgresql,sqlite] (>=0.4.0,<0.5.0)", "orm (>=0.1.5,<0.2.0)", "tortoise-orm[asyncpg,aiomysql,aiosqlite] (>=0.16.18,<0.18.0)", "asyncpg (==0.23.0)", "ormar (>=0.10.5,<0.11.0)", "Django (<3.3.0)", "piccolo (>=0.29.0,<0.30.0)"]
+all = ["gino[starlette] (>=1.0.1,<2.0.0)", "SQLAlchemy (>=1.3.20,<2.0.0)", "sqlalchemy-stubs (>=0.4,<0.5)", "databases[mysql,postgresql,sqlite] (>=0.4.0,<0.5.0)", "orm (>=0.1.5,<0.2.0)", "tortoise-orm[aiomysql,aiosqlite,asyncpg] (>=0.16.18,<0.18.0)", "asyncpg (==0.23.0)", "ormar (>=0.10.5,<0.11.0)", "Django (<3.3.0)", "piccolo (>=0.29.0,<0.30.0)"]
 sqlalchemy = ["SQLAlchemy (>=1.3.20,<2.0.0)", "sqlalchemy-stubs (>=0.4,<0.5)"]
 asyncpg = ["SQLAlchemy (>=1.3.20,<2.0.0)", "asyncpg (==0.23.0)"]
 databases = ["databases[mysql,postgresql,sqlite] (>=0.4.0,<0.5.0)"]
 orm = ["databases[mysql,postgresql,sqlite] (>=0.4.0,<0.5.0)", "orm (>=0.1.5,<0.2.0)"]
 django = ["databases[mysql,postgresql,sqlite] (>=0.4.0,<0.5.0)", "Django (<3.3.0)"]
-tortoise = ["tortoise-orm[asyncpg,aiomysql,aiosqlite] (>=0.16.18,<0.18.0)"]
+tortoise = ["tortoise-orm[aiomysql,aiosqlite,asyncpg] (>=0.16.18,<0.18.0)"]
 ormar = ["ormar (>=0.10.5,<0.11.0)"]
 piccolo = ["piccolo (>=0.29.0,<0.30.0)"]
 
@@ -457,7 +469,7 @@ dev = ["pytest (>=4.6.2)", "black (>=19.3b0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "7657eb6aa6cb7affbdcb9c61bf2db60ccbd6992580b7b6b55c68dafe325c8f39"
+content-hash = "53f1ec23103beaa2463ed9860522d0dada8854eb21a2626baeb9b0f74353b8e5"
 
 [metadata.files]
 aiofiles = [
@@ -495,6 +507,10 @@ databases = [
 fastapi = [
     {file = "fastapi-0.68.0-py3-none-any.whl", hash = "sha256:f4dba2596b1e0a1f962834c3b9ec4291a7aec387a1031c6c2e25bf239d27fd0f"},
     {file = "fastapi-0.68.0.tar.gz", hash = "sha256:c9256a89b0436223b45f53fe3a39b178f3da6be5841a2c59deedff4b676d003f"},
+]
+fastapi-offline = [
+    {file = "fastapi_offline-1.2.2-py3-none-any.whl", hash = "sha256:bb4bf90266e1a013957ccbd6101f92f1ee9a1fa3ff2f1186665c7304185b75b7"},
+    {file = "fastapi_offline-1.2.2.tar.gz", hash = "sha256:e1873765d907226cedfb46ad3f12cc07a406f128db12a077e529758ff30497a8"},
 ]
 fastapi-pagination = [
     {file = "fastapi-pagination-0.8.3.tar.gz", hash = "sha256:d364cfab084ef94db9637c2291f37e3193922e8e1fbecac9788cd14b0de38361"},

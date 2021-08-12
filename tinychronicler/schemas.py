@@ -1,3 +1,6 @@
+from datetime import datetime
+from typing import Optional
+
 from pydantic import BaseModel
 
 
@@ -17,8 +20,9 @@ class Chronicle(ChronicleBase, BaseModel):
         orm_mode = True
 
 
-class ChronicleOut(Chronicle, BaseModel):
-    pass
+class ChronicleOut(ChronicleBase, BaseModel):
+    id: int
+    created_at: datetime
 
 
 class FileBase(BaseModel):
@@ -34,12 +38,37 @@ class FileIn(FileBase, BaseModel):
     thumb_path: str
 
 
-class File(FileIn, BaseModel):
+class File(FileBase, BaseModel):
     id: int
+    path: str
+    thumb_path: str
 
     class Config:
         orm_mode = True
 
 
 class FileOut(FileBase, BaseModel):
-    pass
+    id: int
+    created_at: datetime
+
+
+class CompositionBase(BaseModel):
+    is_ready: bool
+    title: str
+
+
+class CompositionIn(CompositionBase, BaseModel):
+    data: Optional[bytes] = None
+
+
+class Composition(CompositionBase, BaseModel):
+    id: int
+    data: Optional[bytes] = None
+
+    class Config:
+        orm_mode = True
+
+
+class CompositionOut(CompositionBase, BaseModel):
+    created_at: datetime
+    id: int

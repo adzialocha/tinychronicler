@@ -66,3 +66,49 @@ async def get_files(chronicle_id: int):
 async def delete_file(file_id: int):
     query = delete(models.File).where(models.File.id == file_id)
     return await database.execute(query)
+
+
+async def create_composition(
+    composition: schemas.CompositionIn, chronicle_id: int
+):
+    query = insert(models.Composition).values(
+        chronicle_id=chronicle_id,
+        is_ready=composition.is_ready,
+        data=composition.data,
+        title=composition.title,
+    )
+    return await database.execute(query)
+
+
+async def get_composition(composition_id: int):
+    query = select([models.Composition]).where(
+        models.Composition.id == composition_id
+    )
+    return await database.fetch_one(query)
+
+
+async def get_compositions():
+    query = select([models.Composition])
+    return await database.fetch_all(query)
+
+
+async def update_composition(
+    composition_id: int, composition: schemas.CompositionIn
+):
+    query = (
+        update(models.Composition)
+        .where(models.Composition.id == composition_id)
+        .values(
+            is_ready=composition.is_ready,
+            data=composition.data,
+            title=composition.title,
+        )
+    )
+    return await database.execute(query)
+
+
+async def delete_composition(composition_id: int):
+    query = delete(models.Composition).where(
+        models.Composition.id == composition_id
+    )
+    return await database.execute(query)

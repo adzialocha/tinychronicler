@@ -1,5 +1,6 @@
 from fastapi import (
     APIRouter,
+    BackgroundTasks,
     File,
     HTTPException,
     Request,
@@ -14,7 +15,7 @@ from fastapi_pagination.ext.databases import paginate
 from pydantic import BaseModel
 from sqlalchemy import select
 
-from . import crud, models, schemas
+from . import crud, models, schemas, tasks
 from .constants import TEMPLATES_DIR
 from .database import database
 from .files import ALLOWED_MIME_TYPES, store_file
@@ -44,7 +45,7 @@ async def create_chronicle(chronicle: schemas.ChronicleIn):
 
 
 @router.get("/api/chronicles", response_model=Page[schemas.ChronicleOut])
-async def read_chronicles(request: Request):
+async def read_chronicles():
     return await paginate(database, select([models.Chronicle]))
 
 
@@ -134,7 +135,7 @@ async def create_file(chronicle_id: int, file: UploadFile = File(...)):
     "/api/chronicles/{chronicle_id}/files",
     response_model=Page[schemas.FileOut],
 )
-async def read_files(request: Request, chronicle_id: int):
+async def read_files(chronicle_id: int):
     return await paginate(
         database,
         select([models.File]).where(models.File.chronicle_id == chronicle_id),
@@ -176,4 +177,78 @@ async def delete_file(chronicle_id: int, file_id: int):
             detail="File does not belong to chronicle",
         )
     await crud.delete_file(file_id)
+    return Response(status_code=status.HTTP_200_OK)
+
+
+@router.post(
+    "/api/chronicles/{chronicle_id}/compositions",
+    responses={404: {"model": CustomResponse}},
+)
+async def create_composition(
+    chronicle_id: int, background_tasks: BackgroundTasks
+):
+    chronicle = await crud.get_chronicle(chronicle_id)
+    if chronicle is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Chronicle not found"
+        )
+    background_tasks.add_task(tasks.generate_composition, chronicle_id)
+    return Response(status_code=status.HTTP_202_ACCEPTED)
+
+
+@router.get(
+    "/api/chronicles/{chronicle_id}/compositions",
+    response_model=Page[schemas.CompositionOut],
+)
+async def read_compositions(chronicle_id: int):
+    return await paginate(
+        database,
+        select([models.Composition]).where(
+            models.Composition.chronicle_id == chronicle_id
+        ),
+    )
+
+
+@router.get(
+    "/api/chronicles/{chronicle_id}/compositions/{composition_id}",
+    response_model=schemas.CompositionOut,
+    responses={404: {"model": CustomResponse}},
+)
+async def read_composition(chronicle_id: int, composition_id: int):
+    result = await crud.get_composition(composition_id)
+    if result is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Composition not found",
+        )
+    if result.chronicle_id is not chronicle_id:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Composition does not belong to chronicle",
+        )
+    return result
+
+
+@router.delete(
+    "/api/chronicles/{chronicle_id}/compositions/{composition_id}",
+    responses={404: {"model": CustomResponse}, 403: {"model": CustomResponse}},
+)
+async def delete_composition(chronicle_id: int, composition_id: int):
+    composition = await crud.get_composition(composition_id)
+    if composition is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Composition not found",
+        )
+    if composition.chronicle_id is not chronicle_id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Composition does not belong to chronicle",
+        )
+    if not composition.is_ready:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Can't delete composition which is not ready yet",
+        )
+    await crud.delete_composition(composition_id)
     return Response(status_code=status.HTTP_200_OK)
