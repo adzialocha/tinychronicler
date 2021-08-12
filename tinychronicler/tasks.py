@@ -1,10 +1,9 @@
 import pickle
 from datetime import datetime
-from time import sleep
 
 from loguru import logger
 
-from . import crud, schemas
+from . import crud, schemas, generator
 
 
 async def generate_composition(chronicle_id: int):
@@ -15,10 +14,11 @@ async def generate_composition(chronicle_id: int):
     title = "Composition {}".format(datetime.now().strftime("%d.%m.%Y %H:%M"))
     composition = schemas.CompositionIn(title=title, data=None, is_ready=False)
     last_record_id = await crud.create_composition(composition, chronicle_id)
-    # Generate composition
-    sleep(1)
+    # Generate composition, this might take some time ..
+    files = await crud.get_files(chronicle_id)
+    data = await generator.new_composition(files)
     # Update composition with new data and set it ready
-    composition.data = pickle.dumps({"test": "test"})
+    composition.data = pickle.dumps(data)
     composition.is_ready = True
     await crud.update_composition(last_record_id, composition)
     logger.info(
