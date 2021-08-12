@@ -43,14 +43,14 @@ async def create_chronicle(chronicle: schemas.ChronicleIn):
     return {**chronicle.dict(), "id": last_record_id}
 
 
-@router.get("/api/chronicles", response_model=Page[schemas.Chronicle])
+@router.get("/api/chronicles", response_model=Page[schemas.ChronicleOut])
 async def read_chronicles(request: Request):
     return await paginate(database, select([models.Chronicle]))
 
 
 @router.get(
     "/api/chronicles/{chronicle_id}",
-    response_model=schemas.Chronicle,
+    response_model=schemas.ChronicleOut,
     responses={404: {"model": CustomResponse}},
 )
 async def read_chronicle(chronicle_id: int):
@@ -128,3 +128,52 @@ async def create_file(chronicle_id: int, file: UploadFile = File(...)):
         "thumbName": upload["thumb_name"],
         "thumbUrl": upload["thumb_url"],
     }
+
+
+@router.get(
+    "/api/chronicles/{chronicle_id}/files",
+    response_model=Page[schemas.FileOut],
+)
+async def read_files(request: Request, chronicle_id: int):
+    return await paginate(
+        database,
+        select([models.File]).where(models.File.chronicle_id == chronicle_id),
+    )
+
+
+@router.get(
+    "/api/chronicles/{chronicle_id}/files/{file_id}",
+    response_model=schemas.FileOut,
+    responses={404: {"model": CustomResponse}},
+)
+async def read_file(chronicle_id: int, file_id: int):
+    result = await crud.get_file(file_id)
+    if result is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="File not found"
+        )
+    if result.chronicle_id is not chronicle_id:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="File does not belong to chronicle",
+        )
+    return result
+
+
+@router.delete(
+    "/api/chronicles/{chronicle_id}/files/{file_id}",
+    responses={404: {"model": CustomResponse}, 403: {"model": CustomResponse}},
+)
+async def delete_file(chronicle_id: int, file_id: int):
+    file = await crud.get_file(file_id)
+    if file is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="File not found"
+        )
+    if file.chronicle_id is not chronicle_id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="File does not belong to chronicle",
+        )
+    await crud.delete_file(file_id)
+    return Response(status_code=status.HTTP_200_OK)

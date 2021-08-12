@@ -74,7 +74,7 @@ def setup_server(host: str, port: int, log_level: str):
     "--log-level",
     type=click.Choice(list(LOG_LEVELS.keys())),
     default="info",
-    help="Log level. [default: info]",
+    help="Log level.",
     show_default=True,
 )
 def main(host: str, port: int, log_level: str):

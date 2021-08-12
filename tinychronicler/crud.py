@@ -49,3 +49,20 @@ async def create_file(file: schemas.FileIn, chronicle_id: int):
         chronicle_id=chronicle_id,
     )
     return await database.execute(query)
+
+
+async def get_file(file_id: int):
+    query = select([models.File]).where(models.File.id == file_id)
+    return await database.fetch_one(query)
+
+
+async def get_files(chronicle_id: int):
+    query = select([models.File]).where(
+        models.File.chronicle_id == chronicle_id
+    )
+    return await database.fetch_all(query)
+
+
+async def delete_file(file_id: int):
+    query = delete(models.File).where(models.File.id == file_id)
+    return await database.execute(query)

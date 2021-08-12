@@ -1,26 +1,37 @@
 from pydantic import BaseModel
 
 
-class ChronicleIn(BaseModel):
+class ChronicleBase(BaseModel):
     title: str
     description: str
 
 
-class Chronicle(ChronicleIn, BaseModel):
+class ChronicleIn(ChronicleBase, BaseModel):
+    pass
+
+
+class Chronicle(ChronicleBase, BaseModel):
     id: int
 
     class Config:
         orm_mode = True
 
 
-class FileIn(BaseModel):
+class ChronicleOut(Chronicle, BaseModel):
+    pass
+
+
+class FileBase(BaseModel):
     mime: str
     name: str
-    path: str
     url: str
     thumb_name: str
-    thumb_path: str
     thumb_url: str
+
+
+class FileIn(FileBase, BaseModel):
+    path: str
+    thumb_path: str
 
 
 class File(FileIn, BaseModel):
@@ -28,3 +39,7 @@ class File(FileIn, BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class FileOut(FileBase, BaseModel):
+    pass
