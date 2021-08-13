@@ -6,7 +6,7 @@ authors = ["Andreas Dzialocha <x12@adz.garden>"]
 license = "MIT"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.8"
 fastapi = "^0.68.0"
 uvicorn = "^0.14.0"
 aiofiles = "^0.7.0"
@@ -22,6 +22,7 @@ python-multipart = "^0.0.5"
 ffmpeg = "^1.4"
 Pillow = "^8.3.1"
 fastapi-offline = "^1.2.2"
+pretty_midi = "^0.2.9"
 
 [tool.poetry.dev-dependencies]
 flake8 = "^3.9.2"
