@@ -3,6 +3,20 @@ from typing import Dict
 
 from uvicorn.logging import TRACE_LOG_LEVEL
 
+# Image dimensions of file thumbnails
+THUMBNAIL_SIZE = 1600, 1600
+
+# MIME file types
+ALLOWED_MIME_TYPES_AUDIO = ["audio/mpeg", "audio/x-wav"]
+ALLOWED_MIME_TYPES_VIDEO = ["video/mp4", "video/mpeg"]
+ALLOWED_MIME_TYPES_IMAGE = ["image/jpeg", "image/png"]
+
+ALLOWED_MIME_TYPES = (
+    ALLOWED_MIME_TYPES_IMAGE
+    + ALLOWED_MIME_TYPES_VIDEO
+    + ALLOWED_MIME_TYPES_AUDIO
+)
+
 # Log level options
 LOG_LEVELS: Dict[str, int] = {
     "critical": logging.CRITICAL,
@@ -24,3 +38,6 @@ STATIC_DIR = "tinychronicler/web/static"
 
 # Path to directory for uploaded user files
 UPLOADS_DIR = "uploads"
+
+# Path to musical "modules" directory
+MIDI_MODULES_DIR = "midi"

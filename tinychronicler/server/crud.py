@@ -86,8 +86,10 @@ async def get_composition(composition_id: int):
     return await database.fetch_one(query)
 
 
-async def get_compositions():
-    query = select([models.Composition])
+async def get_compositions(chronicle_id):
+    query = select([models.Composition]).where(
+        models.Composition.chronicle_id == chronicle_id
+    )
     return await database.fetch_all(query)
 
 

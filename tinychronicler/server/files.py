@@ -7,22 +7,16 @@ import aiofiles
 from fastapi import File
 from PIL import Image
 
-from tinychronicler.constants import UPLOADS_DIR
+from tinychronicler.constants import (
+    ALLOWED_MIME_TYPES_AUDIO,
+    ALLOWED_MIME_TYPES_IMAGE,
+    ALLOWED_MIME_TYPES_VIDEO,
+    THUMBNAIL_SIZE,
+    UPLOADS_DIR,
+)
 from tinychronicler.helpers import temporary_file
 
 CHUNK_SIZE_1MB = 1000 * 1000  # in bytes
-
-THUMBNAIL_SIZE = 1600, 1600
-
-ALLOWED_MIME_TYPES_AUDIO = ["audio/mpeg", "audio/x-wav"]
-ALLOWED_MIME_TYPES_VIDEO = ["video/mp4", "video/mpeg"]
-ALLOWED_MIME_TYPES_IMAGE = ["image/jpeg", "image/png"]
-
-ALLOWED_MIME_TYPES = (
-    ALLOWED_MIME_TYPES_IMAGE
-    + ALLOWED_MIME_TYPES_VIDEO
-    + ALLOWED_MIME_TYPES_AUDIO
-)
 
 
 def create_uploads_dir():

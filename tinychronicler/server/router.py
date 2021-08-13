@@ -15,11 +15,15 @@ from fastapi_pagination.ext.databases import paginate
 from pydantic import BaseModel
 from sqlalchemy import select
 
-from tinychronicler.constants import TEMPLATES_DIR
+from tinychronicler.constants import (
+    ALLOWED_MIME_TYPES,
+    ALLOWED_MIME_TYPES_AUDIO,
+    TEMPLATES_DIR,
+)
 from tinychronicler.database import database, models, schemas
 
 from . import crud, tasks
-from .files import ALLOWED_MIME_TYPES, store_file
+from .files import store_file
 
 router = APIRouter()
 
@@ -94,7 +98,11 @@ async def delete_chronicle(chronicle_id: int):
 
 @router.post(
     "/api/chronicles/{chronicle_id}/files",
-    responses={415: {"model": CustomResponse}, 404: {"model": CustomResponse}},
+    responses={
+        404: {"model": CustomResponse},
+        409: {"model": CustomResponse},
+        415: {"model": CustomResponse},
+    },
 )
 async def create_file(chronicle_id: int, file: UploadFile = File(...)):
     chronicle = await crud.get_chronicle(chronicle_id)
@@ -106,6 +114,19 @@ async def create_file(chronicle_id: int, file: UploadFile = File(...)):
         raise HTTPException(
             status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
             detail="File format {} is not supported".format(file.content_type),
+        )
+    compositions = await crud.get_compositions(chronicle_id)
+    if len(compositions) > 0:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Can not update files when compositions exist",
+        )
+    files = await crud.get_files(chronicle_id)
+    audio_files = [f for f in files if f.mime in ALLOWED_MIME_TYPES_AUDIO]
+    if len(audio_files) == 1 and file.content_type in ALLOWED_MIME_TYPES_AUDIO:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Chronicle can only contain max. one audio file",
         )
     # Store and process file first ..
     upload = await store_file(file)
@@ -164,7 +185,12 @@ async def read_file(chronicle_id: int, file_id: int):
 
 @router.delete(
     "/api/chronicles/{chronicle_id}/files/{file_id}",
-    responses={404: {"model": CustomResponse}, 403: {"model": CustomResponse}},
+    responses={
+        400: {"model": CustomResponse},
+        403: {"model": CustomResponse},
+        404: {"model": CustomResponse},
+        409: {"model": CustomResponse},
+    },
 )
 async def delete_file(chronicle_id: int, file_id: int):
     file = await crud.get_file(file_id)
@@ -174,8 +200,14 @@ async def delete_file(chronicle_id: int, file_id: int):
         )
     if file.chronicle_id is not chronicle_id:
         raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
+            status_code=status.HTTP_400_BAD_REQUEST,
             detail="File does not belong to chronicle",
+        )
+    compositions = await crud.get_compositions(chronicle_id)
+    if len(compositions) > 0:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Can not update files when compositions exist",
         )
     await crud.delete_file(file_id)
     return Response(status_code=status.HTTP_200_OK)
@@ -183,7 +215,7 @@ async def delete_file(chronicle_id: int, file_id: int):
 
 @router.post(
     "/api/chronicles/{chronicle_id}/compositions",
-    responses={404: {"model": CustomResponse}},
+    responses={404: {"model": CustomResponse}, 409: {"model": CustomResponse}},
 )
 async def create_composition(
     chronicle_id: int, background_tasks: BackgroundTasks
@@ -192,6 +224,13 @@ async def create_composition(
     if chronicle is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Chronicle not found"
+        )
+    files = await crud.get_files(chronicle_id)
+    audio_files = [f for f in files if f.mime in ALLOWED_MIME_TYPES_AUDIO]
+    if len(audio_files) != 1:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Chronicle needs to contain one audio file",
         )
     background_tasks.add_task(tasks.generate_composition, chronicle_id)
     return Response(status_code=status.HTTP_202_ACCEPTED)
@@ -243,7 +282,7 @@ async def delete_composition(chronicle_id: int, composition_id: int):
         )
     if composition.chronicle_id is not chronicle_id:
         raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
+            status_code=status.HTTP_404_NOT_FOUND,
             detail="Composition does not belong to chronicle",
         )
     if not composition.is_ready:
