@@ -23,6 +23,7 @@ ffmpeg = "^1.4"
 Pillow = "^8.3.1"
 fastapi-offline = "^1.2.2"
 pretty_midi = "^0.2.9"
+librosa = "^0.8.1"
 
 [tool.poetry.dev-dependencies]
 flake8 = "^3.9.2"
