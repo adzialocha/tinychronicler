@@ -15,9 +15,10 @@ from fastapi_pagination.ext.databases import paginate
 from pydantic import BaseModel
 from sqlalchemy import select
 
-from . import crud, models, schemas, tasks
-from .constants import TEMPLATES_DIR
-from .database import database
+from tinychronicler.constants import TEMPLATES_DIR
+from tinychronicler.database import database, models, schemas
+
+from . import crud, tasks
 from .files import ALLOWED_MIME_TYPES, store_file
 
 router = APIRouter()

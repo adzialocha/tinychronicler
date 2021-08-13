@@ -2,7 +2,7 @@ import databases
 import sqlalchemy
 from sqlalchemy.ext.declarative import declarative_base
 
-from .constants import DATABASE_URL
+from tinychronicler.constants import DATABASE_URL
 
 # Declare our database handler, this one will execute all queries
 database = databases.Database(DATABASE_URL)

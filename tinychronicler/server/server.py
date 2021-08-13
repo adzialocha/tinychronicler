@@ -2,11 +2,13 @@ from fastapi.staticfiles import StaticFiles
 from fastapi_offline import FastAPIOffline
 from fastapi_pagination import add_pagination
 
-from .constants import STATIC_DIR, UPLOADS_DIR
-from .database import database
+from tinychronicler.constants import STATIC_DIR, UPLOADS_DIR
+from tinychronicler.database import database
+
 from .files import create_uploads_dir
 from .router import router
 
+# Use FastAPIOffline as we don't want to load OpenAPI static files from CDNs
 server = FastAPIOffline()
 
 # Add static files for webpage

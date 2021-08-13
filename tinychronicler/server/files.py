@@ -7,8 +7,8 @@ import aiofiles
 from fastapi import File
 from PIL import Image
 
-from .constants import UPLOADS_DIR
-from .helpers import temporary_file
+from tinychronicler.constants import UPLOADS_DIR
+from tinychronicler.helpers import temporary_file
 
 CHUNK_SIZE_1MB = 1000 * 1000  # in bytes
 
@@ -52,14 +52,30 @@ def generate_videostill(video_file_path: str, img_file_path: str):
     )
 
 
-def generate_waveform(audio_file_path: str, img_file_path: str):
+def generate_waveform(
+    audio_file_path: str,
+    img_file_path: str,
+    dimension="1600x1024",
+    color_fg="white",
+    color_bg="black",
+):
+    format_args = [
+        "aformat=channel_layouts=mono",
+        "showwavespic=s={}:colors={}[wave]".format(dimension, color_fg),
+    ]
+    filter_args = [
+        "color=c={}[color]".format(color_bg),
+        ",".join(format_args),
+        "[color][wave]scale2ref[bg][fg]",
+        "[bg][fg]overlay=format=auto",
+    ]
     subprocess.run(
         [
             "ffmpeg",
             "-i",
             audio_file_path,
             "-filter_complex",
-            "color=c=black[color];aformat=channel_layouts=mono,showwavespic=s=1600x1024:colors=white[wave];[color][wave]scale2ref[bg][fg];[bg][fg]overlay=format=auto",
+            ";".join(filter_args),
             "-frames:v",
             "1",
             img_file_path,

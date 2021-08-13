@@ -5,9 +5,8 @@ import click
 from loguru import logger
 from uvicorn import Config, Server
 
-from . import models
 from .constants import LOG_LEVELS
-from .database import engine
+from .database import engine, models
 
 
 class InterceptHandler(logging.Handler):

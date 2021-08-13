@@ -1,7 +1,6 @@
 from sqlalchemy import delete, insert, select, update
 
-from . import models, schemas
-from .database import database
+from tinychronicler.database import database, models, schemas
 
 
 async def create_chronicle(chronicle: schemas.ChronicleIn):
