@@ -6,35 +6,53 @@
 2. Connect your Raspberry Pi to a screen, keyboard and mouse
 3. Boot from your new installation
 
+*Please note: All of the following steps assume you have a user `pi` on your computer.*
+
 ## 1. Enable SSH server
 
 Follow steps under https://www.raspberrypi.org/documentation/computers/remote-access.html#enabling-the-server
 
-## 2. Install Python
+## 2. Install correct Python version
 
 1. Install *pyenv* first by running:
 
     ```bash
+    # See: https://github.com/pyenv/pyenv-installer
     curl -L https://raw.githubusercontent.com/yyuu/pyenv-installer/master/bin/pyenv-installer | bash
     ```
 
-2. Add the following lines to your `.profile` file:
+2. Add the following lines to your `.bashrc` file:
 
-    ```env
+    ```bash
+    # See: https://github.com/pyenv/pyenv
     export PATH="~/.pyenv/bin:$PATH"
     eval "$(pyenv init -)"
     eval "$(pyenv virtualenv-init -)"
     ```
 
-3. Install Python version 3.8
+3. Install Python version 3.8:
 
     ```bash
-    # Install required Python version and make it the default
+    # Install dependencies to build Python
+    # See: https://github.com/pyenv/pyenv/wiki#suggested-build-environment
+    sudo apt-get install libssl-dev libbz2-dev libreadline-dev libsqlite3-dev \
+        libncursesw5-dev tk-dev libxml2-dev libxmlsec1-dev liblzma-dev
+
+    # Install required Python version, this might take some time ..
     pyenv install 3.8.11
+
+    # .. make it the default
     pyenv global 3.8.11
     ```
 
-## 3. Install Tiny Chronicler
+## 3. Install poetry
+
+```bash
+# See: https://python-poetry.org/docs/
+curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+```
+
+## 4. Install Tiny Chronicler
 
 Open a new terminal and run the following commands:
 
@@ -55,11 +73,14 @@ sudo apt-get install puredata
 git clone https://github.com/adzialocha/tinychronicler
 cd tinychronicler
 
+# Use the right python version
+poetry env use $(pyenv which 3.8.11)
+
 # Install all dependencies, this might take a long time ..
 LLVM_CONFIG=llvm-config-9 poetry install
 ```
 
-## 4. Install HiFi Berry
+## 5. Install HiFi Berry
 
 Related link: https://www.hifiberry.com/docs/software/configuring-linux-3-18-x/
 
@@ -69,7 +90,7 @@ Remove the driver for the onboard sound from `/boot/config.txt` if it exists. Re
 dtparam=audio=on
 ```
 
-## 5. Start Tiny Chronicler when Pi boots
+## 6. Start Tiny Chronicler when Pi boots
 
 Run `crontab -e` and add the following line:
 
@@ -77,7 +98,7 @@ Run `crontab -e` and add the following line:
 @reboot sleep 10; /home/pi/tinychronicler/scripts/start.sh
 ```
 
-## 6. Setup WiFi Access Point and local domain
+## 7. Setup WiFi Access Point and local domain
 
 1. Install required services
 
@@ -181,7 +202,7 @@ Run `crontab -e` and add the following line:
     sudo systemctl enable dnsmasq
     ```
 
-## 7. Reboot!
+## 8. Reboot!
 
 ```bash
 sudo reboot now
