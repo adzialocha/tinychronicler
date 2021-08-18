@@ -5,9 +5,9 @@ Tiny Chronicler is a travelling music robot. It runs on a RaspberryPi computer e
 ## Hardware
 
 - Raspberry Pi 4 Model B w. HDMI output
-- Sound card (HifiBerry)
-- 16x16 LED matrix
-- Thermal printer
+- Sound card for Raspberry Pi ([HifiBerry DAC2 Pro](https://www.hifiberry.com/shop/boards/hifiberry-dac2-pro/))
+- 32x32 Pixel LED matrix with Bonnet ([Adafruit](https://learn.adafruit.com/adafruit-rgb-matrix-bonnet-for-raspberry-pi/))
+- Thermal printer ([Sparkfun](https://www.sparkfun.com/products/14970))
 - USB MIDI keyboard
 - USB MIDI drum pad
 
@@ -16,6 +16,13 @@ Tiny Chronicler is a travelling music robot. It runs on a RaspberryPi computer e
 - Python 3.8
 - [Poetry](https://python-poetry.org)
 - PureData
+
+## Setup
+
+1. Assemble all parts following the steps in [`HARDWARE.md`](HARDWARE.md).
+2. Follow the steps in [`SETUP.md`](SETUP.md) to install Tiny Chronicler and all other required services on your Raspberry Pi.
+3. The Pi will create a WiFi network named `tinychronicler`. You can access it with the password `tinychronicler`.
+4. Start a browser and open the web interface of Tiny Chronicler by entering the URL `http://tinychronicler.local:8000`.
 
 ## Development
 
@@ -29,4 +36,4 @@ poetry run python tinychronicler
 
 ## License
 
-`MIT`
+[`MIT`](LICENSE)
