@@ -120,7 +120,10 @@ async def store_file(file: File):
 
     # Write file in chunks to not put too much pressure on memory
     async with aiofiles.open(file_path, "wb") as out_file:
-        while content := await file.read(CHUNK_SIZE_1MB):
+        while True:
+            content = await file.read(CHUNK_SIZE_1MB)
+            if not content:
+                break
             await out_file.write(content)
 
     # Generate thumbnails after uploading files
