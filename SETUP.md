@@ -2,17 +2,41 @@
 
 ## Preparation
 
-1. Install *Debian with Raspberry Pi Deskop* on your Raspberry Pi first: https://www.raspberrypi.org/software/
+1. Install a fresh version of *Debian with Raspberry Pi Deskop* on your Raspberry Pi first: https://www.raspberrypi.org/software/
 2. Connect your Raspberry Pi to a screen, keyboard and mouse
-3. Boot from your fresh installation
+3. Boot from your new installation
 
 ## 1. Enable SSH server
 
 Follow steps under https://www.raspberrypi.org/documentation/computers/remote-access.html#enabling-the-server
 
-## 2. Install Tiny Chronicler
+## 2. Install Python
 
-Open a terminal and run the following commands:
+1. Install *pyenv* first by running:
+
+    ```bash
+    curl -L https://raw.githubusercontent.com/yyuu/pyenv-installer/master/bin/pyenv-installer | bash
+    ```
+
+2. Add the following lines to your `.profile` file:
+
+    ```env
+    export PATH="~/.pyenv/bin:$PATH"
+    eval "$(pyenv init -)"
+    eval "$(pyenv virtualenv-init -)"
+    ```
+
+3. Install Python version 3.8
+
+    ```bash
+    # Install required Python version and make it the default
+    pyenv install 3.8.11
+    pyenv global 3.8.11
+    ```
+
+## 3. Install Tiny Chronicler
+
+Open a new terminal and run the following commands:
 
 ```bash
 # Install dependencies for pillow
@@ -35,7 +59,7 @@ cd tinychronicler
 LLVM_CONFIG=llvm-config-9 poetry install
 ```
 
-## 3. Install HiFi Berry
+## 4. Install HiFi Berry
 
 Related link: https://www.hifiberry.com/docs/software/configuring-linux-3-18-x/
 
@@ -45,7 +69,7 @@ Remove the driver for the onboard sound from `/boot/config.txt` if it exists. Re
 dtparam=audio=on
 ```
 
-## 4. Start Tiny Chronicler when Pi boots
+## 5. Start Tiny Chronicler when Pi boots
 
 Run `crontab -e` and add the following line:
 
@@ -53,7 +77,7 @@ Run `crontab -e` and add the following line:
 @reboot sleep 10; /home/pi/tinychronicler/scripts/start.sh
 ```
 
-## 5. Setup WiFi Access Point and local domain
+## 6. Setup WiFi Access Point and local domain
 
 1. Install required services
 
@@ -157,7 +181,7 @@ Run `crontab -e` and add the following line:
     sudo systemctl enable dnsmasq
     ```
 
-## 6. Reboot!
+## 7. Reboot!
 
 ```bash
 sudo reboot now
