@@ -46,7 +46,7 @@ if [ $HAS_INTERNET -eq 1 ]; then
         # Install any dependency updates
         echo
         echo "► Update dependencies"
-        /home/pi/.poetry/bin/poetry install
+        LLVM_CONFIG=llvm-config-9 /home/pi/.poetry/bin/poetry install
 
         # Run post-update script when it exists
         echo
