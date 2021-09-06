@@ -7,7 +7,25 @@
   <link href="{{ url_for('static', path='/styles.css') }}" rel="stylesheet">
 </head>
 <body>
+  <header class="header">
+    <h1 class="logo">Tiny Chronicler</h1>
+    <nav class="navigation">
+      <ul>
+        <li>
+          <a href="/">Dashboard</a>
+        </li>
+        <li>
+          <a href="/chronicles">Chronicles</a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+  <main>
   {% block content %}
   {% endblock %}
+  </main>
+  <footer>
+    <small>v{{VERSION}}</small>
+  </footer>
 </body>
 </html>

@@ -21,6 +21,7 @@ from tinychronicler.constants import (
     TEMPLATES_DIR,
 )
 from tinychronicler.database import database, models, schemas
+from tinychronicler.version import version
 
 from . import crud, tasks
 from .files import store_file
@@ -28,15 +29,21 @@ from .files import store_file
 router = APIRouter()
 
 templates = Jinja2Templates(directory=TEMPLATES_DIR)
+templates.env.globals["VERSION"] = version
 
 
 class CustomResponse(BaseModel):
     detail: str
 
 
-@router.get("/", response_class=HTMLResponse, include_in_schema=False)
+@router.get("/", include_in_schema=False)
 async def index(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
+
+
+@router.get("/chronicles", include_in_schema=False)
+async def chronicles(request: Request):
+    return templates.TemplateResponse("chronicles.html", {"request": request})
 
 
 @router.post(
