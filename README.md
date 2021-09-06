@@ -32,6 +32,9 @@ poetry install
 
 # Run application in virtual environment, open browser at localhost:8000
 poetry run python tinychronicler
+
+# Run Jupyer Lab to experiment with code in `/notebooks` folder
+poetry run jupyer lab ./notebooks
 ```
 
 ## License
