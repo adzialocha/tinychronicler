@@ -52,5 +52,6 @@ class Composition(Base):
     is_ready = Column(Boolean(255), nullable=False, default=False)
     data = Column(LargeBinary)
     chronicle_id = Column(Integer, ForeignKey("chronicles.id"), nullable=False)
+    version = Column(Integer, nullable=False)
 
     chronicle = relationship("chronicle", back_populates="compositions")

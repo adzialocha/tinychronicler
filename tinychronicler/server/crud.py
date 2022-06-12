@@ -72,9 +72,10 @@ async def create_composition(
 ):
     query = insert(models.Composition).values(
         chronicle_id=chronicle_id,
-        is_ready=composition.is_ready,
         data=composition.data,
+        is_ready=composition.is_ready,
         title=composition.title,
+        version=composition.version,
     )
     return await database.execute(query)
 

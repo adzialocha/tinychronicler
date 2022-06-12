@@ -133,4 +133,7 @@ async def generate_composition(files: List[schemas.File]):
                 "{0:>2}: {1:.2%} {2}".format(r["index"] + 1, score, win)
             )
 
-    return {"notes": result_notes, "modules": result_modules}
+    return {
+        "notes": result_notes.tolist(),
+        "modules": result_modules,
+    }

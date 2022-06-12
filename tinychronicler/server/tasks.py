@@ -15,7 +15,8 @@ async def generate_composition(chronicle_id: int):
     )
     # Insert pending composition in database
     title = "Composition {}".format(datetime.now().strftime("%d.%m.%Y %H:%M"))
-    composition = schemas.CompositionIn(title=title, data=None, is_ready=False)
+    composition = schemas.CompositionIn(
+        title=title, data=None, is_ready=False, version=1)
     last_record_id = await crud.create_composition(composition, chronicle_id)
     # Generate composition, this might take some time ..
     files = await crud.get_files(chronicle_id)

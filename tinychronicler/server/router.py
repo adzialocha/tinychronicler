@@ -1,3 +1,5 @@
+import pickle
+
 from fastapi import (
     APIRouter,
     BackgroundTasks,
@@ -8,7 +10,6 @@ from fastapi import (
     UploadFile,
     status,
 )
-from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi_pagination import Page
 from fastapi_pagination.ext.databases import paginate
@@ -258,7 +259,7 @@ async def read_compositions(chronicle_id: int):
 
 @router.get(
     "/api/chronicles/{chronicle_id}/compositions/{composition_id}",
-    response_model=schemas.CompositionOut,
+    response_model=schemas.CompositionDataOut,
     responses={404: {"model": CustomResponse}},
 )
 async def read_composition(chronicle_id: int, composition_id: int):
@@ -273,7 +274,16 @@ async def read_composition(chronicle_id: int, composition_id: int):
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Composition does not belong to chronicle",
         )
-    return result
+    # Convert pickled data before responding
+    data = pickle.loads(result.data)
+    return {
+        "created_at": result.created_at,
+        "data": data,
+        "id": result.id,
+        "is_ready": result.is_ready,
+        "title": result.title,
+        "version": result.version,
+    }
 
 
 @router.delete(

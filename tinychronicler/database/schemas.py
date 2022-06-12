@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional
+from typing import List, Optional, Tuple
 
 from pydantic import BaseModel
 
@@ -55,6 +55,7 @@ class FileOut(FileBase, BaseModel):
 class CompositionBase(BaseModel):
     is_ready: bool
     title: str
+    version: int
 
 
 class CompositionIn(CompositionBase, BaseModel):
@@ -71,4 +72,15 @@ class Composition(CompositionBase, BaseModel):
 
 class CompositionOut(CompositionBase, BaseModel):
     created_at: datetime
+    id: int
+
+
+class CompositionData(BaseModel):
+    notes: List[Tuple[float, float]]
+    modules: List[int]
+
+
+class CompositionDataOut(CompositionBase, BaseModel):
+    created_at: datetime
+    data: Optional[CompositionData] = None
     id: int
