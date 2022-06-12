@@ -15,7 +15,7 @@ from .notes import generate_notes
 from .parameters import generate_parameters
 
 
-async def generate_composition(files: List[schemas.File]):
+def generate_composition(files: List[schemas.File]):
     # Separate media files by type
     audio_files = [f.path for f in files if f.mime in ALLOWED_MIME_TYPES_AUDIO]
     video_files = [f.path for f in files if f.mime in ALLOWED_MIME_TYPES_VIDEO]

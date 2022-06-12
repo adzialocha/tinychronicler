@@ -20,7 +20,7 @@ async def generate_composition(chronicle_id: int):
     last_record_id = await crud.create_composition(composition, chronicle_id)
     # Generate composition, this might take some time ..
     files = await crud.get_files(chronicle_id)
-    data = await generator.generate_composition(files)
+    data = generator.generate_composition(files)
     # Update composition with new data and set it ready
     composition.data = pickle.dumps(data)
     composition.is_ready = True
