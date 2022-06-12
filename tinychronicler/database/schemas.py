@@ -75,9 +75,14 @@ class CompositionOut(CompositionBase, BaseModel):
     id: int
 
 
+class CompositionDataParameters(BaseModel):
+    parameters: List[str]
+    module: Tuple[int, int]
+
+
 class CompositionData(BaseModel):
     notes: List[Tuple[float, float]]
-    modules: List[int]
+    parameters: List[CompositionDataParameters]
 
 
 class CompositionDataOut(CompositionBase, BaseModel):

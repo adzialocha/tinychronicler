@@ -38,6 +38,10 @@ poetry run jupyter lab ./notebooks
 
 # Start shell to allow running any other application in virtual environment
 poetry shell
+
+# Check linters
+isort .
+flake8
 ```
 
 ## License
