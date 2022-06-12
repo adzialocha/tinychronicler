@@ -42,11 +42,6 @@ async def index(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 
-@router.get("/chronicles", include_in_schema=False)
-async def chronicles(request: Request):
-    return templates.TemplateResponse("chronicles.html", {"request": request})
-
-
 @router.post(
     "/api/chronicles",
     response_model=schemas.Chronicle,

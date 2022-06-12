@@ -1,5 +1,13 @@
-{% extends "layout.html" %}
-
-{% block content %}
-<h2>Hello, Tiny Chronicler!</h2>
-{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Tiny Chronicler</title>
+</head>
+<body>
+  <noscript>This page can only be viewed with JavaScript enabled browsers.</noscript>
+  <div id="app" data-version="{{ VERSION }}"></div>
+  <script src="{{ url_for('static', path='index.js') }}?v={{ VERSION }}"></script>
+</body>
+</html>

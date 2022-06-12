@@ -5,11 +5,13 @@ export const METHOD_POST = 'POST';
 export const METHOD_PUT = 'PUT';
 export const METHOD_DELETE = 'DELETE';
 
-function encode(str) {
+function encode(str: string): string {
   return encodeURIComponent(str);
 }
 
-function parameterize(obj) {
+function parameterize(obj: {
+  [key: string]: string | number | string[] | number[];
+}): string {
   if (Object.keys(obj).length === 0) {
     return '';
   }
@@ -17,15 +19,17 @@ function parameterize(obj) {
   return (
     '?' +
     Object.keys(obj)
-      .reduce((acc, key) => {
-        if (Array.isArray(obj[key])) {
-          if (obj[key].length === 0) {
+      .reduce<string[]>((acc, key) => {
+        const value = obj[key];
+
+        if (Array.isArray(value)) {
+          if (value.length === 0) {
             return acc;
           }
 
-          const merged = obj[key]
+          const merged = value
             .map((item) => {
-              return `${encode(key)}[]=${encode(item)}`;
+              return `${encode(key)}[]=${encode(item.toString())}`;
             })
             .join('&');
 
@@ -33,20 +37,24 @@ function parameterize(obj) {
           return acc;
         }
 
-        acc.push(`${encode(key)}=${encode(obj[key])}`);
+        acc.push(`${encode(key)}=${encode(value.toString())}`);
         return acc;
       }, [])
       .join('&')
   );
 }
 
-export default async function request(path = [], body = {}, method = METHOD_GET) {
-  const headers = {};
+export default async function request(
+  path: [string?] = [],
+  body = {},
+  method = METHOD_GET,
+) {
+  const headers: HeadersInit = {};
   if (!(body instanceof FormData) && !headers['Content-Type']) {
     headers['Content-Type'] = 'application/json';
   }
 
-  const options = {
+  const options: RequestInit = {
     method,
     headers: new Headers({
       ...headers,
@@ -65,7 +73,10 @@ export default async function request(path = [], body = {}, method = METHOD_GET)
     }
   }
 
-  const response = await window.fetch(`${ENDPOINT}/${path.join('/')}${paramsStr}`, options);
+  const response = await window.fetch(
+    `${ENDPOINT}/${path.join('/')}${paramsStr}`,
+    options,
+  );
 
   const contentType = response.headers.get('Content-Type');
   if (contentType && contentType.includes('application/json')) {

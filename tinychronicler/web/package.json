@@ -1,0 +1,61 @@
+{
+  "name": "tinychronicler-web",
+  "version": "0.1.0",
+  "description": "Web-Interface of Tiny Chronicler",
+  "main": "index.js",
+  "scripts": {
+    "build": "run-s clean webpack:production",
+    "clean": "rimraf ./static",
+    "start": "run-s watch",
+    "lint": "eslint --ext .ts --ext .tsx .",
+    "watch": "run-s clean webpack:development",
+    "webpack:development": "webpack --mode=development --watch",
+    "webpack:production": "webpack --mode=production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adzialocha/tinychronicler.git"
+  },
+  "keywords": [
+    "music"
+  ],
+  "author": "adzialocha",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/adzialocha/tinychronicler/issues"
+  },
+  "homepage": "https://github.com/adzialocha/tinychronicler#readme",
+  "devDependencies": {
+    "@tsconfig/node16": "^1.0.3",
+    "@types/copy-webpack-plugin": "^10.1.0",
+    "@types/luxon": "^2.3.2",
+    "@types/node": "^17.0.42",
+    "@types/react": "^18.0.12",
+    "@types/react-dom": "^18.0.5",
+    "@types/styled-components": "^5.1.25",
+    "@typescript-eslint/eslint-plugin": "^5.27.1",
+    "@typescript-eslint/parser": "^5.27.1",
+    "copy-webpack-plugin": "^11.0.0",
+    "eslint": "^8.17.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react-hooks": "^4.5.0",
+    "npm-run-all": "^4.1.5",
+    "prettier": "2.6.2",
+    "rimraf": "^3.0.2",
+    "ts-loader": "^9.3.0",
+    "ts-node": "^10.8.1",
+    "tsconfig-paths": "^4.0.0",
+    "typescript": "^4.7.3",
+    "typescript-plugin-styled-components": "^2.0.0",
+    "webpack": "^5.73.0",
+    "webpack-cli": "^4.9.2"
+  },
+  "dependencies": {
+    "luxon": "^2.4.0",
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0",
+    "react-router-dom": "^6.3.0",
+    "styled-components": "^5.3.5"
+  }
+}
