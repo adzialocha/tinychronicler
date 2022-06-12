@@ -22,7 +22,7 @@ Tiny Chronicler is a travelling music robot. It runs on a RaspberryPi computer e
 1. Assemble all parts following the steps in [`HARDWARE.md`](HARDWARE.md).
 2. Follow the steps in [`SETUP.md`](SETUP.md) to install Tiny Chronicler and all other required services on your Raspberry Pi.
 3. The Pi will create a WiFi network named `tinychronicler`. You can access it with the password `tinychronicler`.
-4. Start a browser and open the web interface of Tiny Chronicler by entering the URL `http://tinychronicler.local:8000`.
+4. Start a browser and open the [web interface](tinychronicler/web) of Tiny Chronicler by entering the URL `http://tinychronicler.local:8000`.
 
 ## Development
 
