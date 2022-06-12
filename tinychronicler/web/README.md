@@ -1,6 +1,6 @@
 # tinychronicler-web
 
-Statically hosted web interface for [Tiny Chronicler](../README.md).
+Statically hosted web interface for [Tiny Chronicler](../../README.md).
 
 ## Requirements
 
@@ -25,4 +25,4 @@ npm run build
 
 ## License
 
-[`MIT`](../LICENSE)
+[`MIT`](../../LICENSE)
