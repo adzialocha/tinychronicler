@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useCallback, useEffect, useState } from 'react';
 import { DateTime } from 'luxon';
 
 import request from '~/utils/api';
@@ -12,34 +12,70 @@ type Chronicle = {
 
 const Chronicles = () => {
   const [chronicles, setChronicles] = useState<Chronicle[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [values, setValues] = useState({
+    title: '',
+    description: '',
+  });
+
+  const fetchAll = async () => {
+    const response = await request(['chronicles']);
+
+    setChronicles(
+      response.items.map((chronicle: Chronicle) => {
+        return {
+          ...chronicle,
+          created_at: DateTime.fromISO(chronicle.created_at, {
+            zone: 'utc',
+          })
+            .setZone('system')
+            .toFormat('dd.MM.yy HH:mm'),
+        };
+      }),
+    );
+  };
+
+  const create = useCallback(async () => {
+    try {
+      await request(['chronicles'], values, 'POST');
+
+      setValues({
+        title: '',
+        description: '',
+      });
+
+      await fetchAll();
+    } catch {
+      window.alert('Something went wrong ..');
+    }
+  }, [values]);
 
   useEffect(() => {
-    const fetch = async () => {
-      const response = await request(['chronicles']);
-
-      setChronicles(
-        response.items.map((chronicle: Chronicle) => {
-          return {
-            ...chronicle,
-            created_at: DateTime.fromISO(chronicle.created_at, {
-              zone: 'utc',
-            }).toFormat('dd.MM.yy HH:mm'),
-          };
-        }),
-      );
-
-      setIsLoading(false);
-    };
-
-    setIsLoading(true);
-    fetch();
+    fetchAll();
   }, []);
+
+  const change = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+
+    setValues((values) => {
+      return {
+        ...values,
+        [name]: value,
+      };
+    });
+  }, []);
+
+  const submit = useCallback(
+    async (event: React.FormEvent) => {
+      event.preventDefault();
+      create();
+    },
+    [create],
+  );
 
   return (
     <Fragment>
+      <h2>Chronicles</h2>
       <ul>
-        {isLoading && 'Loading ...'}
         {chronicles.map((chronicle) => {
           return (
             <li key={chronicle.id}>
@@ -51,6 +87,30 @@ const Chronicles = () => {
           );
         })}
       </ul>
+      <h2>Create new Chronicle</h2>
+      <form onSubmit={submit}>
+        <fieldset>
+          <label htmlFor="title">Title</label>
+          <input
+            name="title"
+            id="title"
+            value={values.title}
+            type="text"
+            onChange={change}
+          />
+        </fieldset>
+        <fieldset>
+          <label htmlFor="description">Description</label>
+          <input
+            name="description"
+            id="description"
+            type="text"
+            value={values.description}
+            onChange={change}
+          />
+        </fieldset>
+        <input type="submit" value="Create" />
+      </form>
     </Fragment>
   );
 };

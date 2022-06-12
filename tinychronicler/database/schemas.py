@@ -1,12 +1,12 @@
 from datetime import datetime
 from typing import List, Optional, Tuple
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class ChronicleBase(BaseModel):
-    title: str
-    description: str
+    title: str = Field(..., min_length=1, max_length=255)
+    description: str = Field(..., min_length=1)
 
 
 class ChronicleIn(ChronicleBase, BaseModel):

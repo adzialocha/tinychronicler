@@ -79,9 +79,16 @@ export default async function request(
   );
 
   const contentType = response.headers.get('Content-Type');
+  let responseBody;
   if (contentType && contentType.includes('application/json')) {
-    return await response.json();
+    responseBody = await response.json();
+  } else {
+    responseBody = await response.text();
   }
 
-  return await response.text();
+  if (response.status >= 400) {
+    throw Error(responseBody);
+  } else {
+    return responseBody;
+  }
 }
