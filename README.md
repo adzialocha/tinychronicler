@@ -35,6 +35,9 @@ poetry run python tinychronicler
 
 # Run Jupyter Lab to experiment with code in `/notebooks` folder
 poetry run jupyter lab ./notebooks
+
+# Start shell to allow running any other application in virtual environment
+poetry shell
 ```
 
 ## License
