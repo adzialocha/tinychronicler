@@ -54,7 +54,9 @@ async def create_chronicle(chronicle: schemas.ChronicleIn):
 
 @router.get("/api/chronicles", response_model=Page[schemas.ChronicleOut])
 async def read_chronicles():
-    return await paginate(database, select([models.Chronicle]))
+    return await paginate(database,
+                          select([models.Chronicle])
+                          .order_by(models.Chronicle.created_at.desc()))
 
 
 @router.get(

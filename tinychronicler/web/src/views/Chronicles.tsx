@@ -1,7 +1,8 @@
-import { Fragment, useCallback, useEffect, useState } from 'react';
+import { Fragment } from 'react';
 import { DateTime } from 'luxon';
+import { Link } from 'react-router-dom';
 
-import request from '~/utils/api';
+import Paginator from '~/components/Paginator';
 
 type Chronicle = {
   id: number;
@@ -11,106 +12,38 @@ type Chronicle = {
 };
 
 const Chronicles = () => {
-  const [chronicles, setChronicles] = useState<Chronicle[]>([]);
-  const [values, setValues] = useState({
-    title: '',
-    description: '',
-  });
-
-  const fetchAll = async () => {
-    const response = await request(['chronicles']);
-
-    setChronicles(
-      response.items.map((chronicle: Chronicle) => {
-        return {
-          ...chronicle,
-          created_at: DateTime.fromISO(chronicle.created_at, {
-            zone: 'utc',
-          })
-            .setZone('system')
-            .toFormat('dd.MM.yy HH:mm'),
-        };
-      }),
-    );
-  };
-
-  const create = useCallback(async () => {
-    try {
-      await request(['chronicles'], values, 'POST');
-
-      setValues({
-        title: '',
-        description: '',
-      });
-
-      await fetchAll();
-    } catch {
-      window.alert('Something went wrong ..');
-    }
-  }, [values]);
-
-  useEffect(() => {
-    fetchAll();
-  }, []);
-
-  const change = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-
-    setValues((values) => {
-      return {
-        ...values,
-        [name]: value,
-      };
-    });
-  }, []);
-
-  const submit = useCallback(
-    async (event: React.FormEvent) => {
-      event.preventDefault();
-      create();
-    },
-    [create],
-  );
-
   return (
     <Fragment>
       <h2>Chronicles</h2>
-      <ul>
-        {chronicles.map((chronicle) => {
-          return (
-            <li key={chronicle.id}>
-              <p>
-                <strong>{chronicle.title}</strong> ({chronicle.created_at})
-              </p>
-              <p>{chronicle.description}</p>
-            </li>
-          );
-        })}
-      </ul>
-      <h2>Create new Chronicle</h2>
-      <form onSubmit={submit}>
-        <fieldset>
-          <label htmlFor="title">Title</label>
-          <input
-            name="title"
-            id="title"
-            value={values.title}
-            type="text"
-            onChange={change}
-          />
-        </fieldset>
-        <fieldset>
-          <label htmlFor="description">Description</label>
-          <input
-            name="description"
-            id="description"
-            type="text"
-            value={values.description}
-            onChange={change}
-          />
-        </fieldset>
-        <input type="submit" value="Create" />
-      </form>
+      <Link to="/chronicles/new">Create new Chronicle</Link>
+      <Paginator<Chronicle> path={['chronicles']}>
+        {({ items, hasPreviousPage, hasNextPage, nextPage, previousPage }) => (
+          <ul>
+            {items.map((chronicle) => {
+              const createdAt = DateTime.fromISO(chronicle.created_at, {
+                zone: 'utc',
+              })
+                .setZone('system')
+                .toFormat('dd.MM.yy HH:mm');
+
+              return (
+                <li key={chronicle.id}>
+                  <p>
+                    <strong>{chronicle.title}</strong> ({createdAt})
+                  </p>
+                  <p>{chronicle.description}</p>
+                </li>
+              );
+            })}
+            <button disabled={!hasPreviousPage} onClick={previousPage}>
+              &lt;
+            </button>
+            <button disabled={!hasNextPage} onClick={nextPage}>
+              &gt;
+            </button>
+          </ul>
+        )}
+      </Paginator>
     </Fragment>
   );
 };

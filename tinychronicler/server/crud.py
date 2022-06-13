@@ -18,7 +18,8 @@ async def get_chronicle(chronicle_id: int):
 
 
 async def get_chronicles():
-    query = select([models.Chronicle])
+    query = select([models.Chronicle]).order_by(
+        models.Chronicle.created_at.desc())
     return await database.fetch_all(query)
 
 

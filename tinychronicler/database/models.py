@@ -20,7 +20,7 @@ class Chronicle(Base):
     id = Column(Integer, primary_key=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     title = Column(String(255), nullable=False)
-    description = Column(Text)
+    description = Column(Text, nullable=False)
 
     files = relationship("File", back_populates="chronicle")
     compositions = relationship("Composition", back_populates="chronicle")

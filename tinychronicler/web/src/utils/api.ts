@@ -45,7 +45,7 @@ function parameterize(obj: {
 }
 
 export default async function request(
-  path: [string?] = [],
+  path: string[] = [],
   body = {},
   method = METHOD_GET,
 ) {
