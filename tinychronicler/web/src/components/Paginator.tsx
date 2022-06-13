@@ -53,11 +53,6 @@ const Paginator = <T extends object>({ path, children }: Props<T>) => {
     }
   }, [hasPreviousPage]);
 
-  console.log({
-    hasNextPage,
-    hasPreviousPage,
-  });
-
   return children({
     items,
     page,
