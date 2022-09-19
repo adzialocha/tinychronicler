@@ -33,6 +33,7 @@ async def update_chronicle(chronicle_id: int, chronicle: schemas.ChronicleIn):
 
 
 async def delete_chronicle(chronicle_id: int):
+    # @TODO: Also delete related files and compositions
     query = delete(models.Chronicle).where(models.Chronicle.id == chronicle_id)
     return await database.execute(query)
 
@@ -64,6 +65,7 @@ async def get_files(chronicle_id: int):
 
 
 async def delete_file(file_id: int):
+    # @TODO: Also delete actual file
     query = delete(models.File).where(models.File.id == file_id)
     return await database.execute(query)
 
