@@ -30,6 +30,11 @@ const config: Configuration = {
         exclude: /node_modules/,
         loader: 'ts-loader',
       },
+      {
+        test: /\.(woff|woff2)$/i,
+        include: /node_modules/,
+        type: 'asset/resource',
+      },
     ],
   },
   plugins: [

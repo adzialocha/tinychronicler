@@ -1,49 +1,90 @@
 import { Fragment } from 'react';
-import { DateTime } from 'luxon';
-import { Link } from 'react-router-dom';
+import {
+  Table,
+  TableBody,
+  TableDataCell,
+  TableHead,
+  TableHeadCell,
+  TableRow,
+  Toolbar,
+  Window,
+  WindowContent,
+  WindowHeader,
+} from 'react95';
 
+import type { Chronicle } from '~/types';
+
+import Link from '~/components/Link';
 import Paginator from '~/components/Paginator';
-
-type Chronicle = {
-  id: number;
-  title: string;
-  description: string;
-  created_at: string;
-};
+import { formatDate } from '~/utils/format';
 
 const Chronicles = () => {
   return (
     <Fragment>
-      <h2>Chronicles</h2>
-      <Link to="/chronicles/new">Create new Chronicle</Link>
-      <Paginator<Chronicle> path={['chronicles']}>
-        {({ items, hasPreviousPage, hasNextPage, nextPage, previousPage }) => (
-          <ul>
-            {items.map((chronicle) => {
-              const createdAt = DateTime.fromISO(chronicle.created_at, {
-                zone: 'utc',
-              })
-                .setZone('system')
-                .toFormat('dd.MM.yy HH:mm');
-
-              return (
-                <li key={chronicle.id}>
-                  <p>
-                    <strong>{chronicle.title}</strong> ({createdAt})
-                  </p>
-                  <p>{chronicle.description}</p>
-                </li>
-              );
-            })}
-            <button disabled={!hasPreviousPage} onClick={previousPage}>
-              &lt;
-            </button>
-            <button disabled={!hasNextPage} onClick={nextPage}>
-              &gt;
-            </button>
-          </ul>
-        )}
-      </Paginator>
+      <Window style={{ width: '100%', maxWidth: 1000 }}>
+        <WindowHeader>Chronicles</WindowHeader>
+        <Toolbar>
+          <Link to="/chronicles/new" variant="menu" size="sm">
+            Create new
+          </Link>
+        </Toolbar>
+        <WindowContent>
+          <Paginator<Chronicle> path={['chronicles']}>
+            {({
+              items,
+              hasPreviousPage,
+              hasNextPage,
+              nextPage,
+              previousPage,
+            }) => (
+              <>
+                <Table>
+                  <TableHead>
+                    <TableRow head>
+                      <TableHeadCell>ID</TableHeadCell>
+                      <TableHeadCell>Title</TableHeadCell>
+                      <TableHeadCell>Created</TableHeadCell>
+                      <TableHeadCell>Description</TableHeadCell>
+                      <TableHeadCell>Actions</TableHeadCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {items.map((chronicle) => {
+                      return (
+                        <TableRow key={chronicle.id}>
+                          <TableDataCell>{chronicle.id}</TableDataCell>
+                          <TableDataCell>{chronicle.title}</TableDataCell>
+                          <TableDataCell>
+                            {formatDate(chronicle.created_at)}
+                          </TableDataCell>
+                          <TableDataCell>{chronicle.description}</TableDataCell>
+                          <TableDataCell>
+                            <Link
+                              to={`/chronicles/${chronicle.id}/edit`}
+                              variant="flat"
+                              size="sm"
+                            >
+                              Edit
+                            </Link>
+                          </TableDataCell>
+                        </TableRow>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+                <div style={{ paddingTop: 7 }}>
+                  <Link disabled={!hasPreviousPage} onClick={previousPage}>
+                    &lt;
+                  </Link>
+                  <Link disabled={!hasNextPage} onClick={nextPage}>
+                    &gt;
+                  </Link>
+                </div>
+              </>
+            )}
+          </Paginator>
+        </WindowContent>
+      </Window>
     </Fragment>
   );
 };

@@ -87,7 +87,7 @@ export default async function request(
   }
 
   if (response.status >= 400) {
-    throw Error(responseBody);
+    throw Error('detail' in responseBody ? responseBody.detail : responseBody);
   } else {
     return responseBody;
   }
