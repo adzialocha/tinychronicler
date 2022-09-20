@@ -271,8 +271,11 @@ async def read_composition(chronicle_id: int, composition_id: int):
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Composition does not belong to chronicle",
         )
-    # Convert pickled data before responding
-    data = pickle.loads(result.data)
+    if result.is_ready:
+        # Convert pickled data before responding
+        data = pickle.loads(result.data)
+    else:
+        data = None
     return {
         "created_at": result.created_at,
         "data": data,

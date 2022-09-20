@@ -1,5 +1,7 @@
-import pickle
 from datetime import datetime
+from threading import Thread
+import asyncio
+import pickle
 
 from loguru import logger
 
@@ -9,7 +11,7 @@ from tinychronicler.generator import generator
 from . import crud
 
 
-async def generate_composition(chronicle_id: int):
+async def generate_composition_thread(chronicle_id: int):
     logger.info(
         "Generate new composition based on chronicle {}".format(chronicle_id)
     )
@@ -30,3 +32,14 @@ async def generate_composition(chronicle_id: int):
             chronicle_id
         )
     )
+
+
+def thread_handler(chronicle_id: int):
+    asyncio.run(generate_composition_thread(chronicle_id))
+
+
+async def generate_composition(chronicle_id: int):
+    # Move it all into a separate thread as loading an large audio file blocks
+    # the main thread
+    new_thread = Thread(target=thread_handler, args=(chronicle_id,))
+    new_thread.start()

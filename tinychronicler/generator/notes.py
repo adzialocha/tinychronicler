@@ -1,14 +1,18 @@
 from typing import List
 
+from loguru import logger
+import audioread.ffdec
 import librosa
 import numpy as np
-from loguru import logger
 
 from .audio import detect_onsets, remove_close_onsets
 from .midi import analyze_midi
 
 # Look only for onsets which are close (+/- seconds)
 SIMILARITY_THRESHOLD = 0.4
+
+# Load files with this sample rate
+SAMPLE_RATE = 225050
 
 
 def times_from_range(times, start, end):
@@ -32,8 +36,8 @@ def calculate_similarity(source, target):
 
 
 def generate_notes(audio_file: str, midi_files: List[str]):
-    # @TODO: Move this into a thread or batch read to avoid blocking the thread
-    y, sr = librosa.load(audio_file)
+    aro = audioread.ffdec.FFmpegAudioFile(audio_file)
+    y, sr = librosa.load(aro)
     logger.debug("Read audio file: {} @ {}hz".format(audio_file, sr))
 
     # Detect onsets

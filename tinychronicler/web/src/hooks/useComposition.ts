@@ -12,10 +12,7 @@ export default function useComposition(
 
   const [composition, setComposition] = useState<Composition>({
     created_at: '',
-    data: {
-      notes: [],
-      parameters: [],
-    },
+    data: undefined,
     id: 0,
     is_ready: false,
     title: '',

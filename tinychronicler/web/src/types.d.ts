@@ -17,7 +17,7 @@ export type File = {
 
 export type Composition = {
   created_at: string;
-  data: {
+  data?: {
     notes: [number, number][];
     parameters: {
       parameters: string[];

@@ -9,15 +9,21 @@ const MARKER_SEC = 30;
 const CompositionPreview = ({ composition }: { composition: Composition }) => {
   const canvasRef = createRef<HTMLCanvasElement>();
 
-  const { notes, parameters } = composition.data;
-  const end = Math.ceil(notes[notes.length - 1][1]);
-
   useEffect(() => {
+    if (!composition.data) {
+      return;
+    }
+
+    const { notes, parameters } = composition.data;
+    const end = Math.ceil(notes[notes.length - 1][1]);
+
     const canvas = canvasRef.current;
 
     if (!canvas) {
       return;
     }
+
+    canvas.setAttribute('width', `${end * CELL_SIZE + 10}px`);
 
     const context = canvas.getContext('2d');
 
@@ -65,13 +71,13 @@ const CompositionPreview = ({ composition }: { composition: Composition }) => {
       context.fillRect(from, 70, to, CELL_SIZE * 10);
       context.fillText(parameter.parameters.join(', '), from + 5, 70);
     });
-  }, [canvasRef, notes, end, parameters]);
+  }, [canvasRef, composition.data]);
 
   return (
     <Cutout
       style={{ width: '700px', height: '200px', backgroundColor: '#fff' }}
     >
-      <canvas height={178} width={end * CELL_SIZE + 10} ref={canvasRef} />
+      <canvas height={178} ref={canvasRef} />
     </Cutout>
   );
 };
