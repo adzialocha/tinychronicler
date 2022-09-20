@@ -6,7 +6,15 @@ import type { Composition } from '~/types';
 const CELL_SIZE = 10;
 const MARKER_SEC = 30;
 
-const CompositionPreview = ({ composition }: { composition: Composition }) => {
+const CompositionCanvas = ({
+  composition,
+  from,
+  to,
+}: {
+  composition: Composition;
+  from: number;
+  to: number;
+}) => {
   const canvasRef = createRef<HTMLCanvasElement>();
 
   useEffect(() => {
@@ -15,7 +23,17 @@ const CompositionPreview = ({ composition }: { composition: Composition }) => {
     }
 
     const { notes, parameters } = composition.data;
-    const end = Math.ceil(notes[notes.length - 1][1]);
+
+    if (notes.length <= from) {
+      return;
+    }
+
+    const start = Math.ceil(notes[from][0]);
+    const end =
+      notes.length <= to
+        ? Math.ceil(notes[notes.length - 1][1])
+        : Math.ceil(notes[to][1]);
+    const duration = end - start;
 
     const canvas = canvasRef.current;
 
@@ -23,7 +41,7 @@ const CompositionPreview = ({ composition }: { composition: Composition }) => {
       return;
     }
 
-    canvas.setAttribute('width', `${end * CELL_SIZE + 10}px`);
+    canvas.setAttribute('width', `${duration * CELL_SIZE}px`);
 
     const context = canvas.getContext('2d');
 
@@ -37,13 +55,17 @@ const CompositionPreview = ({ composition }: { composition: Composition }) => {
     context.fillStyle = '#fff';
     context.fillRect(0, 0, width, height);
 
+    function xPos(x: number) {
+      return Math.round((x - start) * CELL_SIZE);
+    }
+
     // Draw markers
     context.fillStyle = '#999';
     context.strokeStyle = '#999';
     context.lineWidth = 2;
-    const steps = Math.ceil(end / MARKER_SEC);
+    const steps = Math.ceil(duration / MARKER_SEC);
     for (let i = 0; i < steps; i += 1) {
-      const pos = i * MARKER_SEC * CELL_SIZE;
+      const pos = xPos(i * MARKER_SEC);
       context.beginPath();
       context.moveTo(pos, 0);
       context.lineTo(pos, 178);
@@ -54,8 +76,8 @@ const CompositionPreview = ({ composition }: { composition: Composition }) => {
     // Draw note events
     context.fillStyle = '#000';
     notes.forEach((note) => {
-      const from = Math.round(note[0] * CELL_SIZE);
-      const to = Math.round(note[1] * CELL_SIZE) - from;
+      const from = xPos(note[0]);
+      const to = xPos(note[1]) - from;
       context.fillRect(from, 20, to, CELL_SIZE * 3);
     });
 
@@ -66,18 +88,28 @@ const CompositionPreview = ({ composition }: { composition: Composition }) => {
       )}, ${Math.floor(Math.random() * 255)}, ${Math.floor(
         Math.random() * 255,
       )}, 0.5)`;
-      const from = Math.round(parameter.module[0] * CELL_SIZE);
-      const to = Math.round(parameter.module[1] * CELL_SIZE) - from;
+      const from = xPos(parameter.module[0]);
+      const to = xPos(parameter.module[1]) - from;
       context.fillRect(from, 70, to, CELL_SIZE * 10);
       context.fillText(parameter.parameters.join(', '), from + 5, 70);
     });
-  }, [canvasRef, composition.data]);
+  }, [canvasRef, composition.data, from, to]);
 
+  return <canvas height={178} ref={canvasRef} />;
+};
+
+const CompositionPreview = ({ composition }: { composition: Composition }) => {
   return (
     <Cutout
-      style={{ width: '700px', height: '200px', backgroundColor: '#fff' }}
+      style={{
+        backgroundColor: '#fff',
+        height: '200px',
+        width: '700px',
+        whiteSpace: 'nowrap',
+      }}
     >
-      <canvas height={178} ref={canvasRef} />
+      <CompositionCanvas composition={composition} from={0} to={500} />
+      <CompositionCanvas composition={composition} from={500} to={1000} />
     </Cutout>
   );
 };
