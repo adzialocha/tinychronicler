@@ -1,6 +1,6 @@
 import { Fragment, useState, createRef } from 'react';
 import { useFormik } from 'formik';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import * as Yup from 'yup';
 import {
   Button,
@@ -102,8 +102,10 @@ const EditInfo = ({ chronicle }: { chronicle: Chronicle }) => {
 };
 
 const EditFiles = ({ chronicle }: { chronicle: Chronicle }) => {
+  const [search, setSearch] = useSearchParams();
   const uploader = createRef<HTMLInputElement>();
   const { compositions } = useChronicle(chronicle.id.toString());
+  const page = search.get('page');
   const [loading, setLoading] = useState(false);
 
   const onClick = () => {
@@ -170,6 +172,10 @@ const EditFiles = ({ chronicle }: { chronicle: Chronicle }) => {
         <Hourglass />
       ) : (
         <Paginator<File>
+          page={page ? parseInt(page, 10) : 1}
+          onChange={(page) => {
+            setSearch({ page: page.toString(), tab: 'files' });
+          }}
           path={['chronicles', chronicle.id.toString(), 'files']}
         >
           {({
@@ -254,6 +260,8 @@ const EditFiles = ({ chronicle }: { chronicle: Chronicle }) => {
 
 const EditCompositions = ({ chronicle }: { chronicle: Chronicle }) => {
   const { files } = useChronicle(chronicle.id.toString());
+  const [search, setSearch] = useSearchParams();
+  const page = search.get('page');
   const [loading, setLoading] = useState(false);
 
   const onGenerate = async () => {
@@ -299,6 +307,10 @@ const EditCompositions = ({ chronicle }: { chronicle: Chronicle }) => {
 
   return files > 0 ? (
     <Paginator<Composition>
+      page={page ? parseInt(page, 10) : 1}
+      onChange={(page) => {
+        setSearch({ page: page.toString(), tab: 'compositions' });
+      }}
       path={['chronicles', chronicle.id.toString(), 'compositions']}
     >
       {({ items, hasPreviousPage, hasNextPage, nextPage, previousPage }) => (
@@ -372,14 +384,15 @@ const EditCompositions = ({ chronicle }: { chronicle: Chronicle }) => {
 
 const ChroniclesEdit = () => {
   const { id } = useParams();
-  const [activeTab, setActiveTab] = useState(0);
+  const [search, setSearch] = useSearchParams();
+  const activeTab = search.get('tab') ? search.get('tab') : 'info';
   const { chronicle, loading } = useChronicle(id);
 
   const handleChange = (
     _event: React.MouseEvent<HTMLElement>,
-    value: number,
+    value: string,
   ) => {
-    setActiveTab(value);
+    setSearch({ tab: value });
   };
 
   return loading ? (
@@ -389,14 +402,16 @@ const ChroniclesEdit = () => {
       <WindowHeader>Edit "{chronicle.title}" Chronicle</WindowHeader>
       <WindowContent>
         <Tabs value={activeTab} onChange={handleChange}>
-          <Tab value={0}>Chronicle</Tab>
-          <Tab value={1}>Files</Tab>
-          <Tab value={2}>Compositions</Tab>
+          <Tab value="info">Chronicle</Tab>
+          <Tab value="files">Files</Tab>
+          <Tab value="compositions">Compositions</Tab>
         </Tabs>
         <TabBody>
-          {activeTab === 0 && <EditInfo chronicle={chronicle} />}
-          {activeTab === 1 && <EditFiles chronicle={chronicle} />}
-          {activeTab === 2 && <EditCompositions chronicle={chronicle} />}
+          {activeTab === 'info' && <EditInfo chronicle={chronicle} />}
+          {activeTab === 'files' && <EditFiles chronicle={chronicle} />}
+          {activeTab === 'compositions' && (
+            <EditCompositions chronicle={chronicle} />
+          )}
         </TabBody>
       </WindowContent>
     </Window>

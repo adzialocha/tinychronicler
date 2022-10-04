@@ -1,4 +1,5 @@
 import { Fragment, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import {
   Hourglass,
   Table,
@@ -20,7 +21,9 @@ import request from '~/utils/api';
 import { formatDate } from '~/utils/format';
 
 const Chronicles = () => {
+  const [search, setSearch] = useSearchParams();
   const [loading, setLoading] = useState(false);
+  const page = search.get('page');
 
   const onDelete = async (id: number) => {
     const answer = window.confirm('Are you sure?');
@@ -46,7 +49,13 @@ const Chronicles = () => {
           {loading ? (
             <Hourglass />
           ) : (
-            <Paginator<Chronicle> path={['chronicles']}>
+            <Paginator<Chronicle>
+              page={page ? parseInt(page, 10) : 1}
+              onChange={(page) => {
+                setSearch({ page: page.toString() });
+              }}
+              path={['chronicles']}
+            >
               {({
                 items,
                 hasPreviousPage,

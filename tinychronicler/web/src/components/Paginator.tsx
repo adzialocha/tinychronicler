@@ -6,9 +6,10 @@ const PAGE_SIZE = 10;
 
 type Props<T> = {
   path: string[];
+  page: number;
+  onChange: (page: number) => void;
   children: React.FunctionComponent<{
     items: T[];
-    page: number;
     total: number;
     size: number;
     hasNextPage: boolean;
@@ -18,9 +19,13 @@ type Props<T> = {
   }>;
 };
 
-const Paginator = <T extends object>({ path, children }: Props<T>) => {
+const Paginator = <T extends object>({
+  path,
+  page = 1,
+  onChange,
+  children,
+}: Props<T>) => {
   const [items, setItems] = useState<T[]>([]);
-  const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
@@ -28,7 +33,6 @@ const Paginator = <T extends object>({ path, children }: Props<T>) => {
       try {
         const response = await request(path, { page, size: PAGE_SIZE });
         setItems(response.items);
-        setPage(response.page);
         setTotal(response.total);
       } catch {
         window.alert('Something went wrong');
@@ -43,19 +47,18 @@ const Paginator = <T extends object>({ path, children }: Props<T>) => {
 
   const nextPage = useCallback(() => {
     if (hasNextPage) {
-      setPage((page) => page + 1);
+      onChange(page + 1);
     }
-  }, [hasNextPage]);
+  }, [page, onChange, hasNextPage]);
 
   const previousPage = useCallback(() => {
     if (hasPreviousPage) {
-      setPage((page) => page - 1);
+      onChange(page - 1);
     }
-  }, [hasPreviousPage]);
+  }, [page, onChange, hasPreviousPage]);
 
   return children({
     items,
-    page,
     size: PAGE_SIZE,
     total,
     hasNextPage,
