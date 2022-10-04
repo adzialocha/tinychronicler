@@ -108,8 +108,7 @@ const CompositionPreview = ({ composition }: { composition: Composition }) => {
         whiteSpace: 'nowrap',
       }}
     >
-      <CompositionCanvas composition={composition} from={0} to={500} />
-      <CompositionCanvas composition={composition} from={500} to={1000} />
+      <CompositionCanvas composition={composition} from={0} to={128000} />
     </Cutout>
   );
 };

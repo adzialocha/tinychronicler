@@ -31,7 +31,10 @@ const FilesShow = () => {
           <br />
           Uploaded: {formatDate(file.created_at)}
           <br />
-          URL: <Anchor href={file.url}>{file.url}</Anchor>
+          URL:{' '}
+          <Anchor href={file.url} target="_blank">
+            {file.url}
+          </Anchor>
           <br />
         </Fieldset>
       </WindowContent>
