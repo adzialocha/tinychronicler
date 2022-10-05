@@ -193,16 +193,42 @@ Run `crontab -e` and add the following line:
     nohook wpa_supplicant
     ```
 
-7. Configure services
+7. Set up reverse proxy
+
+```bash
+sudo apt-get install nginx
+```
+
+Add this to `/etc/nginx/sites-enabled/default` (make sure all other lines are removed):
+
+```
+server {
+    client_max_body_size 4096M;
+
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    server_name tinychronicler.local;
+
+    location / {
+        proxy_set_header  X-Forwarded-For $remote-addr;
+        proxy_set_header  Host $http_host;
+        proxy_pass        "http://127.0.0.1:8000";
+    }
+}
+```
+
+8. Configure services
 
     ```bash
     sudo systemctl unmask hostapd
     sudo systemctl start hostapd
     sudo systemctl enable hostapd
     sudo systemctl enable dnsmasq
+    sudo systemctl enable nginx
     ```
 
-## 8. Reboot!
+## 9. Reboot!
 
 ```bash
 sudo reboot now
