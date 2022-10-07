@@ -31,6 +31,7 @@ def generate_file_name(file_ext: str):
 
 
 def generate_videostill(video_file_path: str, img_file_path: str):
+    # @TODO use asyncio
     subprocess.run(
         [
             "ffmpeg",
@@ -63,6 +64,7 @@ def generate_waveform(
         "[color][wave]scale2ref[bg][fg]",
         "[bg][fg]overlay=format=auto",
     ]
+    # @TODO use asyncio
     subprocess.run(
         [
             "ffmpeg",
