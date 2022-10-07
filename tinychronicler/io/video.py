@@ -30,7 +30,7 @@ class VideoProcess(object):
         self._process = await asyncio.create_subprocess_shell(
             " ".join([
                 "ffplay",
-                "-fs",  # Enable fullscreen
+                # "-fs",  # Enable fullscreen
                 "-noborder",  # Borderless window
                 "-loglevel",  # Disable logging
                 "quiet",
@@ -69,7 +69,7 @@ class VideoProcess(object):
         self._process = await asyncio.create_subprocess_shell(
             " ".join([
                 "ffplay",
-                "-fs",  # Enable fullscreen
+                # "-fs",  # Enable fullscreen
                 "-loop 0",  # Loop forever
                 "-noborder",  # Borderless window
                 "-sn",  # Disable subtitles
@@ -98,9 +98,6 @@ class VideoProcess(object):
             asyncio.sleep(seconds),
             self._process.wait(),
         ], return_when=asyncio.FIRST_COMPLETED)
-
-        # Wait for the subprocess to finish
-        await self._process.wait()
         await self.stop()
 
     async def stop(self):
