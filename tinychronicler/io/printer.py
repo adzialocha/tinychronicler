@@ -2,7 +2,7 @@ from loguru import logger
 from serial.serialutil import SerialException
 from thermalprinter import ThermalPrinter
 
-THERMAL_PRINTER_TTY = '/dev/ttyAMA0'
+THERMAL_PRINTER_TTY = '/dev/serial0'
 
 printer = None
 try:
@@ -14,9 +14,7 @@ except SerialException as err:
 def print_composition():
     if printer is None:
         raise Exception("Printer is not set up")
-
     # @TODO
-    printer.out("Test")
 
 
 def print_test_page():

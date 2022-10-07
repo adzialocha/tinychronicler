@@ -6,7 +6,7 @@ from tinychronicler.constants import (
 from tinychronicler.server.files import random_file
 
 from .audio import play_audio, stop_audio
-from .matrix import run_test_sequence
+from .led import run_test_sequence
 from .printer import print_composition, print_test_page
 from .screen import get_screen_dimensions
 from .video import play_video, show_image, stop_video_or_image
@@ -38,6 +38,6 @@ async def run_test(test_id: str):
     elif test_id == "stop-video":
         await stop_video_or_image()
     elif test_id == "run-led-test":
-        run_test_sequence()
+        await run_test_sequence()
     else:
         raise Exception("Unknown test id")
