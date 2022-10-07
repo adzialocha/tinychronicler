@@ -6,6 +6,7 @@ import ChroniclesNew from '~/views/ChroniclesNew';
 import CompositionsShow from '~/views/CompositionsShow';
 import Dashboard from '~/views/Dashboard';
 import FilesShow from '~/views/FilesShow';
+import Settings from '~/views/Settings';
 
 const Router = () => {
   return (
@@ -22,6 +23,7 @@ const Router = () => {
         path="/chronicles/:chronicleId/compositions/:id"
         element={<CompositionsShow />}
       />
+      <Route path="/settings" element={<Settings />} />
     </Routes>
   );
 };

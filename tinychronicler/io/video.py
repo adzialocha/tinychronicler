@@ -1,75 +1,163 @@
 import asyncio
 import datetime
+import os
 import time
 
-process = None
+from loguru import logger
 
 
-async def stop_video_or_image():
-    if process is not None:
-        process.terminate()
-        await process.wait()
+class VideoProcess(object):
+    _instance = None
+    _process = None
+    _timeout = None
+    _running = False
+
+    def __new__(cls):
+        # Singleton pattern to make sure we only create this instance once
+        if cls._instance is None:
+            cls._instance = super(VideoProcess, cls).__new__(cls)
+        return cls._instance
+
+    async def show_image(
+        self,
+        image_file_path: str,
+        monitor_id: int,
+        duration: str,
+    ):
+        self._running = True
+
+        # Play image file via `ffplay`
+        self._process = await asyncio.create_subprocess_shell(
+            " ".join([
+                "ffplay",
+                "-fs",  # Enable fullscreen
+                "-noborder",  # Borderless window
+                "-loglevel",  # Disable logging
+                "quiet",
+                image_file_path,
+            ]),
+            env={
+                **os.environ,
+                "DISPLAY": ":{}.0".format(monitor_id)  # Select monitor
+            }
+        )
+
+        # Convert duration string to seconds
+        dur = time.strptime(duration, '%H:%M:%S')
+        seconds = datetime.timedelta(hours=dur.tm_hour,
+                                     minutes=dur.tm_min,
+                                     seconds=dur.tm_sec).total_seconds()
+
+        # Run `ffplay` for x seconds and then terminate process
+        await asyncio.wait([
+            asyncio.sleep(seconds),
+            self._process.wait(),
+        ], return_when=asyncio.FIRST_COMPLETED)
+        await self.stop()
+
+    async def play_video(
+        self,
+        video_file_path: str,
+        monitor_id: int,
+        duration: str,
+        seek: str,
+        muted: bool
+    ):
+        self._running = True
+
+        # Play video file via `ffplay`
+        self._process = await asyncio.create_subprocess_shell(
+            " ".join([
+                "ffplay",
+                "-fs",  # Enable fullscreen
+                "-loop 0",  # Loop forever
+                "-noborder",  # Borderless window
+                "-sn",  # Disable subtitles
+                "-loglevel quiet",  # Disable logging
+                "-t {}".format(duration),  # Set duration of video
+                # Start playing video from this position
+                "-ss {}".format(seek),
+                "-an" if muted else "",  # Disable audio
+                "-autoexit",  # Exit `ffplay` automatically after playing
+                video_file_path,
+            ]),
+            env={
+                **os.environ,
+                "DISPLAY": ":{}.0".format(monitor_id)  # Select monitor
+            }
+        )
+
+        # Convert duration string to seconds
+        dur = time.strptime(duration, '%H:%M:%S')
+        seconds = datetime.timedelta(hours=dur.tm_hour,
+                                     minutes=dur.tm_min,
+                                     seconds=dur.tm_sec).total_seconds()
+
+        # Run `ffplay` for x seconds and then terminate process
+        await asyncio.wait([
+            asyncio.sleep(seconds),
+            self._process.wait(),
+        ], return_when=asyncio.FIRST_COMPLETED)
+
+        # Wait for the subprocess to finish
+        await self._process.wait()
+        await self.stop()
+
+    async def stop(self):
+        if self._timeout is not None:
+            self._timeout.cancel()
+            self._timeout = None
+
+        if self._running:
+            try:
+                self._process.terminate()
+                await self._process.wait()
+            except Exception:
+                # This might throw when process is already gone, silently fail
+                pass
+            self._running = False
+
+
+player = VideoProcess()
 
 
 async def play_video(
-        video_file_path: str,
-        monitor_id: int = 0,
-        duration: str = "00:10:00",
-        seek: str = "00:00:00",
-        muted: bool = False):
+    video_file_path: str,
+    monitor_id: int = 0,
+    duration: str = "00:00:10",
+    seek: str = "00:00:00",
+    muted: bool = False
+):
     # Make sure current process gets terminated first
-    await stop_video_or_image()
+    await player.stop()
 
     # Show video via `ffplay`
-    process = await asyncio.create_subprocess_exec(
-        [
-            "DISPLAY=:{}.0".format(monitor_id),  # Select monitor
-            "ffplay",
-            "-fs",  # Enable fullscreen
-            "-loop 0",  # Loop forever
-            "-noborder",  # Borderless window
-            "-sn",  # Disable subtitles
-            "-loglevel quiet",  # Disable logging
-            "-t {}".format(duration),  # Set duration of video
-            "-ss {}".format(seek),  # Start playing video from this position
-            "-an" if muted else "",  # Disable audio
-            "-autoexit",  # Exit `ffplay` automatically after playing
-            video_file_path
-        ],
+    logger.debug("Play video file @ {}".format(video_file_path))
+    await player.play_video(
+        video_file_path,
+        monitor_id,
+        duration,
+        seek,
+        muted
     )
 
-    # Wait for the subprocess to finish
-    await process.wait()
-    process = None
 
-
-def show_image(
-        image_file_path: str,
-        monitor_id: int = 0,
-        duration: str = "00:10:00"):
+async def show_image(
+    image_file_path: str,
+    monitor_id: int = 0,
+    duration: str = "00:00:10"
+):
     # Make sure current process gets terminated first
-    await stop_video_or_image()
+    await player.stop()
 
     # Show image via `ffplay`
-    process = await asyncio.create_subprocess_exec(
-        [
-            "DISPLAY=:{}.0".format(monitor_id),  # Select monitor
-            "ffplay",
-            "-fs",  # Enable fullscreen
-            "-noborder",  # Borderless window
-            "-loglevel quiet",  # Disable logging
-            image_file_path
-        ],
+    logger.debug("Show image file @ {}".format(image_file_path))
+    await player.show_image(
+        image_file_path,
+        monitor_id,
+        duration,
     )
 
-    # Convert duration string to seconds
-    dur = time.strptime(duration, '%H:%M:%S')
-    seconds = datetime.timedelta(hours=dur.tm_hour,
-                                 minutes=dur.tm_min,
-                                 seconds=dur.tm_sec).total_seconds()
 
-    # Run `ffplay` for x seconds and then terminate process
-    time.sleep(seconds)
-    process.terminate()
-    await process.wait()
-    process = None
+async def stop_video_or_image():
+    await player.stop()

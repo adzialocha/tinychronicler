@@ -89,3 +89,7 @@ class CompositionDataOut(CompositionBase, BaseModel):
     created_at: datetime
     data: Optional[CompositionData] = None
     id: int
+
+
+class IOTest(BaseModel):
+    name: str

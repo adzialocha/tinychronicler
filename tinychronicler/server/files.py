@@ -1,7 +1,10 @@
+import glob
 import mimetypes
 import os
+import random
 import subprocess
 import uuid
+from typing import List
 
 import aiofiles
 from fastapi import File
@@ -145,3 +148,15 @@ async def store_file(file: File):
 def remove_file(file_path):
     if os.path.isfile(file_path):
         os.remove(file_path)
+
+
+def random_file(file_mimes: List[str]):
+    files = []
+    for file_mime in file_mimes:
+        file_ext = mimetypes.guess_extension(file_mime)
+        if file_ext is not None:
+            files = files + glob.glob('{}/*{}'.format(UPLOADS_DIR, file_ext))
+    if len(files) == 0:
+        return None
+    file = random.choice(files)
+    return os.path.abspath(file)

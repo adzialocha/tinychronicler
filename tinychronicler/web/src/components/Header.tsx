@@ -36,6 +36,7 @@ const Header = ({ version }: Props) => {
         <div style={{ position: 'relative', display: 'inline-block' }}>
           <Link to="/">Start</Link>
           <Link to="/chronicles">Chronicles</Link>
+          <Link to="/settings">Settings</Link>
         </div>
         <Title>
           <Emoji>💌</Emoji> Tiny Chronicler <Version>v{version}</Version>

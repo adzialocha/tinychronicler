@@ -309,3 +309,18 @@ async def delete_composition(chronicle_id: int, composition_id: int):
         )
     await crud.delete_composition(composition_id)
     return Response(status_code=status.HTTP_200_OK)
+
+
+@router.post(
+    "/api/settings/tests",
+    responses={400: {"model": CustomResponse}},
+)
+async def run_io_test(test: schemas.IOTest, background_tasks: BackgroundTasks):
+    try:
+        background_tasks.add_task(tasks.run_io_test, test.name)
+    except Exception as err:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Could not execute this test: {}".format(err),
+        )
+    return Response(status_code=status.HTTP_200_OK)
