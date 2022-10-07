@@ -21,9 +21,9 @@ def print_test_page():
     if printer is None:
         raise Exception("Printer is not set up")
 
-    printer.out("▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼")
-    printer.out("Hello,")
-    printer.out("                Tiny Chronicler!")
-    printer.out("           <3", bold=True)
-    printer.out("▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲")
+    printer.out("╔══════════════════════════════╗")
+    printer.out("║ Hello,                       ║")
+    printer.out("║           Tiny Chronicler!   ║")
+    printer.out("║      <3                      ║")
+    printer.out("╚══════════════════════════════╝")
     printer.feed(3)
