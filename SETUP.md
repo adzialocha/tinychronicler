@@ -48,8 +48,8 @@ Follow steps under https://www.raspberrypi.org/documentation/computers/remote-ac
 ## 3. Install poetry
 
 ```bash
-# See: https://python-poetry.org/docs/
-curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+# See: https://python-poetry.org/docs/#installation
+curl -sSL https://install.python-poetry.org | python3 -
 ```
 
 ## 4. Install Tiny Chronicler
@@ -84,11 +84,7 @@ LLVM_CONFIG=llvm-config-9 poetry install
 
 Related link: https://www.hifiberry.com/docs/software/configuring-linux-3-18-x/
 
-Remove the driver for the onboard sound from `/boot/config.txt` if it exists. Remove the line:
-
-```
-dtparam=audio=on
-```
+Probably you will run on a Linux Kernel version >= 5, make sure to follow the instructions for it.
 
 ## 6. Start Tiny Chronicler when Pi boots
 

@@ -1,9 +1,9 @@
 from typing import List
 
-from loguru import logger
 import audioread.ffdec
 import librosa
 import numpy as np
+from loguru import logger
 
 from .audio import detect_onsets, remove_close_onsets
 from .midi import analyze_midi
