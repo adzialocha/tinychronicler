@@ -35,7 +35,7 @@ class AudioProcess(object):
     async def stop(self):
         if self._running:
             try:
-                self._process.terminate()
+                self._process.kill()
                 await self._process.wait()
             except Exception:
                 # This might throw when process is already gone, silently fail
