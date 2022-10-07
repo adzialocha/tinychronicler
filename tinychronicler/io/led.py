@@ -23,19 +23,19 @@ def send_command(command_id: int):
 
 async def run_test_sequence():
     print_background()
-    asyncio.sleep(1)
+    await asyncio.sleep(1)
     print_left_eye()
-    asyncio.sleep(1)
+    await asyncio.sleep(1)
     print_right_eye()
-    asyncio.sleep(1)
+    await asyncio.sleep(1)
     print_mouth()
-    asyncio.sleep(1)
+    await asyncio.sleep(1)
     reset_mouth()
-    asyncio.sleep(1)
+    await asyncio.sleep(1)
     reset_eyes()
-    asyncio.sleep(1)
+    await asyncio.sleep(1)
     print_both_eyes()
-    asyncio.sleep(1)
+    await asyncio.sleep(1)
     reset_all()
 
 
