@@ -1,4 +1,4 @@
-#include <RGBMatrixPanel.h>
+#include <RGBmatrixPanel.h>
 
 #define CLK 11
 #define OE   9
@@ -20,7 +20,7 @@ void setup() {
   matrix.begin();
 }
 
-void loop {
+void loop() {
   if (Serial.available() == 0) {
     return;
   }
