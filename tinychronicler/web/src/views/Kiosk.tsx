@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react';
+import { createElement, useEffect, useState, useMemo, useRef } from 'react';
 import styled from 'styled-components';
 import OSC from 'osc-js';
 
@@ -6,9 +6,20 @@ const OSC_ENDPOINT = '127.0.0.1';
 const OSC_PORT = '8000/ws';
 const RECONNECTION_ATTEMPT_INTERVAL = 5000;
 
-const MODE_STANDBY = 0;
-const MODE_VIDEO = 1;
-const MODE_IMAGE = 2;
+type VisualState =
+  | {
+      mode: 'black';
+    }
+  | ({
+      mode: 'image';
+    } & ImageArgs)
+  | ({
+      mode: 'video';
+    } & VideoArgs);
+
+type AudioState = {
+  url?: string;
+};
 
 type VideoArgs = {
   url: string;
@@ -34,39 +45,86 @@ const StyledKiosk = styled.div`
   left: 0;
   background-color: #000;
   z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
 `;
 
-const ImageView = () => {
-  return null;
+const Image = styled.img`
+  object-fit: contain;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+`;
+
+const Video = styled.video`
+  object-fit: contain;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+`;
+
+const Audio = styled.audio`
+  display: none;
+`;
+
+const ImageView = (props: ImageArgs) => {
+  return <Image src={props.url} />;
 };
 
-const VideoPlayer = () => {
-  return null;
+const VideoPlayer = (props: VideoArgs) => {
+  return <Video autoPlay muted={props.muted} loop src={props.url} />;
 };
 
-const AudioPlayer = () => {
-  return null;
+const AudioPlayer = (props: AudioArgs) => {
+  return <Audio autoPlay src={props.url} />;
 };
 
 const Kiosk = () => {
-  const [mode, setMode] = useState(MODE_STANDBY);
+  const [visualState, setVisualState] = useState<VisualState>({
+    mode: 'black',
+  });
+  const [audioState, setAudioState] = useState<AudioState>({
+    url: undefined,
+  });
 
   const osc = useMemo(() => {
     return new OSC();
   }, []);
 
   const onVideo = (args: VideoArgs) => {
-    setMode(MODE_VIDEO);
-    console.log(args);
+    setVisualState({
+      mode: 'video',
+      ...args,
+    });
   };
 
   const onImage = (args: ImageArgs) => {
-    setMode(MODE_IMAGE);
-    console.log(args);
+    setVisualState({
+      mode: 'image',
+      ...args,
+    });
   };
 
   const onAudio = (args: AudioArgs) => {
-    console.log(args);
+    setAudioState({
+      ...args,
+    });
+  };
+
+  const onResetVideo = () => {
+    setVisualState({
+      mode: 'black',
+    });
+  };
+
+  const onResetAudio = () => {
+    setAudioState({
+      url: undefined,
+    });
   };
 
   useEffect(() => {
@@ -124,7 +182,7 @@ const Kiosk = () => {
     });
 
     osc.on('/video/reset', () => {
-      setMode(MODE_STANDBY);
+      onResetVideo();
     });
 
     osc.on('/image', (message: OSC.Message) => {
@@ -136,14 +194,14 @@ const Kiosk = () => {
       });
     });
 
-    osc.on('/image/reset', () => {
-      setMode(MODE_STANDBY);
-    });
-
     osc.on('/audio', (message: OSC.Message) => {
       onAudio({
         url: message.args[0] as string,
       });
+    });
+
+    osc.on('/audio/reset', () => {
+      onResetAudio();
     });
 
     connect();
@@ -156,9 +214,9 @@ const Kiosk = () => {
 
   return (
     <StyledKiosk>
-      <AudioPlayer />
-      {mode === MODE_VIDEO && <VideoPlayer />}
-      {mode === MODE_IMAGE && <ImageView />}
+      {audioState.url && <AudioPlayer url={audioState.url} />}
+      {visualState.mode === 'video' && <VideoPlayer {...visualState} />}
+      {visualState.mode === 'image' && <ImageView {...visualState} />}
     </StyledKiosk>
   );
 };

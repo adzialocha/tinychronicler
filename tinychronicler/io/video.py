@@ -23,4 +23,3 @@ def show_image(
 
 def stop_video_or_image():
     send_message("/video/reset")
-    send_message("/image/reset")
