@@ -37,7 +37,24 @@ const GlobalStyle = createGlobalStyle`
   body,
   #app {
     height: 100%;
-    min-width: 1000px;
+  }
+
+  td {
+    word-wrap: anywhere;
+  }
+
+  @media (max-width: 900px) {
+    td {
+      max-width: 100px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      word-wrap: normal;
+      white-space: nowrap;
+    }
+
+    td:last-child {
+      white-space: normal;
+    }
   }
 `;
 

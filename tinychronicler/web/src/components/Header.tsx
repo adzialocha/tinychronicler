@@ -14,6 +14,11 @@ const Title = styled.h1`
   color: rgb(132, 133, 132);
   text-shadow: white 2px 2px;
   padding-left: 10px;
+  padding-right: 5px;
+
+  @media (max-width: 500px) {
+    display: none;
+  }
 `;
 
 const Version = styled.span`
