@@ -1,11 +1,16 @@
-from pythonosc.udp_client import SimpleUDPClient
+from typing import List, Union
 
-OSC_ENDPOINT = "127.0.0.1"
-OSC_PORT = 5005
+from pythonosc.osc_message_builder import OscMessageBuilder
 
-client = SimpleUDPClient(address=OSC_ENDPOINT, port=OSC_PORT)
+from tinychronicler.server.ws import ws_manager
 
 
-def send_message():
-    # @TODO
-    client.send_message("/test")
+def send_message(
+    address: str,
+    *args: List[Union[str, bytes, bool, int, float, tuple, list]]
+):
+    builder = OscMessageBuilder(address=address)
+    for arg in args:
+        builder.add_arg(arg)
+    message = builder.build()
+    ws_manager.broadcast(message.dgram)

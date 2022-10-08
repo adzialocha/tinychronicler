@@ -7,7 +7,6 @@ from loguru import logger
 
 from tinychronicler.database import schemas
 from tinychronicler.generator import generator
-from tinychronicler.io import run_test
 
 from . import crud
 
@@ -44,7 +43,3 @@ async def generate_composition(chronicle_id: int):
     # the main thread
     new_thread = Thread(target=thread_handler, args=(chronicle_id,))
     new_thread.start()
-
-
-async def run_io_test(test_name: str):
-    await run_test(test_name)

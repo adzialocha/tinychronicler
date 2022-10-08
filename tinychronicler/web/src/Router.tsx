@@ -6,6 +6,7 @@ import ChroniclesNew from '~/views/ChroniclesNew';
 import CompositionsShow from '~/views/CompositionsShow';
 import Dashboard from '~/views/Dashboard';
 import FilesShow from '~/views/FilesShow';
+import Kiosk from '~/views/Kiosk';
 import Settings from '~/views/Settings';
 
 const Router = () => {
@@ -24,6 +25,7 @@ const Router = () => {
         element={<CompositionsShow />}
       />
       <Route path="/settings" element={<Settings />} />
+      <Route path="/kiosk" element={<Kiosk />} />
     </Routes>
   );
 };

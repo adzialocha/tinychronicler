@@ -8,6 +8,7 @@ from fastapi import (
     Request,
     Response,
     UploadFile,
+    WebSocket,
     status,
 )
 from fastapi.templating import Jinja2Templates
@@ -23,9 +24,11 @@ from tinychronicler.constants import (
 )
 from tinychronicler.database import database, models, schemas
 from tinychronicler.version import version
+from tinychronicler.io import run_test
 
 from . import crud, tasks
 from .files import store_file
+from .ws import ws_manager
 
 router = APIRouter()
 
@@ -315,12 +318,17 @@ async def delete_composition(chronicle_id: int, composition_id: int):
     "/api/settings/tests",
     responses={400: {"model": CustomResponse}},
 )
-async def run_io_test(test: schemas.IOTest, background_tasks: BackgroundTasks):
+async def run_io_test(test: schemas.IOTest):
     try:
-        background_tasks.add_task(tasks.run_io_test, test.name)
+        await run_test(test.name)
     except Exception as err:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Could not execute this test: {}".format(err),
         )
     return Response(status_code=status.HTTP_200_OK)
+
+
+@router.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket):
+    await ws_manager.handle(websocket)
