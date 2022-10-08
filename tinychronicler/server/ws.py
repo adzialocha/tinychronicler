@@ -1,9 +1,9 @@
-from typing import Set
 import asyncio
+from typing import Set
 
 from fastapi import WebSocket, WebSocketDisconnect
-from starlette.websockets import WebSocketState
 from loguru import logger
+from starlette.websockets import WebSocketState
 
 
 async def send(websocket: WebSocket, message: bytes):

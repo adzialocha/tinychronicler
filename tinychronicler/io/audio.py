@@ -1,6 +1,6 @@
-from tinychronicler.io.osc import send_message
-
 from loguru import logger
+
+from tinychronicler.io.osc import send_message
 
 
 def play_audio(audio_file_path: str):
