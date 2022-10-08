@@ -1,8 +1,9 @@
 #!/bin/bash
 # Check for updates and start tinychronicler
 
-BASE_DIR=/home/pi/tinychronicler
 SESSION=tc
+BASE_DIR=$HOME/tinychronicler
+POETRY_BIN=$HOME/.local/bin/poetry
 
 function check_command() {
         if ! [ -x "$(command -v $1)" ]; then
@@ -14,7 +15,7 @@ function check_command() {
 # Make sure all required programs are installed
 check_command git
 check_command ping
-check_command /home/pi/.local/bin/poetry
+check_command $POETRY_BIN
 check_command puredata
 check_command tmux
 
@@ -46,7 +47,7 @@ if [ $HAS_INTERNET -eq 1 ]; then
         # Install any dependency updates
         echo
         echo "► Update dependencies"
-        LLVM_CONFIG=llvm-config-9 /home/pi/.local/bin/poetry install
+        LLVM_CONFIG=llvm-config-9 $POETRY_BIN install
 
         # Run post-update script when it exists
         echo
@@ -66,5 +67,7 @@ echo "► Start tinychronicler"
 tmux kill-session -t $SESSION
 tmux new-session -d -s $SESSION
 tmux split-window -h -t $SESSION
-tmux send-keys -t $SESSION:0.0 "/home/pi/.local/bin/poetry run python tinychronicler" Enter
+tmux split-window -v -t $SESSION
+tmux send-keys -t $SESSION:0.0 "$POETRY_BIN run python tinychronicler" Enter
 tmux send-keys -t $SESSION:0.1 "puredata -inchannels 0 -nogui ./tinychronicler.pd" Enter
+tmux send-keys -t $SESSION:0.2 "unclutter & chromium-browser http://localhost:8000/#/kiosk --window-size=1920,1080 --start-fullscreen --kiosk --incognito --noerrdialogs --disable-translate --no-first-run --fast --fast-start --disable-infobars --disable-features=TranslateUI --disk-cache-dir=/dev/null --password-store=basic" Enter
