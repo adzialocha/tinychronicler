@@ -70,4 +70,4 @@ tmux split-window -h -t $SESSION
 tmux split-window -v -t $SESSION
 tmux send-keys -t $SESSION:0.0 "$POETRY_BIN run python tinychronicler" Enter
 tmux send-keys -t $SESSION:0.1 "puredata -inchannels 0 -nogui ./tinychronicler.pd" Enter
-tmux send-keys -t $SESSION:0.2 "unclutter & chromium-browser http://localhost:8000/#/kiosk --window-size=1920,1080 --start-fullscreen --kiosk --incognito --noerrdialogs --disable-translate --no-first-run --fast --fast-start --disable-infobars --disable-features=TranslateUI --disk-cache-dir=/dev/null --password-store=basic" Enter
+tmux send-keys -t $SESSION:0.2 "unclutter & sleep 10; chromium-browser http://localhost:8000/#/kiosk --window-size=1920,1080 --start-fullscreen --kiosk --incognito --noerrdialogs --disable-translate --no-first-run --fast --fast-start --disable-infobars --disable-features=TranslateUI --disk-cache-dir=/dev/null --password-store=basic" Enter
