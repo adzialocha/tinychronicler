@@ -1,15 +1,17 @@
 import asyncio
 from typing import Set
 
-from fastapi import WebSocket, WebSocketDisconnect
+from fastapi import WebSocket
 from loguru import logger
 from starlette.websockets import WebSocketState
 
 
 async def send(websocket: WebSocket, message: bytes):
+    if websocket.client_state is WebSocketState.DISCONNECTED:
+        return
     try:
         await websocket.send_bytes(message)
-    except WebSocketDisconnect:
+    except RuntimeError:
         pass
 
 
@@ -22,7 +24,7 @@ class WebSocketConnectionManager:
         try:
             while websocket.client_state is not WebSocketState.DISCONNECTED:
                 _ = await websocket.receive()
-        except WebSocketDisconnect:
+        except RuntimeError:
             self.disconnect(websocket)
 
     async def connect(self, websocket: WebSocket):

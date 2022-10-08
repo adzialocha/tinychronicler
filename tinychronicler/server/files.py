@@ -158,5 +158,4 @@ def random_file(file_mimes: List[str]):
             files = files + glob.glob('{}/*{}'.format(UPLOADS_DIR, file_ext))
     if len(files) == 0:
         return None
-    file = random.choice(files)
-    return os.path.abspath(file)
+    return random.choice(files)
