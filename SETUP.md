@@ -82,9 +82,15 @@ LLVM_CONFIG=llvm-config-9 poetry install
 
 ## 5. Install HiFi Berry
 
-Related link: https://www.hifiberry.com/docs/software/configuring-linux-3-18-x/
+1. Install driver
 
-Probably you will run on a Linux Kernel version >= 5, make sure to follow the instructions for it.
+    Related link: https://www.hifiberry.com/docs/software/configuring-linux-3-18-x/
+
+    Probably you will run on a Linux Kernel version >= 5, make sure to follow the instructions for it.
+
+2. Allow audio from multiple sources
+
+    Related link: https://www.hifiberry.com/docs/software/mixing-different-audio-sources/
 
 ## 6. Start Tiny Chronicler when Pi boots
 
@@ -191,28 +197,28 @@ Run `crontab -e` and add the following line:
 
 7. Set up reverse proxy
 
-```bash
-sudo apt-get install nginx
-```
+    ```bash
+    sudo apt-get install nginx
+    ```
 
-Add this to `/etc/nginx/sites-enabled/default` (make sure all other lines are removed):
+    Add this to `/etc/nginx/sites-enabled/default` (make sure all other lines are removed):
 
-```
-server {
-    client_max_body_size 4096M;
+    ```
+    server {
+        client_max_body_size 4096M;
 
-    listen 80 default_server;
-    listen [::]:80 default_server;
+        listen 80 default_server;
+        listen [::]:80 default_server;
 
-    server_name tinychronicler.local;
+        server_name tinychronicler.local;
 
-    location / {
-        proxy_set_header  X-Forwarded-For $remote-addr;
-        proxy_set_header  Host $http_host;
-        proxy_pass        "http://127.0.0.1:8000";
+        location / {
+            proxy_set_header  X-Forwarded-For $remote-addr;
+            proxy_set_header  Host $http_host;
+            proxy_pass        "http://127.0.0.1:8000";
+        }
     }
-}
-```
+    ```
 
 8. Configure services
 
@@ -224,7 +230,32 @@ server {
     sudo systemctl enable nginx
     ```
 
-## 9. Reboot!
+## 8. Install chromium
+
+Read more: https://sylvaindurand.org/launch-chromium-in-kiosk-mode/
+
+1. Install `chromium-browser` and `unclutter`
+
+    ```bash
+    sudo apt-get install chromium-browser
+    sudo apt-get install unclutter
+    ```
+
+2. Open `chromium-browser` and make sure that "Sound" is allowed in the "Site Permissions"
+
+## 9. Compile and upload Arduino program
+
+1. Install Arduino IDE for Raspberry PI
+
+2. Download "RGB matrix Panel" library (https://www.arduino.cc/reference/en/libraries/rgb-matrix-panel/)
+
+3. Connect Arduino MEGA 2560 via USB to Raspberry Pi
+
+4. Select correct Serial Port and Board in Arduino IDE
+
+5. Open `tinychronicler.ino` patch, compile and upload it!
+
+## 10. Reboot!
 
 ```bash
 sudo reboot now
