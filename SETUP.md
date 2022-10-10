@@ -80,17 +80,11 @@ poetry env use $(pyenv which 3.8.11)
 LLVM_CONFIG=llvm-config-9 poetry install
 ```
 
-## 5. Install HiFi Berry
+## 5. Install HiFi Berry driver
 
-1. Install driver
+Related link: https://www.hifiberry.com/docs/software/configuring-linux-3-18-x/
 
-    Related link: https://www.hifiberry.com/docs/software/configuring-linux-3-18-x/
-
-    Probably you will run on a Linux Kernel version >= 5, make sure to follow the instructions for it.
-
-2. Allow audio from multiple sources
-
-    Related link: https://www.hifiberry.com/docs/software/mixing-different-audio-sources/
+Probably you will run on a Linux Kernel version >= 5, make sure to follow the instructions for it.
 
 ## 6. Start Tiny Chronicler when Pi boots
 

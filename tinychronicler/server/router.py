@@ -23,12 +23,12 @@ from tinychronicler.constants import (
     TEMPLATES_DIR,
 )
 from tinychronicler.database import database, models, schemas
-from tinychronicler.io import run_test
+from tinychronicler.io.tests import run_test
 from tinychronicler.version import version
 
 from . import crud, tasks
 from .files import store_file
-from .ws import ws_manager
+from .ws import WebSocketConnectionManager
 
 router = APIRouter()
 
@@ -331,4 +331,5 @@ async def run_io_test(test: schemas.IOTest):
 
 @router.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
+    ws_manager = WebSocketConnectionManager()
     await ws_manager.handle(websocket)

@@ -39,5 +39,8 @@ STATIC_DIR = "tinychronicler/web/static"
 # Path to directory for uploaded user files
 UPLOADS_DIR = "uploads"
 
+# Path to directory for MIDI instrument samples
+SAMPLES_DIR = "samples"
+
 # Path to musical "modules" directory
 MIDI_MODULES_DIR = "midi"

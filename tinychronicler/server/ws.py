@@ -1,4 +1,5 @@
 import asyncio
+from asyncio import Queue
 from typing import Set
 
 from fastapi import WebSocket
@@ -15,9 +16,44 @@ async def send(websocket: WebSocket, message: bytes):
         pass
 
 
+async def broadcast_worker(self, queue, active_connections):
+    while True:
+        message = await queue.get()
+        for websocket in active_connections:
+            asyncio.create_task(send(websocket, message))
+        queue.task_done()
+
+
 class WebSocketConnectionManager:
-    def __init__(self):
-        self.active_connections: Set[WebSocket] = set()
+    _instance = None
+
+    queue = None
+    active_connections: Set[WebSocket] = None
+
+    def __new__(cls):
+        if cls._instance is None:
+            # Singleton Pattern: Create instance only once
+            cls._instance = super(WebSocketConnectionManager, cls).__new__(cls)
+
+            # Initiate an async queue which will contain all the messages
+            # to-be-sent via websockets
+            cls.queue = Queue()
+
+            # List of all active websocket clients
+            cls.active_connections = set()
+
+            # Create a background task which checks the queue for new messages
+            # and broadcasts them to all active websocket clients
+            asyncio.create_task(
+                broadcast_worker('broadcast',
+                                 cls.queue,
+                                 cls.active_connections))
+
+        return cls._instance
+
+    def add_to_queue(self, message: bytes):
+        if len(self.active_connections) > 0:
+            self.queue.put_nowait(message)
 
     async def handle(self, websocket: WebSocket):
         await self.connect(websocket)
@@ -35,10 +71,3 @@ class WebSocketConnectionManager:
     def disconnect(self, websocket: WebSocket):
         logger.debug("WebSocket client disconnected")
         self.active_connections.remove(websocket)
-
-    def broadcast(self, message: bytes):
-        for websocket in self.active_connections:
-            asyncio.create_task(send(websocket, message))
-
-
-ws_manager = WebSocketConnectionManager()

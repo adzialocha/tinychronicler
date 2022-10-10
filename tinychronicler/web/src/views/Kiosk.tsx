@@ -250,6 +250,10 @@ const Kiosk = () => {
       });
     };
 
+    osc.on('*', (message: OSC.Message) => {
+      console.log(message);
+    });
+
     osc.on('open', () => {
       console.info('OSC client ready');
       clearTimeout();
@@ -257,6 +261,7 @@ const Kiosk = () => {
 
     osc.on('close', () => {
       console.info('OSC client close');
+
       // Attempt to re-connect
       reattempt();
     });

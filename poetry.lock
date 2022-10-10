@@ -1559,6 +1559,14 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "python-rtmidi"
+version = "1.4.9"
+description = "A Python binding for the RtMidi C++ library implemented using Cython."
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "pytz"
 version = "2022.1"
 description = "World timezone definitions, modern and historical"
@@ -2089,7 +2097,7 @@ testing = ["func-timeout", "jaraco.itertools", "pytest (>=6)", "pytest-black (>=
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "5ff5eae9becbc023d128a693dbcf7f7b8a6487cd0fada10567d76ab92b44fb72"
+content-hash = "53567707d58fa942fc7e5bc5b9d119f0c992602584d89c7f7a05a3a364afd349"
 
 [metadata.files]
 aiofiles = [
@@ -3134,6 +3142,21 @@ python-multipart = [
 python-osc = [
     {file = "python-osc-1.8.0.tar.gz", hash = "sha256:2f8c187c68d239960fb2eddcb5346a62a9b35e64f2de045b3e5e509f475ca73d"},
     {file = "python_osc-1.8.0-py3-none-any.whl", hash = "sha256:9e2abb2fc9ba2c356f8e951609a03c9c7017bf0bad82cca8490e9b8af9e92a0b"},
+]
+python-rtmidi = [
+    {file = "python-rtmidi-1.4.9.tar.gz", hash = "sha256:bfeb4ed99d0cccf6fa2837566907652ded7adc1c03b69f2160c9de4082301302"},
+    {file = "python_rtmidi-1.4.9-cp36-cp36m-macosx_10_6_intel.whl", hash = "sha256:8f7e154681c5d6ed7228ce8639708592da758ef4c0f575f7020854e07ca6478b"},
+    {file = "python_rtmidi-1.4.9-cp36-cp36m-win32.whl", hash = "sha256:6f495672ec76700400d4dff6f8848dbd52ca60301ed6011a6a1b3a9e95a7a07e"},
+    {file = "python_rtmidi-1.4.9-cp36-cp36m-win_amd64.whl", hash = "sha256:4d75788163327f6ac1f898c29e3b4527da83dbc5bab5a7e614b6a4385fde3231"},
+    {file = "python_rtmidi-1.4.9-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:d201516bb1c64511e7e4de50533f6b828072113e3c26f3f5b657f11b90252073"},
+    {file = "python_rtmidi-1.4.9-cp37-cp37m-win32.whl", hash = "sha256:0f5409e1b2e92cfe377710a0ea5c450c58fda8b52ec4bf4baf517aa731d9f6a6"},
+    {file = "python_rtmidi-1.4.9-cp37-cp37m-win_amd64.whl", hash = "sha256:3d4b7fdb477d8036d51cce281b303686114ae676f1c83693db963ab01db11cf5"},
+    {file = "python_rtmidi-1.4.9-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:5dad7a28035eea9e24aaab4fcb756cd2b78c5b14835aa64750cb4062f77ec169"},
+    {file = "python_rtmidi-1.4.9-cp38-cp38-win32.whl", hash = "sha256:7d27d0a70e85d991f1451f286416cf5ef4514292b027155bf91dcae0b8c0d5d2"},
+    {file = "python_rtmidi-1.4.9-cp38-cp38-win_amd64.whl", hash = "sha256:69907663e0f167fcf3fc1632a792419d0d9d00550f94dca39370ebda3bc999db"},
+    {file = "python_rtmidi-1.4.9-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:04bd95dd86fef3fe8d72838f719d31875f107a842127024bfe276617961eed5d"},
+    {file = "python_rtmidi-1.4.9-cp39-cp39-win32.whl", hash = "sha256:2286ab096a5603430ab1e1a664fe4d96acc40f9443f44c27e911dfad85ea3ac8"},
+    {file = "python_rtmidi-1.4.9-cp39-cp39-win_amd64.whl", hash = "sha256:54d40cb794a6b079105bfb923ab0b4d5f041e9eef5dc5cce25480e4c3e3fc2f6"},
 ]
 pytz = [
     {file = "pytz-2022.1-py2.py3-none-any.whl", hash = "sha256:e68985985296d9a66a881eb3193b0906246245294a881e7c8afe623866ac6a5c"},

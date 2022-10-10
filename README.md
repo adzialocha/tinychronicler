@@ -16,7 +16,7 @@ Tiny Chronicler is a travelling music robot. It runs on a RaspberryPi computer e
 
 - Python 3.8.11
 - [Poetry](https://python-poetry.org)
-- PureData
+- Chromium
 
 ## Setup
 
