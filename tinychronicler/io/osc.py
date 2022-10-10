@@ -19,5 +19,5 @@ def send_message(
     ws_manager.add_to_queue(message.dgram)
 
 
-def send_midi_note():
-    send_message("/instrument/1/note")
+def send_midi_note(channel: int, note: int, velocity: int, note_on: bool):
+    send_message("/note", channel, note, velocity, note_on)
