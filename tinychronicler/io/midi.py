@@ -22,11 +22,14 @@ def received_message(message: Message):
 
 def open_midi_port_blocking(event: Event):
     ports = []
+    port_names = []
     instruments = mido.get_input_names()
     logger.debug("Detected the following MIDI instruments:")
     for index, instrument in enumerate(instruments):
         logger.debug("#{}: {}".format(index, instrument))
-        ports.append(mido.open_input(instrument))
+        if instrument not in port_names:
+            ports.append(mido.open_input(instrument))
+            port_names.append(instrument)
 
     # Listen to all ports at the same time so we don't need to worry about
     # selecting instruments

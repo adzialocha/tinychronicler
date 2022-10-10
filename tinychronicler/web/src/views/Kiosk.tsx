@@ -2,6 +2,8 @@ import React, { useEffect, useState, useMemo, useRef } from 'react';
 import styled from 'styled-components';
 import OSC from 'osc-js';
 
+import { triggerNote, startInstruments, stopInstruments } from '~/instruments';
+
 const OSC_ENDPOINT = '127.0.0.1';
 const OSC_PORT = '8000/ws';
 
@@ -250,10 +252,6 @@ const Kiosk = () => {
       });
     };
 
-    osc.on('*', (message: OSC.Message) => {
-      console.log(message);
-    });
-
     osc.on('open', () => {
       console.info('OSC client ready');
       clearTimeout();
@@ -264,6 +262,17 @@ const Kiosk = () => {
 
       // Attempt to re-connect
       reattempt();
+    });
+
+    osc.on('/note', (message: OSC.Message) => {
+      const [channel, note, velocity, noteOn] = message.args;
+
+      triggerNote({
+        channel: channel as number,
+        note: note as number,
+        noteOn: noteOn as boolean,
+        velocity: velocity as number,
+      });
     });
 
     osc.on('/video', (message: OSC.Message) => {
@@ -300,11 +309,13 @@ const Kiosk = () => {
       onResetAudio();
     });
 
+    startInstruments();
     connect();
 
     return () => {
       osc.close();
       clearTimeout();
+      stopInstruments();
     };
   }, [osc]);
 

@@ -62298,6 +62298,59 @@ root.render((0, jsx_runtime_1.jsx)(App_1.default, { version: version ? version :
 
 /***/ }),
 
+/***/ "./src/instruments.ts":
+/*!****************************!*\
+  !*** ./src/instruments.ts ***!
+  \****************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.triggerNote = exports.stopInstruments = exports.startInstruments = void 0;
+const context = new AudioContext();
+const sources = {};
+async function fetchAudioSample(url) {
+    const response = await window.fetch(url);
+    const buffer = await response.arrayBuffer();
+    return buffer;
+}
+async function createAudioBuffer(url) {
+    const arrayBuffer = await fetchAudioSample(url);
+    const result = await context.decodeAudioData(arrayBuffer);
+    return result;
+}
+async function startInstruments() {
+    const promises = [
+        createAudioBuffer('/samples/test-1.wav'),
+        createAudioBuffer('/samples/test-2.wav'),
+        createAudioBuffer('/samples/test-3.wav'),
+        createAudioBuffer('/samples/test-4.wav'),
+    ];
+    const results = await Promise.all(promises);
+    results.forEach((source, index) => {
+        sources[`test-${index + 1}`] = source;
+    });
+}
+exports.startInstruments = startInstruments;
+function stopInstruments() {
+    // @TODO
+}
+exports.stopInstruments = stopInstruments;
+function triggerNote(event) {
+    if (event.noteOn) {
+        const note = event.note % Object.keys(sources).length;
+        const audioSource = context.createBufferSource();
+        audioSource.buffer = sources[`test-${note + 1}`];
+        audioSource.connect(context.destination);
+        audioSource.start();
+    }
+}
+exports.triggerNote = triggerNote;
+
+
+/***/ }),
+
 /***/ "./src/utils/api.ts":
 /*!**************************!*\
   !*** ./src/utils/api.ts ***!
@@ -62827,6 +62880,7 @@ const jsx_runtime_1 = __webpack_require__(/*! react/jsx-runtime */ "./node_modul
 const react_1 = __importStar(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
 const styled_components_1 = __importDefault(__webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js"));
 const osc_js_1 = __importDefault(__webpack_require__(/*! osc-js */ "./node_modules/osc-js/lib/osc.min.js"));
+const instruments_1 = __webpack_require__(/*! ~/instruments */ "./src/instruments.ts");
 const OSC_ENDPOINT = '127.0.0.1';
 const OSC_PORT = '8000/ws';
 const RECONNECTION_ATTEMPT_INTERVAL = 5000;
@@ -62997,9 +63051,6 @@ const Kiosk = () => {
                 port: OSC_PORT,
             });
         };
-        osc.on('*', (message) => {
-            console.log(message);
-        });
         osc.on('open', () => {
             console.info('OSC client ready');
             clearTimeout();
@@ -63008,6 +63059,15 @@ const Kiosk = () => {
             console.info('OSC client close');
             // Attempt to re-connect
             reattempt();
+        });
+        osc.on('/note', (message) => {
+            const [channel, note, velocity, noteOn] = message.args;
+            (0, instruments_1.triggerNote)({
+                channel: channel,
+                note: note,
+                noteOn: noteOn,
+                velocity: velocity,
+            });
         });
         osc.on('/video', (message) => {
             const [url, seek, duration, muted] = message.args;
@@ -63036,10 +63096,12 @@ const Kiosk = () => {
         osc.on('/audio/reset', () => {
             onResetAudio();
         });
+        (0, instruments_1.startInstruments)();
         connect();
         return () => {
             osc.close();
             clearTimeout();
+            (0, instruments_1.stopInstruments)();
         };
     }, [osc]);
     (0, react_1.useEffect)(() => {
