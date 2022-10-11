@@ -19,10 +19,6 @@ type VisualState =
       mode: 'video';
     } & VideoArgs);
 
-type AudioState = {
-  url?: string;
-};
-
 type VideoArgs = {
   url: string;
   seek: number;
@@ -33,10 +29,6 @@ type VideoArgs = {
 type ImageArgs = {
   url: string;
   duration: number;
-};
-
-type AudioArgs = {
-  url: string;
 };
 
 type Visible = {
@@ -80,34 +72,22 @@ const Video = styled.video<Visible>`
   transition: opacity ${TRANSITION_DURATION} linear;
 `;
 
-const Audio = styled.audio`
-  display: none;
-`;
-
 const ImageView = React.forwardRef<HTMLImageElement, Visible>((props, ref) => {
   return <Image visible={props.visible} ref={ref} />;
 });
 
 const VideoPlayer = React.forwardRef<HTMLVideoElement, Visible>(
   (props, ref) => {
-    return <Video visible={props.visible} ref={ref} loop />;
+    return <Video visible={props.visible} ref={ref} loop muted />;
   },
 );
 
-const AudioPlayer = React.forwardRef<HTMLAudioElement>((_, ref) => {
-  return <Audio ref={ref} autoPlay />;
-});
-
 const Kiosk = () => {
-  const audioRef = useRef<HTMLAudioElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const [visualState, setVisualState] = useState<VisualState>({
     mode: 'black',
-  });
-  const [audioState, setAudioState] = useState<AudioState>({
-    url: undefined,
   });
 
   const startVideo = (args: VideoArgs) => {
@@ -125,7 +105,6 @@ const Kiosk = () => {
 
     video.src = args.url;
     video.currentTime = args.seek;
-    video.muted = args.muted;
     video.play();
   };
 
@@ -162,26 +141,6 @@ const Kiosk = () => {
     // Do nothing
   };
 
-  const startAudio = (args: AudioArgs) => {
-    if (!audioRef.current) {
-      return;
-    }
-
-    const audio = audioRef.current;
-    audio.src = args.url;
-    audio.currentTime = 0;
-    audio.play();
-  };
-
-  const stopAudio = () => {
-    if (!audioRef.current) {
-      return;
-    }
-
-    const audio = audioRef.current;
-    audio.pause();
-  };
-
   const osc = useMemo(() => {
     return new OSC();
   }, []);
@@ -200,21 +159,9 @@ const Kiosk = () => {
     });
   };
 
-  const onAudio = (args: AudioArgs) => {
-    setAudioState({
-      ...args,
-    });
-  };
-
   const onResetVideo = () => {
     setVisualState({
       mode: 'black',
-    });
-  };
-
-  const onResetAudio = () => {
-    setAudioState({
-      url: undefined,
     });
   };
 
@@ -285,16 +232,6 @@ const Kiosk = () => {
       });
     });
 
-    osc.on('/audio', (message: OSC.Message) => {
-      onAudio({
-        url: message.args[0] as string,
-      });
-    });
-
-    osc.on('/audio/reset', () => {
-      onResetAudio();
-    });
-
     connect();
 
     return () => {
@@ -316,19 +253,8 @@ const Kiosk = () => {
     }
   }, [visualState]);
 
-  useEffect(() => {
-    if (audioState.url) {
-      startAudio({
-        url: audioState.url,
-      });
-    } else {
-      stopAudio();
-    }
-  }, [audioState]);
-
   return (
     <StyledKiosk>
-      <AudioPlayer ref={audioRef} />
       <Container>
         <VideoPlayer ref={videoRef} visible={visualState.mode === 'video'} />
       </Container>
