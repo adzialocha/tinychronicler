@@ -255,7 +255,15 @@ Read more: https://sylvaindurand.org/launch-chromium-in-kiosk-mode/
 
 5. Open `tinychronicler.ino` patch, compile and upload it!
 
-## 10. Reboot!
+## 10. Download ML models
+
+Run the following script to download all models into the right folder:
+
+```bash
+./scripts/models.sh
+```
+
+## 11. Reboot!
 
 ```bash
 sudo reboot now
