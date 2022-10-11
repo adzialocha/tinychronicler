@@ -4,12 +4,19 @@
 SESSION=tc
 BASE_DIR=$HOME/tinychronicler
 POETRY_BIN=$HOME/.local/bin/poetry
+HTTP_PORT=8000
 
 function check_command() {
         if ! [ -x "$(command -v $1)" ]; then
           echo "Error: $1 is not installed." >&2
           exit 1
         fi
+}
+
+function check_open_port() {
+        while ! nc -z localhost $HTTP_PORT; do
+          sleep 0.5
+        done
 }
 
 # Make sure all required programs are installed
@@ -64,13 +71,14 @@ fi
 # Start unclutter in background
 unclutter &
 
-# Start Tiny Chronicler and Pure Data in tmux session
+# Start Tiny Chronicler, Chromium (in kiosk mode) and Pure Data in tmux session
 echo
 echo "► Start tinychronicler"
 tmux kill-session -t $SESSION
 tmux new-session -d -s $SESSION
 tmux split-window -h -t $SESSION
 tmux split-window -v -t $SESSION
-tmux send-keys -t $SESSION:0.0 "$POETRY_BIN run python tinychronicler" Enter
+tmux send-keys -t $SESSION:0.0 "$POETRY_BIN run python tinychronicler -- --port $HTTP_PORT" Enter
 tmux send-keys -t $SESSION:0.1 "puredata -inchannels 0 -nogui ./tinychronicler.pd" Enter
-tmux send-keys -t $SESSION:0.2 "sleep 10; chromium-browser http://localhost:8000/#/kiosk --window-size=1920,1080 --start-fullscreen --kiosk --incognito --noerrdialogs --disable-translate --no-first-run --fast --fast-start --disable-infobars --disable-features=TranslateUI --disk-cache-dir=/dev/null --password-store=basic" Enter
+check_open_port # Wait until http server is ready
+tmux send-keys -t $SESSION:0.2 "chromium-browser http://localhost:$HTTP_PORT/#/kiosk --kiosk --incognito --noerrdialogs --disable-translate --no-first-run --fast --fast-start --disable-infobars --disable-features=TranslateUI --disk-cache-dir=/dev/null --password-store=basic" Enter
