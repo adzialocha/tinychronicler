@@ -1,16 +1,17 @@
 import os
+import random
 from typing import List
 
 from tinychronicler.constants import (
     ALLOWED_MIME_TYPES_AUDIO,
     ALLOWED_MIME_TYPES_IMAGE,
     ALLOWED_MIME_TYPES_VIDEO,
-    MIDI_MODULES_DIR,
 )
 from tinychronicler.database import schemas
 
-from .midi import get_midi_files
-from .movements import MOVEMENTS
+from .movements import (MOVEMENTS, MOVEMENTS_WITHOUT_PHOTO,
+                        MOVEMENTS_WITHOUT_VIDEO,
+                        MOVEMENTS_WITHOUT_VIDEO_AND_PHOTO)
 from .notes import generate_notes
 from .parameters import generate_parameters
 
@@ -20,7 +21,6 @@ def generate_composition(files: List[schemas.File]):
     audio_files = [f.path for f in files if f.mime in ALLOWED_MIME_TYPES_AUDIO]
     video_files = [f.path for f in files if f.mime in ALLOWED_MIME_TYPES_VIDEO]
     image_files = [f.path for f in files if f.mime in ALLOWED_MIME_TYPES_IMAGE]
-    midi_files = get_midi_files(MIDI_MODULES_DIR)
 
     # Load audio file which serves as the base for this composition. Every
     # chronicle holds one only audio file
@@ -30,11 +30,25 @@ def generate_composition(files: List[schemas.File]):
 
     # Generate a MIDI score and list of modules from audio file. A module is a
     # predetermined short sequence of notes
-    (notes, modules) = generate_notes(audio_file, midi_files)
+    (notes, module_indices) = generate_notes(audio_file)
+
+    # Shuffle the files before, so the outcome is always a little different
+    random.shuffle(video_files)
+    random.shuffle(image_files)
 
     # Generate parameters which determine the used sounds and media of the
     # composition
-    parameters = generate_parameters(modules, MOVEMENTS)
+    has_images = len(image_files) > 0
+    has_videos = len(video_files) > 0
+    movements = MOVEMENTS
+    if not has_images and has_videos:
+        movements = MOVEMENTS_WITHOUT_PHOTO
+    elif has_images and not has_videos:
+        movements = MOVEMENTS_WITHOUT_VIDEO
+    elif not has_images and not has_videos:
+        movements = MOVEMENTS_WITHOUT_VIDEO_AND_PHOTO
+    parameters = generate_parameters(
+        module_indices[0], movements, video_files, image_files)
 
     return {
         "notes": notes,

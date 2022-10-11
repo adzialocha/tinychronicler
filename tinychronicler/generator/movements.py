@@ -6,46 +6,98 @@ def to_dict(namespace, arr):
 
 
 PARAMETERS = to_dict("parameters", [
-    "PHOTO",
-    "VIDEO_ONLY",
-    "VIDEO_W_SOUND",
-    "BLACK",
     "NARRATOR",
-    "VOCODER",
-    "VOCODER_RELEASE_0.34",
-    "VOCODER_RELEASE_0.65",
-    "VOCODER_REVERB_0",
-    "VOCODER_REVERB_-11",
-    "TINY_CHRONICLER",
-    "CHOIR",
-    "BASS",
-    "KAJSA_M",
-    "KAJSA_L",
-    "MALTE",
-    "VOICES_SHORT",
-    "VOICES_LONG",
-    "VOICES_HP_0.6",
-    "VOICES_HP_1.0",
-    "VOICES_REVERB_-23",
-    "VOICES_REVERB_-6",
+    "PHOTO",
+    "VIDEO",
+    # "VIDEO_W_SOUND", # Currently not supported
+    "VOICE_1",
+    "VOICE_2",
 ])
 
 SCENES = {
+    # ==================================
     "ONLY_NARRATOR": [
         PARAMETERS["NARRATOR"],
     ],
-    "NARRATOR_W_2VOICES_HP": [
+    # ==================================
+    "TUTTI": [
         PARAMETERS["NARRATOR"],
-        PARAMETERS["KAJSA_M"],
-        PARAMETERS["MALTE"],
-        PARAMETERS["VOICES_HP_0.6"],
-        PARAMETERS["VOICES_SHORT"],
+        PARAMETERS["VOICE_1"],
+        PARAMETERS["VOICE_2"],
     ],
-    "2VOICES": [
-        PARAMETERS["KAJSA_M"],
-        PARAMETERS["MALTE"],
-        PARAMETERS["VOICES_HP_1.0"],
-        PARAMETERS["VOICES_SHORT"],
+    "TUTTI_W_VIDEO": [
+        PARAMETERS["NARRATOR"],
+        PARAMETERS["VOICE_1"],
+        PARAMETERS["VOICE_2"],
+        PARAMETERS["VIDEO"],
+    ],
+    "TUTTI_W_PHOTO": [
+        PARAMETERS["NARRATOR"],
+        PARAMETERS["VOICE_1"],
+        PARAMETERS["VOICE_2"],
+        PARAMETERS["PHOTO"],
+    ],
+    # ==================================
+    "N_VOICE_1": [
+        PARAMETERS["NARRATOR"],
+        PARAMETERS["VOICE_1"],
+    ],
+    "N_VOICE_1_W_VIDEO": [
+        PARAMETERS["NARRATOR"],
+        PARAMETERS["VOICE_1"],
+        PARAMETERS["VIDEO"],
+    ],
+    "N_VOICE_1_W_PHOTO": [
+        PARAMETERS["NARRATOR"],
+        PARAMETERS["VOICE_1"],
+        PARAMETERS["PHOTO"],
+    ],
+    # ==================================
+    "N_VOICE_2": [
+        PARAMETERS["NARRATOR"],
+        PARAMETERS["VOICE_2"],
+    ],
+    "N_VOICE_2_W_VIDEO": [
+        PARAMETERS["NARRATOR"],
+        PARAMETERS["VOICE_2"],
+        PARAMETERS["VIDEO"],
+    ],
+    "N_VOICE_2_W_PHOTO": [
+        PARAMETERS["NARRATOR"],
+        PARAMETERS["VOICE_2"],
+        PARAMETERS["PHOTO"],
+    ],
+    # ==================================
+    "VOICE_1_SOLO": [
+        PARAMETERS["VOICE_1"],
+    ],
+    "VOICE_1_SOLO_W_VIDEO": [
+        PARAMETERS["VOICE_1"],
+        PARAMETERS["VIDEO"],
+    ],
+    "VOICE_1_SOLO_W_PHOTO": [
+        PARAMETERS["VOICE_1"],
+        PARAMETERS["PHOTO"],
+    ],
+    # ==================================
+    "VOICE_2_SOLO": [
+        PARAMETERS["VOICE_2"],
+    ],
+    "VOICE_2_SOLO_W_VIDEO": [
+        PARAMETERS["VOICE_2"],
+        PARAMETERS["VIDEO"],
+    ],
+    "VOICE_2_SOLO_W_PHOTO": [
+        PARAMETERS["VOICE_2"],
+        PARAMETERS["PHOTO"],
+    ],
+    # ==================================
+    "BLACK": [],
+    "TACET_W_VIDEO": [
+        PARAMETERS["VIDEO"],
+    ],
+    "TACET_W_PHOTO": [
+        PARAMETERS["PHOTO"],
     ],
 }
 
@@ -77,12 +129,12 @@ MOVEMENTS = [
                     {
                         "name": "MOVEMENT_1_SECTION_2_SCENE_2",
                         "percentage": 0.5,
-                        "parameters": SCENES["NARRATOR_W_2VOICES_HP"],
+                        "parameters": SCENES["TUTTI"],
                     },
                     {
                         "name": "MOVEMENT_1_SECTION_2_SCENE_3",
                         "percentage": 0.3,
-                        "parameters": SCENES["2VOICES"],
+                        "parameters": SCENES["TUTTI_W_PHOTO"],
                     }
                 ]
             },
@@ -110,10 +162,17 @@ MOVEMENTS = [
                     {
                         "name": "MOVEMENT_2_SECTION_1_SCENE_1",
                         "percentage": 1,
-                        "parameters": SCENES["ONLY_NARRATOR"],
+                        "parameters": SCENES["TUTTI_W_VIDEO"],
                     },
                 ]
             },
         ],
     },
 ]
+
+
+MOVEMENTS_WITHOUT_PHOTO = MOVEMENTS
+
+MOVEMENTS_WITHOUT_VIDEO = MOVEMENTS
+
+MOVEMENTS_WITHOUT_VIDEO_AND_PHOTO = MOVEMENTS

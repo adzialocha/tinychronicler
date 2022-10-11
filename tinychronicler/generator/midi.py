@@ -1,11 +1,9 @@
-import math
 import os
 
 import numpy as np
 import pretty_midi
 
-SECONDS_PER_MINUTE = 60
-MS_PER_120_QUARTER = 500
+from tinychronicler.constants import MIDI_MODULES_DIR
 
 
 def get_midi_files(base_dir):
@@ -19,23 +17,6 @@ def get_midi_files(base_dir):
                 midi_files.append(os.path.join(base_dir, file))
     midi_files.sort()
     return midi_files
-
-
-def get_end_time(score, time_signature, bpm=120):
-    # Get the score end time in seconds
-    end_time = math.ceil(score.get_end_time() * 10) / 10
-
-    # Calculate how long a measure is in seconds
-    beat_time = (
-        SECONDS_PER_MINUTE
-        / bpm
-        / (time_signature.denominator / time_signature.numerator)
-    )
-    measure_time = beat_time * time_signature.numerator
-
-    # Normalize the end time to a well formed measure
-    end_time = end_time + (end_time % measure_time)
-    return end_time
 
 
 def get_all_notes(score):
@@ -58,21 +39,20 @@ def analyze_midi(file, bpm=120):
     score = pretty_midi.PrettyMIDI(file, initial_tempo=bpm)
     score.remove_invalid_notes()
 
-    # Get time signature
-    if len(score.time_signature_changes) == 0:
-        raise Exception("No time signature given for {}".format(file))
-    time_signature = score.time_signature_changes[0]
-
-    # Get last event in MIDI file
-    last_event_time = score.get_end_time() * 1000
-
-    # Get duration of one bar
-    fraction = MS_PER_120_QUARTER / time_signature.denominator
-    bar_duration = (fraction * time_signature.numerator) * 4
-
-    # Get duration of whole midi file
-    duration = math.ceil(last_event_time / bar_duration) * bar_duration
-
     # Get MIDI events in seconds and remove duplicates (eg. chords)
-    notes = get_all_notes(score)
-    return notes, duration / 1000
+    return get_all_notes(score)
+
+
+def load_midi_modules(midi_files):
+    """
+    Load all MIDI files from a list
+    """
+    modules = []
+    for file in midi_files:
+        notes = analyze_midi("{}/{}".format(MIDI_MODULES_DIR, file["file"]))
+        modules.append({
+            "notes": notes,
+            "file": file["file"],
+            "duration": file["duration"],
+        })
+    return modules

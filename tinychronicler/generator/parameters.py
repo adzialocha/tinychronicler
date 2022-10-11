@@ -1,7 +1,18 @@
+import random
+import subprocess
 from typing import Any, List, Tuple
 
 import numpy as np
 from loguru import logger
+
+
+def get_video_length(file):
+    result = subprocess.run(["ffprobe", "-v", "error", "-show_entries",
+                             "format=duration", "-of",
+                             "default=noprint_wrappers=1:nokey=1", file],
+                            stdout=subprocess.PIPE,
+                            stderr=subprocess.STDOUT)
+    return float(result.stdout)
 
 
 def check_movements(config):
@@ -24,8 +35,18 @@ def check_movements(config):
         raise Exception("Invalid movement total percentage (not 100%)")
 
 
-def generate_parameters(modules: List[Tuple[int, int]], movements: List[Any]):
+def generate_parameters(modules: List[Tuple[int, int]],
+                        movements: List[Any],
+                        video_files: List[str],
+                        image_files: List[str]):
     check_movements(movements)
+
+    # Get video durations
+    durations = []
+    for video in video_files:
+        # Pick a random starting position for video file
+        duration = get_video_length(video)
+        durations.append(duration)
 
     # Prepare values for generation
     movement = 0
@@ -36,6 +57,9 @@ def generate_parameters(modules: List[Tuple[int, int]], movements: List[Any]):
 
     section_start = 0
     section_end = movements[movement]['sections'][section]['percentage']
+
+    last_video_index = 0
+    last_image_index = 0
 
     # Go through all modules and find parameters for each of them
     result = []
@@ -71,9 +95,28 @@ def generate_parameters(modules: List[Tuple[int, int]], movements: List[Any]):
         logger.debug("Pick scene {} for module #{}".format(
             scene['name'], index))
 
+        # Decide which photo or video to show and which point of the video
+        file = None
+        file_from = 0
+        if "PHOTO" in scene["parameters"]:
+            file = image_files[last_image_index]
+            # Prepare the next image for next time
+            last_image_index += 1
+            if len(image_files) < last_image_index + 1:
+                last_image_index = 0
+        elif "VIDEO" in scene["parameters"]:
+            file = video_files[last_video_index]
+            file_from = random.uniform(0, durations[last_video_index])
+            # Prepare the next video for next time
+            last_video_index += 1
+            if len(video_files) < last_video_index + 1:
+                last_video_index = 0
+
         result.append({
             "parameters": scene['parameters'],
             "module": module,
+            "media": file,
+            "media_from": file_from,
         })
 
     return result
