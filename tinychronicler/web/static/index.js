@@ -62310,6 +62310,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.triggerNote = exports.stopInstruments = exports.startInstruments = void 0;
 const context = new AudioContext();
 const sources = {};
+const gainNode = context.createGain();
+gainNode.gain.value = 0.2;
+gainNode.connect(context.destination);
 async function fetchAudioSample(url) {
     const response = await window.fetch(url);
     const buffer = await response.arrayBuffer();
@@ -62342,7 +62345,7 @@ function triggerNote(event) {
         const note = event.note % Object.keys(sources).length;
         const audioSource = context.createBufferSource();
         audioSource.buffer = sources[`test-${note + 1}`];
-        audioSource.connect(context.destination);
+        audioSource.connect(gainNode);
         audioSource.start();
     }
 }

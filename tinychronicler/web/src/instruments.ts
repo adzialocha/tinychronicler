@@ -8,6 +8,10 @@ type NoteEvent = {
 const context = new AudioContext();
 const sources: { [name: string]: AudioBuffer } = {};
 
+const gainNode = context.createGain();
+gainNode.gain.value = 0.2;
+gainNode.connect(context.destination);
+
 async function fetchAudioSample(url: string): Promise<ArrayBuffer> {
   const response = await window.fetch(url);
   const buffer = await response.arrayBuffer();
@@ -43,7 +47,7 @@ export function triggerNote(event: NoteEvent) {
     const note = event.note % Object.keys(sources).length;
     const audioSource = context.createBufferSource();
     audioSource.buffer = sources[`test-${note + 1}`];
-    audioSource.connect(context.destination);
+    audioSource.connect(gainNode);
     audioSource.start();
   }
 }

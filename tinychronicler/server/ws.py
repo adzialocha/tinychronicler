@@ -16,7 +16,7 @@ async def send(websocket: WebSocket, message: bytes):
         pass
 
 
-async def broadcast_worker(self, queue, active_connections):
+async def broadcast_worker(queue, active_connections):
     while True:
         message = await queue.get()
         for websocket in active_connections:
@@ -37,17 +37,18 @@ class WebSocketConnectionManager:
 
             # Initiate an async queue which will contain all the messages
             # to-be-sent via websockets
-            cls.queue = Queue()
+            loop = asyncio.get_running_loop()
+            cls.queue = Queue(loop=loop)
 
             # List of all active websocket clients
             cls.active_connections = set()
 
             # Create a background task which checks the queue for new messages
             # and broadcasts them to all active websocket clients
-            asyncio.create_task(
-                broadcast_worker('broadcast',
-                                 cls.queue,
-                                 cls.active_connections))
+            asyncio.create_task(name='broadcast',
+                                coro=broadcast_worker(
+                                    cls.queue,
+                                    cls.active_connections))
 
         return cls._instance
 

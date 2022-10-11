@@ -29,3 +29,10 @@ export type Composition = {
   title: string;
   version: number;
 };
+
+export type NoteEvent = {
+  channel: number;
+  note: number;
+  noteOn: boolean;
+  velocity: number;
+};
