@@ -27,7 +27,7 @@ def get_all_notes(score):
     notes = []
     for instrument in score.instruments:
         for note in instrument.notes:
-            notes.append([note.start, note.end])
+            notes.append([note.pitch, note.start, note.end])
     return np.sort(np.unique(notes, axis=0), axis=0)
 
 

@@ -126,7 +126,7 @@ def map_modules_to_word_times(total_duration: int,
                               modules,
                               word_times: List[int]):
     offset = 0
-    result_notes = np.empty((0, 2))
+    result_notes = np.empty((0, 3))
     result_modules = []
 
     while offset < total_duration:
@@ -151,7 +151,9 @@ def map_modules_to_word_times(total_duration: int,
             file = module["file"]
             notes = module["notes"]
             duration = module["duration"]
-            notes_with_offset = np.array([t + start_time for t in notes])[:, 0]
+
+            # Take only the starting time of each note (pitch, start, end)
+            notes_with_offset = np.array([t + start_time for t in notes])[:, 1]
 
             # Get all offset events between this slice (start - end time)
             end_time = start_time + duration
@@ -159,6 +161,11 @@ def map_modules_to_word_times(total_duration: int,
 
             # Analyze similarity of original slice with module notes
             similarity = calculate_similarity(times_range, notes_with_offset)
+
+            final_notes = []
+            for note in notes:
+                final_notes.append(
+                    (int(note[0]), note[1] + start_time, note[2] + start_time))
 
             # Store results
             results.append({
@@ -168,7 +175,7 @@ def map_modules_to_word_times(total_duration: int,
                 'index': index + 1,
                 'start_time': start_time,
                 'end_time': end_time,
-                'notes_with_offset': np.array([t + start_time for t in notes]),
+                'notes_with_offset': final_notes,
             })
 
         # @TODO: What is this doing here?
