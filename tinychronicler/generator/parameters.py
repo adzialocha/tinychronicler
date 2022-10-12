@@ -39,14 +39,14 @@ def generate_parameters(modules: List[Tuple[int, int]],
                         movements: List[Any],
                         video_files: List[str],
                         image_files: List[str]):
+    logger.debug("Generate movements for score")
+
     check_movements(movements)
 
     # Get video durations
     durations = []
     for video in video_files:
-        # Pick a random starting position for video file
-        duration = get_video_length(video)
-        durations.append(duration)
+        durations.append(get_video_length(video))
 
     # Prepare values for generation
     movement = 0
@@ -61,8 +61,13 @@ def generate_parameters(modules: List[Tuple[int, int]],
     last_video_index = 0
     last_image_index = 0
 
+    # Shuffle the files before, so the outcome is always a little different
+    random.shuffle(video_files)
+    random.shuffle(image_files)
+
     # Go through all modules and find parameters for each of them
-    result = []
+    results = []
+    previous_scene = None
     for (index, module) in enumerate(modules):
         current_position = index / len(modules)
 
@@ -92,31 +97,44 @@ def generate_parameters(modules: List[Tuple[int, int]],
 
         # Randomly find scene with parameters
         scene = np.random.choice(scenes, None, True, scenes_probabilities)
-        logger.debug("Pick scene {} for module #{}".format(
-            scene['name'], index))
+        logger.debug("Pick scene {} for module #{} w. {}".format(
+            scene['name'], index, ",".join(scene["parameters"])))
+        result = {"parameters": scene['parameters'], "module": module}
 
-        # Decide which photo or video to show and which point of the video
-        file = None
-        file_from = 0
-        if "PHOTO" in scene["parameters"]:
-            file = image_files[last_image_index]
-            # Prepare the next image for next time
-            last_image_index += 1
-            if len(image_files) < last_image_index + 1:
-                last_image_index = 0
-        elif "VIDEO" in scene["parameters"]:
-            file = video_files[last_video_index]
-            file_from = random.uniform(0, durations[last_video_index])
-            # Prepare the next video for next time
-            last_video_index += 1
-            if len(video_files) < last_video_index + 1:
-                last_video_index = 0
+        # Decide which photo or video to show when it is a PHOTO or VIDEO
+        # scene, skip over this step if we're already showing something
+        try:
+            if ("PHOTO" in scene["parameters"] and
+                    "PHOTO" not in previous_scene["parameters"]):
+                # Pick image
+                result["media"] = image_files[last_image_index]
+                # Prepare the next image for next time
+                last_image_index += 1
+                # If we reached the end of the files list, start from the top
+                # again but with a re-shuffled set of files
+                if len(image_files) < last_image_index + 1:
+                    random.shuffle(image_files)
+                    last_image_index = 0
+            elif ("VIDEO" in scene["parameters"] and
+                    "VIDEO" not in previous_scene["parameters"]):
+                # Pick video
+                result["media"] = video_files[last_video_index]
+                # Pick a random starting point in the video
+                result["media_from"] = random.uniform(
+                    0,
+                    durations[last_video_index])
+                # Prepare the next video for next time
+                last_video_index += 1
+                # If we reached the end of the files list, start from the top
+                # again but with a re-shuffled set of files
+                if len(video_files) < last_video_index + 1:
+                    random.shuffle(video_files)
+                    last_video_index = 0
+        except IndexError:
+            raise Exception(
+                "Trying to assign media in movement while none are given")
 
-        result.append({
-            "parameters": scene['parameters'],
-            "module": module,
-            "media": file,
-            "media_from": file_from,
-        })
+        results.append(result)
+        previous_scene = result
 
-    return result
+    return results

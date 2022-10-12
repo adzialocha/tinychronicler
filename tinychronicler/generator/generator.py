@@ -1,5 +1,4 @@
 import os
-import random
 from typing import List
 
 from tinychronicler.constants import (
@@ -34,10 +33,6 @@ def generate_composition(files: List[schemas.File]):
     # Generate a MIDI score and list of modules from audio file. A module is a
     # predetermined short sequence of notes
     (notes, module_indices) = generate_notes(audio_file)
-
-    # Shuffle the files before, so the outcome is always a little different
-    random.shuffle(video_files)
-    random.shuffle(image_files)
 
     # Generate parameters which determine the used sounds and media of the
     # composition
