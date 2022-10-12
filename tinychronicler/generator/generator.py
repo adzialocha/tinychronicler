@@ -9,9 +9,12 @@ from tinychronicler.constants import (
 )
 from tinychronicler.database import schemas
 
-from .movements import (MOVEMENTS, MOVEMENTS_WITHOUT_PHOTO,
-                        MOVEMENTS_WITHOUT_VIDEO,
-                        MOVEMENTS_WITHOUT_VIDEO_AND_PHOTO)
+from .movements import (
+    MOVEMENTS,
+    MOVEMENTS_WITHOUT_PHOTO,
+    MOVEMENTS_WITHOUT_VIDEO,
+    MOVEMENTS_WITHOUT_VIDEO_AND_PHOTO,
+)
 from .notes import generate_notes
 from .parameters import generate_parameters
 

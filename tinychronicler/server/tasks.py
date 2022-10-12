@@ -19,12 +19,15 @@ async def generate_composition(chronicle_id: int):
         )
 
         # Insert pending composition in database
-        title = "Composition {}".format(
-            datetime.now().strftime("%d.%m.%Y %H:%M"))
-        composition = schemas.CompositionIn(
-            title=title, data=None, is_ready=False, version=1)
-        last_record_id = await crud.create_composition(
-            composition, chronicle_id)
+        chronicle = await crud.get_chronicle(chronicle_id)
+        title = "{} {}".format(chronicle.title,
+                               datetime.now().strftime("%d.%m.%Y %H:%M"))
+        composition = schemas.CompositionIn(title=title,
+                                            data=None,
+                                            is_ready=False,
+                                            version=1)
+        last_record_id = await crud.create_composition(composition,
+                                                       chronicle_id)
 
         # Generate composition, this might take some time ..
         files = await crud.get_files(chronicle_id)
@@ -37,8 +40,7 @@ async def generate_composition(chronicle_id: int):
         await crud.update_composition(last_record_id, composition)
         logger.info(
             "Finished generation of new composition based on chronicle {}"
-            .format(chronicle_id)
-        )
+            .format(chronicle_id))
 
     def thread_handler(chronicle_id: int):
         asyncio.run(generate_composition_thread(chronicle_id))

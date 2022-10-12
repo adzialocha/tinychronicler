@@ -1,16 +1,20 @@
-import subprocess
-import random
-import json
-import wave
 import contextlib
+import json
+import random
+import subprocess
+import wave
 from typing import List
 
 import numpy as np
 from loguru import logger
-from vosk import Model, KaldiRecognizer, SetLogLevel
+from vosk import KaldiRecognizer, Model, SetLogLevel
 
 from tinychronicler.constants import (
-    MODEL_PATHS, GRID_SIZE, MIDI_MODULES_1, MIDI_MODULES_2)
+    GRID_SIZE,
+    MIDI_MODULES_1,
+    MIDI_MODULES_2,
+    MODEL_PATHS,
+)
 
 from .midi import load_midi_modules
 
