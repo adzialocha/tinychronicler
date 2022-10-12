@@ -77,11 +77,13 @@ class CompositionOut(CompositionBase, BaseModel):
 
 class CompositionDataParameters(BaseModel):
     parameters: List[str]
-    module: Tuple[int, int]
+    module: Tuple[int, float, float]
+    media: Optional[str]
+    media_from: Optional[float]
 
 
 class CompositionData(BaseModel):
-    notes: List[Tuple[float, float]]
+    notes: List[List[Tuple[float, float]]]
     parameters: List[CompositionDataParameters]
 
 

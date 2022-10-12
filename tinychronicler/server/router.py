@@ -23,8 +23,8 @@ from tinychronicler.constants import (
     TEMPLATES_DIR,
 )
 from tinychronicler.database import database, models, schemas
-from tinychronicler.version import version
 from tinychronicler.io import run_test
+from tinychronicler.version import version
 
 from . import crud, tasks
 from .files import store_file

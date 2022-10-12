@@ -187,11 +187,10 @@ def map_modules_to_word_times(total_duration: int,
         if len(results_winner['notes_with_offset']) > 0:
             result_notes = np.append(
                 result_notes, results_winner['notes_with_offset'], axis=0)
-        result_modules.append({
-            "index": results_winner['index'],
-            "from": results_winner['start_time'],
-            "to": results_winner['end_time']
-        })
+        result_modules.append((
+            results_winner['index'],
+            results_winner['start_time'],
+            results_winner['end_time']))
 
         # Prepare offset for next iteration
         offset = results_winner['end_time']
@@ -234,7 +233,7 @@ def generate_notes(audio_file: str):
         notes, module_indices = map_modules_to_word_times(
             duration, modules, quantized_word_times)
 
-        result_notes.append(notes)
+        result_notes.append(notes.tolist())
         result_module_indices.append(module_indices)
 
     logger.info("Finished generating notes")
