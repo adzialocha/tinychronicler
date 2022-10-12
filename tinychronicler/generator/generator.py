@@ -18,7 +18,7 @@ from .notes import generate_notes
 from .parameters import generate_parameters
 
 
-def generate_composition(files: List[schemas.File]):
+def generate_composition(files: List[schemas.File], language: str):
     # Separate media files by type
     audio_files = [f.path for f in files if f.mime in ALLOWED_MIME_TYPES_AUDIO]
     video_files = [f.path for f in files if f.mime in ALLOWED_MIME_TYPES_VIDEO]
@@ -32,7 +32,7 @@ def generate_composition(files: List[schemas.File]):
 
     # Generate a MIDI score and list of modules from audio file. A module is a
     # predetermined short sequence of notes
-    (notes, module_indices) = generate_notes(audio_file)
+    (notes, module_indices) = generate_notes(audio_file, language)
 
     # Generate parameters which determine the used sounds and media of the
     # composition

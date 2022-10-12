@@ -9,6 +9,7 @@ export default function useChronicle(id?: string | number) {
     title: '',
     description: '',
     created_at: '',
+    language: '',
     id: 0,
   });
 

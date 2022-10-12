@@ -31,7 +31,7 @@ async def generate_composition(chronicle_id: int):
 
         # Generate composition, this might take some time ..
         files = await crud.get_files(chronicle_id)
-        data = generator.generate_composition(files)
+        data = generator.generate_composition(files, chronicle.language)
 
         # Update composition with new data and set it ready
         composition.data = pickle.dumps(data)

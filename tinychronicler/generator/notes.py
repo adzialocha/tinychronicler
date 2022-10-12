@@ -64,8 +64,8 @@ def detect_word_times(audio_file: str, language_code: str = "en"):
 
     # Load ML model for speech recognition
     model = Model(MODEL_PATHS[language_code])
-    logger.debug("Loaded speech recognition model for language {}"
-                 .format(language_code))
+    logger.info("Loaded speech recognition model for language '{}'"
+                .format(language_code))
 
     # Prepare speech recognition
     rec = KaldiRecognizer(model, SAMPLE_RATE)
@@ -216,14 +216,14 @@ def map_modules_to_word_times(total_duration: int,
     return result_notes, result_modules
 
 
-def generate_notes(audio_file: str):
+def generate_notes(audio_file: str, language: str):
     # Determine total duration of file
     duration = audio_file_duration(audio_file)
     logger.info("Read audio file: {}, {}hz, {:0.2f}s"
                 .format(audio_file, SAMPLE_RATE, duration))
 
     # Detect all spoken words inside the audio and return times
-    word_times = detect_word_times(audio_file)
+    word_times = detect_word_times(audio_file, language)
     logger.info("Detected {} words".format(len(word_times)))
 
     # Quantize all times so they fit a grid

@@ -22,6 +22,7 @@ class Chronicle(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     title = Column(String(255), nullable=False)
     description = Column(Text, nullable=False)
+    language = Column(String(2), nullable=False, default="en")
 
     files = relationship("File", back_populates="chronicle")
     compositions = relationship("Composition", back_populates="chronicle")

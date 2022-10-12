@@ -57,10 +57,12 @@ const EditInfo = ({ chronicle }: { chronicle: Chronicle }) => {
   return (
     <form onSubmit={formik.handleSubmit}>
       <Fieldset label="Meta">
-        Created {formatDate(chronicle.created_at)}
+        Created: <em>{formatDate(chronicle.created_at)}</em>
+        <br />
+        Language: <em>{chronicle.language}</em>
       </Fieldset>
       <br />
-      <Fieldset label="Fields">
+      <Fieldset label="Information">
         <fieldset>
           <label htmlFor="title">Title</label>
           <TextField

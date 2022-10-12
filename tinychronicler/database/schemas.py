@@ -3,6 +3,8 @@ from typing import List, Optional, Tuple
 
 from pydantic import BaseModel, Field
 
+from tinychronicler.constants import LanguageEnum
+
 
 class ChronicleBase(BaseModel):
     title: str = Field(..., min_length=1, max_length=255)
@@ -10,11 +12,17 @@ class ChronicleBase(BaseModel):
 
 
 class ChronicleIn(ChronicleBase, BaseModel):
+    language: LanguageEnum = Field(..., min_length=2, max_length=2)
+    pass
+
+
+class ChronicleUpdateIn(ChronicleBase, BaseModel):
     pass
 
 
 class Chronicle(ChronicleBase, BaseModel):
     id: int
+    language: LanguageEnum = Field(..., min_length=2, max_length=2)
 
     class Config:
         orm_mode = True
@@ -23,6 +31,7 @@ class Chronicle(ChronicleBase, BaseModel):
 class ChronicleOut(ChronicleBase, BaseModel):
     id: int
     created_at: datetime
+    language: LanguageEnum = Field(..., min_length=2, max_length=2)
 
 
 class FileBase(BaseModel):

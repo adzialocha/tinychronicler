@@ -1,5 +1,6 @@
 import logging
 from typing import Dict
+from enum import Enum
 
 from uvicorn.logging import TRACE_LOG_LEVEL
 
@@ -44,16 +45,30 @@ MIDI_MODULES_DIR = "midi"
 
 # Paths to trained machine learning model for speech recognition
 MODEL_PATHS = {
-    "cn": "models/vosk-model-small-cn-0.22.zip",
-    "de": "models/vosk-model-small-de-0.15.zip",
+    "cn": "models/vosk-model-small-cn-0.22",
+    "de": "models/vosk-model-small-de-0.15",
     "en": "models/vosk-model-small-en-us-0.15",
-    "es": "models/vosk-model-small-es-0.42.zip",
-    "fr": "models/vosk-model-small-fr-0.22.zip",
-    "it": "models/vosk-model-small-it-0.22.zip",
-    "ja": "models/vosk-model-small-ja-0.22.zip",
-    "pl": "models/vosk-model-small-pl-0.22.zip",
-    "ru": "models/vosk-model-small-ru-0.22.zip",
+    "es": "models/vosk-model-small-es-0.42",
+    "fr": "models/vosk-model-small-fr-0.22",
+    "it": "models/vosk-model-small-it-0.22",
+    "ja": "models/vosk-model-small-ja-0.22",
+    "pl": "models/vosk-model-small-pl-0.22",
+    "ru": "models/vosk-model-small-ru-0.22",
 }
+
+
+class LanguageEnum(str, Enum):
+    # Enum of possible language selections
+    chinese = "cn"
+    german = "de"
+    english = "en"
+    spanish = "es"
+    french = "fr"
+    italian = "it"
+    japanese = "ja"
+    polish = "pl"
+    russian = "ru"
+
 
 # Grid size of the composition (in seconds)
 GRID_SIZE = 0.0625  # 32th note in 120bpm (quarters)

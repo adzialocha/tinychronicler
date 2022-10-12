@@ -7,7 +7,9 @@ from .files import remove_file
 
 async def create_chronicle(chronicle: schemas.ChronicleIn):
     query = insert(models.Chronicle).values(
-        title=chronicle.title, description=chronicle.description
+        title=chronicle.title,
+        description=chronicle.description,
+        language=chronicle.language
     )
     return await database.execute(query)
 

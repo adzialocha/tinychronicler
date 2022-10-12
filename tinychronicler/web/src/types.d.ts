@@ -1,5 +1,6 @@
 export type Chronicle = {
   created_at: string;
+  language: string;
   description: string;
   id: number;
   title: string;
