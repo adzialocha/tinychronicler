@@ -1,6 +1,6 @@
 import logging
-from typing import Dict
 from enum import Enum
+from typing import Dict
 
 from uvicorn.logging import TRACE_LOG_LEVEL
 
@@ -8,9 +8,22 @@ from uvicorn.logging import TRACE_LOG_LEVEL
 THUMBNAIL_SIZE = 1600, 1600
 
 # MIME file types
-ALLOWED_MIME_TYPES_AUDIO = ["audio/mpeg", "audio/x-wav"]
-ALLOWED_MIME_TYPES_VIDEO = ["video/mp4", "video/mpeg"]
-ALLOWED_MIME_TYPES_IMAGE = ["image/jpeg", "image/png"]
+ALLOWED_MIME_TYPES_AUDIO = [
+    "audio/mpeg",
+    "audio/x-wav",
+]
+ALLOWED_MIME_TYPES_VIDEO = [
+    "video/mp4",
+    "video/mpeg",
+    "video/quicktime",
+    "video/x-msvideo",
+    "video/x-matroska",
+    "video/x-ms-wmv",
+]
+ALLOWED_MIME_TYPES_IMAGE = [
+    "image/jpeg",
+    "image/png",
+]
 
 ALLOWED_MIME_TYPES = (
     ALLOWED_MIME_TYPES_IMAGE

@@ -145,7 +145,13 @@ async def create_file(chronicle_id: int, file: UploadFile = File(...)):
             detail="Chronicle can only contain max. one audio file",
         )
     # Store and process file first ..
-    upload = await store_file(file)
+    try:
+        upload = await store_file(file)
+    except Exception:
+        raise HTTPException(
+            status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
+            detail="Could not process this file",
+        )
     # ..then make an entry in the database
     file_id = await crud.create_file(
         schemas.FileIn(

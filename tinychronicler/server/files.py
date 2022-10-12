@@ -8,6 +8,7 @@ from typing import List
 
 import aiofiles
 from fastapi import File
+from ffmpeg import FFmpeg
 from PIL import Image
 
 from tinychronicler.constants import (
@@ -33,24 +34,19 @@ def generate_file_name(file_ext: str):
     return file_name
 
 
-def generate_videostill(video_file_path: str, img_file_path: str):
-    # @TODO use asyncio
-    subprocess.run(
-        [
-            "ffmpeg",
-            "-i",
-            video_file_path,
-            "-ss",
-            "00:00:00.000",
-            "-frames:v",
-            "1",
-            img_file_path,
-        ],
-        check=True,
-    )
+async def generate_videostill(video_file_path: str, img_file_path: str):
+    await FFmpeg().input(
+        video_file_path
+    ).output(
+        img_file_path,
+        {
+            "ss": "00:00:00.000",
+            "frames:v": 1,
+        },
+    ).execute()
 
 
-def generate_waveform(
+async def generate_waveform(
     audio_file_path: str,
     img_file_path: str,
     dimension="1600x1024",
@@ -67,20 +63,16 @@ def generate_waveform(
         "[color][wave]scale2ref[bg][fg]",
         "[bg][fg]overlay=format=auto",
     ]
-    # @TODO use asyncio
-    subprocess.run(
-        [
-            "ffmpeg",
-            "-i",
-            audio_file_path,
-            "-filter_complex",
-            ";".join(filter_args),
-            "-frames:v",
-            "1",
-            img_file_path,
-        ],
-        check=True,
-    )
+
+    await FFmpeg().input(
+        audio_file_path,
+    ).output(
+        img_file_path,
+        {
+            "filter_complex": ";".join(filter_args),
+            "frames:v": 1,
+        },
+    ).execute()
 
 
 def generate_thumbnail(img_file_path: str):
@@ -100,17 +92,81 @@ def generate_thumbnail(img_file_path: str):
     }
 
 
-def thumbnail_from_file_type(file_path: str, file_mime: str):
+async def thumbnail_from_file_type(file_path: str, file_mime: str):
     if file_mime in ALLOWED_MIME_TYPES_IMAGE:
         return generate_thumbnail(file_path)
     elif file_mime in ALLOWED_MIME_TYPES_VIDEO:
         with temporary_file(".jpg") as tmp_file_path:
-            generate_videostill(file_path, tmp_file_path)
+            await generate_videostill(file_path, tmp_file_path)
             return generate_thumbnail(tmp_file_path)
     elif file_mime in ALLOWED_MIME_TYPES_AUDIO:
         with temporary_file(".png") as tmp_file_path:
-            generate_waveform(file_path, tmp_file_path)
+            await generate_waveform(file_path, tmp_file_path)
             return generate_thumbnail(tmp_file_path)
+    else:
+        raise Exception("Cant process unknow file type")
+
+
+async def convert_video(input_path: str, output_path: str):
+    await FFmpeg().input(
+        input_path
+    ).output(
+        output_path,
+        {
+            # Disable rescaling for now
+            # "vf": "scale=1920:-1",
+            # "preset": "slow",
+            # "crf": 20,
+            # "b:a": "160k",
+            "vcodec": "libx264",
+            "acodec": "aac",
+            "ar": 44100,
+        }
+    ).execute()
+
+
+def convert_audio(input_path: str, output_path: str):
+    # Do not convert, we support all of the uploaded formats, just move it to
+    # the destination
+    subprocess.call("cp {} {}".format(input_path, output_path), shell=True)
+
+
+def convert_image(input_path: str, output_path: str):
+    with Image.open(input_path) as im:
+        rgb_im = im.convert("RGB")
+        rgb_im.thumbnail((2000, 2000))
+        rgb_im.save(output_path, "JPEG")
+
+
+async def convert(input_path: str, output_path: str, file_mime: str):
+    if file_mime in ALLOWED_MIME_TYPES_IMAGE:
+        convert_image(input_path, output_path)
+    elif file_mime in ALLOWED_MIME_TYPES_VIDEO:
+        await convert_video(input_path, output_path)
+    elif file_mime in ALLOWED_MIME_TYPES_AUDIO:
+        convert_audio(input_path, output_path)
+    else:
+        raise Exception("Cant process unknow file type")
+
+
+def file_extension(file_mime: str):
+    if file_mime in ALLOWED_MIME_TYPES_IMAGE:
+        return ".jpg"
+    elif file_mime in ALLOWED_MIME_TYPES_VIDEO:
+        return ".mp4"
+    elif file_mime in ALLOWED_MIME_TYPES_AUDIO:
+        return mimetypes.guess_extension(file_mime)
+    else:
+        raise Exception("Cant process unknow file type")
+
+
+def file_mime_type(file_mime: str):
+    if file_mime in ALLOWED_MIME_TYPES_IMAGE:
+        return "image/jpeg"
+    elif file_mime in ALLOWED_MIME_TYPES_VIDEO:
+        return "video/mp4"
+    elif file_mime in ALLOWED_MIME_TYPES_AUDIO:
+        return file_mime
     else:
         raise Exception("Cant process unknow file type")
 
@@ -118,26 +174,30 @@ def thumbnail_from_file_type(file_path: str, file_mime: str):
 async def store_file(file: File):
     # Generate new file name and destination
     file_mime = file.content_type
-    file_ext = mimetypes.guess_extension(file_mime)
+    file_ext = file_extension(file_mime)
     file_name = generate_file_name(file_ext)
     file_path = "{}/{}".format(UPLOADS_DIR, file_name)
     file_url = "/uploads/{}".format(file_name)
 
     # Write file in chunks to not put too much pressure on memory
-    async with aiofiles.open(file_path, "wb") as out_file:
+    async with aiofiles.tempfile.NamedTemporaryFile('wb') as tmp_file:
+        # Create temporary file
         while True:
             content = await file.read(CHUNK_SIZE_1MB)
             if not content:
                 break
-            await out_file.write(content)
+            await tmp_file.write(content)
+
+        # Convert data
+        await convert(tmp_file.name, file_path, file_mime)
 
     # Generate thumbnails after uploading files
-    thumb = thumbnail_from_file_type(file_path, file_mime)
+    thumb = await thumbnail_from_file_type(file_path, file_mime)
 
     return {
         "file_name": file_name,
         "file_path": file_path,
-        "file_mime": file_mime,
+        "file_mime": file_mime_type(file_mime),
         "file_url": file_url,
         "thumb_name": thumb["thumb_file_name"],
         "thumb_path": thumb["thumb_file_path"],

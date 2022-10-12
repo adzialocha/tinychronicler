@@ -29,7 +29,7 @@ import request from '~/utils/api';
 import useChronicle from '~/hooks/useChronicle';
 import { formatDate } from '~/utils/format';
 
-const ALLOWED_FILES = '.wav,.png,.jpg,.mp4,.mpeg';
+const ALLOWED_FILES = '.mp3,.wav,.png,.jpg,.mp4,.mpeg,.avi,.mov,.wmv,.mkv';
 
 const EditInfo = ({ chronicle }: { chronicle: Chronicle }) => {
   const navigate = useNavigate();

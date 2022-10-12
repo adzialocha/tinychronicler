@@ -1,6 +1,10 @@
 import type { File } from '~/types';
 
 const FileThumbnail = ({ file }: { file: File }) => {
+  if (file.mime.includes('video')) {
+    return null;
+  }
+
   return <img src={file.thumb_url} style={{ width: '100%', maxWidth: 400 }} />;
 };
 
