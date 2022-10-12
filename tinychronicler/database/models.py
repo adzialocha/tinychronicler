@@ -16,6 +16,7 @@ from .database import Base
 
 class Chronicle(Base):
     __tablename__ = "chronicles"
+    __table_args__ = {'sqlite_autoincrement': True}
 
     id = Column(Integer, primary_key=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
@@ -28,6 +29,7 @@ class Chronicle(Base):
 
 class File(Base):
     __tablename__ = "files"
+    __table_args__ = {'sqlite_autoincrement': True}
 
     id = Column(Integer, primary_key=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
@@ -45,6 +47,7 @@ class File(Base):
 
 class Composition(Base):
     __tablename__ = "compositions"
+    __table_args__ = {'sqlite_autoincrement': True}
 
     id = Column(Integer, primary_key=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
