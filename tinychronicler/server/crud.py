@@ -2,6 +2,8 @@ from sqlalchemy import delete, insert, select, update
 
 from tinychronicler.database import database, models, schemas
 
+from .files import remove_file
+
 
 async def create_chronicle(chronicle: schemas.ChronicleIn):
     query = insert(models.Chronicle).values(
@@ -33,7 +35,20 @@ async def update_chronicle(chronicle_id: int, chronicle: schemas.ChronicleIn):
 
 
 async def delete_chronicle(chronicle_id: int):
-    # @TODO: Also delete related files and compositions
+    # Delete related compositions
+    compositions = await get_compositions(chronicle_id)
+    # Check first if compositions are still being generated
+    for composition in compositions:
+        if not composition.is_ready:
+            raise Exception(
+                "Can not delete chronicle while composition is generated")
+    for composition in compositions:
+        await delete_composition(composition.id)
+    # Delete related files
+    files = await get_files(chronicle_id)
+    for file in files:
+        remove_file(file)
+    # Finally delete chronicle entry
     query = delete(models.Chronicle).where(models.Chronicle.id == chronicle_id)
     return await database.execute(query)
 
@@ -65,7 +80,10 @@ async def get_files(chronicle_id: int):
 
 
 async def delete_file(file_id: int):
-    # @TODO: Also delete actual file
+    # Get file and delete it
+    file = await get_file(file_id)
+    remove_file(file)
+    # Delete entry in database
     query = delete(models.File).where(models.File.id == file_id)
     return await database.execute(query)
 

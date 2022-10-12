@@ -23,8 +23,8 @@ from tinychronicler.constants import (
     TEMPLATES_DIR,
 )
 from tinychronicler.database import database, models, schemas
-from tinychronicler.io import run_test
 from tinychronicler.version import version
+from tinychronicler.io import run_test
 
 from . import crud, tasks
 from .files import store_file
@@ -93,13 +93,22 @@ async def update_chronicle(chronicle_id: int, chronicle: schemas.ChronicleIn):
 
 @router.delete(
     "/api/chronicles/{chronicle_id}",
-    responses={404: {"model": CustomResponse}},
+    responses={
+        404: {"model": CustomResponse},
+        409: {"model": CustomResponse},
+    },
 )
 async def delete_chronicle(chronicle_id: int):
-    result = await crud.delete_chronicle(chronicle_id)
-    if not result:
+    try:
+        result = await crud.delete_chronicle(chronicle_id)
+        if not result:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Chronicle not found"
+            )
+    except Exception as err:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Chronicle not found"
+            status_code=status.HTTP_409_CONFLICT, detail=str(err)
         )
     return Response(status_code=status.HTTP_200_OK)
 

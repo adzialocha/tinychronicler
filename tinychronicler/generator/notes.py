@@ -213,12 +213,12 @@ def map_modules_to_word_times(total_duration: int,
 def generate_notes(audio_file: str):
     # Determine total duration of file
     duration = audio_file_duration(audio_file)
-    logger.debug("Read audio file: {}, {}hz, {:0.2f}s"
-                 .format(audio_file, SAMPLE_RATE, duration))
+    logger.info("Read audio file: {}, {}hz, {:0.2f}s"
+                .format(audio_file, SAMPLE_RATE, duration))
 
     # Detect all spoken words inside the audio and return times
     word_times = detect_word_times(audio_file)
-    logger.debug("Detected {} words".format(len(word_times)))
+    logger.info("Detected {} words".format(len(word_times)))
 
     # Quantize all times so they fit a grid
     quantized_word_times = quantize_word_times(word_times)
@@ -237,4 +237,5 @@ def generate_notes(audio_file: str):
         result_notes.append(notes)
         result_module_indices.append(module_indices)
 
+    logger.info("Finished generating notes")
     return (result_notes, result_module_indices)

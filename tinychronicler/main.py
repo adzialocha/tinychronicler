@@ -30,17 +30,32 @@ class InterceptHandler(logging.Handler):
 
 
 def setup_logging(log_level: str):
-    # Intercept everything at the root logger
-    logging.root.handlers = [InterceptHandler()]
-    logging.root.setLevel(log_level.upper())
-
     # Remove every other logger's handlers and propagate to root logger
     for name in logging.root.manager.loggerDict.keys():
-        logging.getLogger(name).handlers = []
+        logging.getLogger(name).handlers.clear()
         logging.getLogger(name).propagate = True
 
+    # Intercept everything at the root logger and redirect to loguru
+    logging.basicConfig(handlers=[InterceptHandler()], level=0)
+
     # Configure loguru
-    logger.configure(handlers=[{"sink": sys.stdout, "serialize": False}])
+    config = {
+        "handlers": [
+            {
+                "sink": sys.stdout,
+                "format": "".join([
+                    "<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> | ",
+                    "<level>{level: <8}</level> | ",
+                    "<cyan>{name}</cyan>:",
+                    "<cyan>{function}</cyan>:",
+                    "<cyan>{line}</cyan> - ",
+                    "<level>{message}</level>",
+                ]),
+                "level": log_level.upper()
+            },
+        ],
+    }
+    logger.configure(**config)
 
 
 def setup_server(host: str, port: int, log_level: str):

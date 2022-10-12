@@ -145,9 +145,12 @@ async def store_file(file: File):
     }
 
 
-def remove_file(file_path):
-    if os.path.isfile(file_path):
-        os.remove(file_path)
+def remove_file(file):
+    if os.path.isfile(file.thumb_path):
+        os.remove(file.thumb_path)
+
+    if os.path.isfile(file.path):
+        os.remove(file.path)
 
 
 def random_file(file_mimes: List[str]):

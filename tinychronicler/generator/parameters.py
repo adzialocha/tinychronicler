@@ -39,7 +39,7 @@ def generate_parameters(modules: List[Tuple[int, int]],
                         movements: List[Any],
                         video_files: List[str],
                         image_files: List[str]):
-    logger.debug("Generate movements for score")
+    logger.info("Generate movements for score")
 
     check_movements(movements)
 
@@ -137,4 +137,6 @@ def generate_parameters(modules: List[Tuple[int, int]],
         results.append(result)
         previous_scene = result
 
+    logger.info(
+        "Finished generating {} movements for score".format(len(results)))
     return results
