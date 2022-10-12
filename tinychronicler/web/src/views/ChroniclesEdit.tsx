@@ -248,7 +248,7 @@ const EditFiles = ({ chronicle }: { chronicle: Chronicle }) => {
                     &gt;
                   </Link>
                 </div>
-                <Link onClick={onClick}>Upload file</Link>
+                <Link onClick={onClick}>🗃️ Upload file</Link>
               </div>
             </>
           )}
@@ -371,7 +371,7 @@ const EditCompositions = ({ chronicle }: { chronicle: Chronicle }) => {
               </Link>
             </div>
             <Link disabled={loading} onClick={onGenerate}>
-              Generate composition
+              🤖 Generate composition
             </Link>
           </div>
         </>

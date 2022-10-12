@@ -323,6 +323,58 @@ async def delete_composition(chronicle_id: int, composition_id: int):
 
 
 @router.post(
+    "/api/chronicles/{chronicle_id}/compositions/{composition_id}/play",
+    responses={404: {"model": CustomResponse}, 409: {"model": CustomResponse}},
+)
+async def play_composition(chronicle_id: int,
+                           composition_id: int,
+                           player_configuration: schemas.PlayerConfiguration):
+    composition = await crud.get_composition(composition_id)
+    if composition is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Composition not found",
+        )
+    if composition.chronicle_id is not chronicle_id:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Composition does not belong to chronicle",
+        )
+    if not composition.is_ready:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Composition is not ready yet",
+        )
+    # @TODO
+    return Response(status_code=status.HTTP_202_ACCEPTED)
+
+
+@router.post(
+    "/api/chronicles/{chronicle_id}/compositions/{composition_id}/print",
+    responses={404: {"model": CustomResponse}, 409: {"model": CustomResponse}},
+)
+async def print_composition(chronicle_id: int, composition_id: int):
+    composition = await crud.get_composition(composition_id)
+    if composition is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Composition not found",
+        )
+    if composition.chronicle_id is not chronicle_id:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Composition does not belong to chronicle",
+        )
+    if not composition.is_ready:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Composition is not ready yet",
+        )
+    # @TODO
+    return Response(status_code=status.HTTP_202_ACCEPTED)
+
+
+@router.post(
     "/api/settings/tests",
     responses={400: {"model": CustomResponse}},
 )
@@ -335,7 +387,13 @@ async def run_io_test(test: schemas.IOTest):
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Could not execute this test: {}".format(err),
         )
-    return Response(status_code=status.HTTP_200_OK)
+    return Response(status_code=status.HTTP_202_ACCEPTED)
+
+
+@router.post("/api/settings/stop")
+async def stop_player():
+    # @TODO
+    return Response(status_code=status.HTTP_202_ACCEPTED)
 
 
 @router.websocket("/ws")

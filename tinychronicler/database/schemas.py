@@ -95,3 +95,7 @@ class CompositionDataOut(CompositionBase, BaseModel):
 
 class IOTest(BaseModel):
     name: str
+
+
+class PlayerConfiguration(BaseModel):
+    is_demo: bool

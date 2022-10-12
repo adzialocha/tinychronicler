@@ -1,5 +1,6 @@
 import { useParams } from 'react-router-dom';
 import {
+  Button,
   Fieldset,
   Hourglass,
   Window,
@@ -10,10 +11,57 @@ import {
 import CompositionPreview from '~/components/CompositionPreview';
 import useComposition from '~/hooks/useComposition';
 import { formatDate } from '~/utils/format';
+import request from '~/utils/api';
 
 const CompositionsShow = () => {
   const { id, chronicleId } = useParams();
   const { composition, loading } = useComposition(chronicleId, id);
+
+  const onPlay = async (isDemo = false) => {
+    if (!chronicleId || !id) {
+      return;
+    }
+
+    try {
+      await request(
+        [
+          'chronicles',
+          chronicleId.toString(),
+          'compositions',
+          id.toString(),
+          'play',
+        ],
+        {
+          is_demo: isDemo,
+        },
+        'POST',
+      );
+    } catch (error) {
+      window.alert(error);
+    }
+  };
+
+  const onPrint = async () => {
+    if (!chronicleId || !id) {
+      return;
+    }
+
+    try {
+      await request(
+        [
+          'chronicles',
+          chronicleId.toString(),
+          'compositions',
+          id.toString(),
+          'print',
+        ],
+        undefined,
+        'POST',
+      );
+    } catch (error) {
+      window.alert(error);
+    }
+  };
 
   return loading ? (
     <Hourglass />
@@ -31,6 +79,12 @@ const CompositionsShow = () => {
           Generated: {formatDate(composition.created_at)}
           <br />
           Status: {composition.is_ready ? 'Ready' : 'Pending'}
+        </Fieldset>
+        <br />
+        <Fieldset label="Tiny Chronicler 💌">
+          <Button onClick={() => onPrint()}>🖨️ Print score</Button>
+          <Button onClick={() => onPlay(true)}>🧪 Simulation</Button>
+          <Button onClick={() => onPlay()}>🏓 Play composition</Button>
         </Fieldset>
       </WindowContent>
     </Window>
