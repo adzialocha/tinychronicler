@@ -7,6 +7,7 @@ from uvicorn import Config, Server
 
 from .constants import LOG_LEVELS
 from .database import engine, models
+from .version import version
 
 
 class InterceptHandler(logging.Handler):
@@ -92,6 +93,20 @@ def setup_server(host: str, port: int, log_level: str):
     show_default=True,
 )
 def main(host: str, port: int, log_level: str):
+    print("""
+    TINY CHRONICLER v{} ~ @( * O * )@
+    ♪ﾟ+.ｏ.+ﾟ♪ﾟ+.ｏ.+ﾟ♪ﾟ+.ｏ.+ﾟ♪ﾟ+.ｏ.+♪
+
+        _______
+        |.-----.|
+        ||o   o||          host={}
+        ||_.O._||          port={}
+        `--)-(--`          log_level={}
+       __[=== o]___
+      |:::::::::::|
+      `-=========-`()
+    """.format(version, host, port, log_level))
+
     # Run all migrations
     models.Base.metadata.create_all(bind=engine)
 
