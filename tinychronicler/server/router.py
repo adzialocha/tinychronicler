@@ -23,7 +23,6 @@ from tinychronicler.constants import (
     TEMPLATES_DIR,
 )
 from tinychronicler.database import database, models, schemas
-from tinychronicler.io import run_test
 from tinychronicler.version import version
 
 from . import crud, tasks
@@ -328,6 +327,7 @@ async def delete_composition(chronicle_id: int, composition_id: int):
     responses={400: {"model": CustomResponse}},
 )
 async def run_io_test(test: schemas.IOTest):
+    from tinychronicler.io import run_test
     try:
         await run_test(test.name)
     except Exception as err:
