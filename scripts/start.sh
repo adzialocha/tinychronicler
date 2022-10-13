@@ -54,7 +54,7 @@ if [ $HAS_INTERNET -eq 1 ]; then
         # Install any dependency updates
         echo
         echo "► Update dependencies"
-        LLVM_CONFIG=llvm-config-9 $POETRY_BIN install
+        $POETRY_BIN install --only main
 
         # Run post-update script when it exists
         echo

@@ -9,11 +9,10 @@ from .audio import play_audio, stop_audio
 from .led import run_test_sequence
 from .osc import send_message
 from .printer import print_composition, print_test_page
-from .screen import get_screen_dimensions
 from .video import play_video, show_image, stop_video_or_image
 
 __all__ = ["print_composition", "send_message",
-           "get_screen_dimensions", "play_video", "play_audio", "run_test"]
+           "play_video", "play_audio", "run_test"]
 
 
 async def run_test(test_id: str):
