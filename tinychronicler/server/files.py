@@ -2,11 +2,11 @@ import glob
 import mimetypes
 import os
 import random
-import subprocess
 import uuid
 from typing import List
 
 import aiofiles
+from loguru import logger
 from fastapi import File
 from ffmpeg import FFmpeg
 from PIL import Image
@@ -35,7 +35,7 @@ def generate_file_name(file_ext: str):
 
 
 async def generate_videostill(video_file_path: str, img_file_path: str):
-    await FFmpeg().input(
+    ffmpeg = FFmpeg().input(
         video_file_path
     ).output(
         img_file_path,
@@ -43,7 +43,13 @@ async def generate_videostill(video_file_path: str, img_file_path: str):
             "ss": "00:00:00.000",
             "frames:v": 1,
         },
-    ).execute()
+    )
+
+    @ffmpeg.on('stderr')
+    def on_stderr(line):
+        logger.debug(line)
+
+    await ffmpeg.execute()
 
 
 async def generate_waveform(
@@ -64,7 +70,7 @@ async def generate_waveform(
         "[bg][fg]overlay=format=auto",
     ]
 
-    await FFmpeg().input(
+    ffmpeg = FFmpeg().input(
         audio_file_path,
     ).output(
         img_file_path,
@@ -72,7 +78,13 @@ async def generate_waveform(
             "filter_complex": ";".join(filter_args),
             "frames:v": 1,
         },
-    ).execute()
+    )
+
+    @ffmpeg.on('stderr')
+    def on_stderr(line):
+        logger.debug(line)
+
+    await ffmpeg.execute()
 
 
 def generate_thumbnail(img_file_path: str):
@@ -108,7 +120,7 @@ async def thumbnail_from_file_type(file_path: str, file_mime: str):
 
 
 async def convert_video(input_path: str, output_path: str):
-    await FFmpeg().input(
+    ffmpeg = FFmpeg().input(
         input_path
     ).output(
         output_path,
@@ -122,13 +134,31 @@ async def convert_video(input_path: str, output_path: str):
             "acodec": "aac",
             "ar": 44100,
         }
-    ).execute()
+    )
+
+    @ffmpeg.on('stderr')
+    def on_stderr(line):
+        logger.debug(line)
+
+    await ffmpeg.execute()
 
 
-def convert_audio(input_path: str, output_path: str):
-    # Do not convert, we support all of the uploaded formats, just move it to
-    # the destination
-    subprocess.call("cp {} {}".format(input_path, output_path), shell=True)
+async def convert_audio(input_path: str, output_path: str):
+    ffmpeg = FFmpeg().input(
+        input_path
+    ).output(
+        output_path,
+        {
+            "ar": 44100,
+            "ac": 2,
+        }
+    )
+
+    @ffmpeg.on('stderr')
+    def on_stderr(line):
+        logger.debug(line)
+
+    await ffmpeg.execute()
 
 
 def convert_image(input_path: str, output_path: str):
@@ -144,7 +174,7 @@ async def convert(input_path: str, output_path: str, file_mime: str):
     elif file_mime in ALLOWED_MIME_TYPES_VIDEO:
         await convert_video(input_path, output_path)
     elif file_mime in ALLOWED_MIME_TYPES_AUDIO:
-        convert_audio(input_path, output_path)
+        await convert_audio(input_path, output_path)
     else:
         raise Exception("Cant process unknow file type")
 
@@ -155,7 +185,7 @@ def file_extension(file_mime: str):
     elif file_mime in ALLOWED_MIME_TYPES_VIDEO:
         return ".mp4"
     elif file_mime in ALLOWED_MIME_TYPES_AUDIO:
-        return mimetypes.guess_extension(file_mime)
+        return ".wav"
     else:
         raise Exception("Cant process unknow file type")
 
@@ -166,7 +196,7 @@ def file_mime_type(file_mime: str):
     elif file_mime in ALLOWED_MIME_TYPES_VIDEO:
         return "video/mp4"
     elif file_mime in ALLOWED_MIME_TYPES_AUDIO:
-        return file_mime
+        return "audio/x-wav"
     else:
         raise Exception("Cant process unknow file type")
 
