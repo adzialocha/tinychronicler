@@ -10,3 +10,15 @@ def play_audio(audio_file_path: str):
 
 def stop_audio():
     send_message("/audio/reset")
+
+
+def mute_audio():
+    send_message("/audio/mute")
+
+
+def unmute_audio():
+    send_message("/audio/mute")
+
+
+def play_note(instrument: str, note: int):
+    send_message("/note/{}".format(str), note)

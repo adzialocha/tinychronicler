@@ -10,7 +10,7 @@ def play_video(
     muted: bool = False
 ):
     logger.debug("Play video file @ {}".format(video_file_path))
-    send_message("/video", video_file_path, seek, duration, muted)
+    send_message("/video", video_file_path, seek, duration)
 
 
 def show_image(

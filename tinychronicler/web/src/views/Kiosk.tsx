@@ -209,13 +209,13 @@ const Kiosk = () => {
     });
 
     osc.on('/video', (message: OSC.Message) => {
-      const [url, seek, duration, muted] = message.args;
+      const [url, seek, duration] = message.args;
 
       onVideo({
         url: url as string,
         seek: seek as number,
         duration: duration as number,
-        muted: muted as boolean,
+        muted: true,
       });
     });
 
