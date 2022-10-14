@@ -25,6 +25,7 @@ export type Composition = {
       module: [number, number];
     }[];
   };
+  score?: string;
   id: number;
   is_ready: boolean;
   title: string;

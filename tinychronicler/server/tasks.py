@@ -1,6 +1,5 @@
 import asyncio
 import pickle
-from datetime import datetime
 from threading import Thread
 
 from loguru import logger
@@ -20,8 +19,7 @@ async def generate_composition(chronicle_id: int):
 
         # Insert pending composition in database
         chronicle = await crud.get_chronicle(chronicle_id)
-        title = "{} {}".format(chronicle.title,
-                               datetime.now().strftime("%d.%m.%Y %H:%M"))
+        title = chronicle.title
         composition = schemas.CompositionIn(title=title,
                                             data=None,
                                             is_ready=False,

@@ -108,14 +108,17 @@ MIDI_MODULES_1 = [
     {
         "file": "module-3notes-1.mid",
         "duration": MODULE_DURATION,
+        "character": "A",
     },
     {
         "file": "module-3notes-2.mid",
         "duration": MODULE_DURATION,
+        "character": "B",
     },
     {
         "file": "module-3notes-3.mid",
         "duration": MODULE_DURATION,
+        "character": "C",
     },
 ]
 
@@ -124,17 +127,21 @@ MIDI_MODULES_2 = [
     {
         "file": "module-3notes-4.mid",
         "duration": MODULE_DURATION,
+        "character": "D",
     },
     {
         "file": "module-3notes-5.mid",
         "duration": MODULE_DURATION,
+        "character": "E",
     },
     {
         "file": "module-3notes-6.mid",
         "duration": MODULE_DURATION,
+        "character": "F",
     },
     {
         "file": "module-3notes-7.mid",
         "duration": MODULE_DURATION,
+        "character": "G",
     },
 ]

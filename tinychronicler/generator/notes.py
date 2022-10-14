@@ -178,10 +178,6 @@ def map_modules_to_word_times(total_duration: int,
                 'notes_with_offset': final_notes,
             })
 
-        # @TODO: What is this doing here?
-        # if len(results) == 0:
-        #     break
-
         # Shuffle it before to allow different results when similarity score is
         # the same
         shuffled = results[:]

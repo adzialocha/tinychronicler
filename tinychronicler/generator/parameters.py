@@ -35,7 +35,7 @@ def check_movements(config):
         raise Exception("Invalid movement total percentage (not 100%)")
 
 
-def generate_parameters(modules: List[Tuple[int, int]],
+def generate_parameters(modules: List[List[Tuple[int, int]]],
                         movements: List[Any],
                         video_files: List[str],
                         image_files: List[str]):
@@ -68,8 +68,8 @@ def generate_parameters(modules: List[Tuple[int, int]],
     # Go through all modules and find parameters for each of them
     results = []
     previous_scene = None
-    for (index, module) in enumerate(modules):
-        current_position = index / len(modules)
+    for (index, module) in enumerate(modules[0]):
+        current_position = index / len(modules[0])
 
         # Determine movement
         if movement_end < current_position:
@@ -99,7 +99,12 @@ def generate_parameters(modules: List[Tuple[int, int]],
         scene = np.random.choice(scenes, None, True, scenes_probabilities)
         logger.debug("Pick scene {} for module #{} w. {}".format(
             scene['name'], index, ",".join(scene["parameters"])))
-        result = {"parameters": scene['parameters'], "module": module}
+        result = {"parameters": scene['parameters'], "module": (
+            modules[0][index][0],  # Module ID first voice
+            modules[1][index][0],  # Module ID second voice
+            modules[0][index][1],  # Start time
+            modules[0][index][2],  # End time
+        )}
 
         # Decide which photo or video to show when it is a PHOTO or VIDEO
         # scene, skip over this step if we're already showing something

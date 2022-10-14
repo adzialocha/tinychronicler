@@ -1,8 +1,15 @@
+import base64
+import io
+
 from loguru import logger
+from PIL import Image
 from serial.serialutil import SerialException
 from thermalprinter import ThermalPrinter
 
-THERMAL_PRINTER_TTY = '/dev/serial0'
+from tinychronicler.database import schemas
+
+THERMAL_PRINTER_TTY = "/dev/serial0"
+TINY_CHRONICLER_IMAGE = "tc.jpg"
 
 printer = None
 try:
@@ -11,12 +18,19 @@ except SerialException as err:
     logger.error("Could not set up printer serial connection: {}".format(err))
 
 
-def print_score(text: str):
+def print_score(composition: schemas.Composition, score: str):
     if printer is None:
         raise Exception("Printer is not set up")
     printer.feed(3)
-    for line in text.splitlines():
-        printer.out(line)
+    printer.out("Tiny Chronicler @( * O * )@")
+    printer.feed()
+    printer.image(Image.open(TINY_CHRONICLER_IMAGE))
+    printer.feed()
+    printer.out(composition.title, double_height=True)
+    printer.out(composition.created_at.strftime(
+        "%d.%m.%Y %H:%M"))
+    for line in score.splitlines():
+        printer.out(line, rotate=True)
     printer.feed(3)
 
 

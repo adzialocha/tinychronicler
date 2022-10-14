@@ -101,14 +101,15 @@ async def perform(audio_file_path: str,
             # Get composition data for next module
             module = modules[current_module_index]
             parameters = module["parameters"]
-            (id, start_time, end_time) = module["module"]
+            (id_1, id_2, start_time, end_time) = module["module"]
             media = module["media"] if "media" in module else None
             media_from = (
                 module["media_from"] if "media_from" in module else None)
 
             # Print some debugging info
             logger.debug("=============")
-            logger.debug("Module #{} ({})", current_module_index, id)
+            logger.debug("Module #{} ({}, {})",
+                         current_module_index, id_1, id_2)
             logger.debug("Parameters: {} {}s-{}s, Media: {}".format(
                          ", ".join(parameters), start_time, end_time, media))
 

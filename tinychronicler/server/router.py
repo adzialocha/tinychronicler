@@ -294,7 +294,7 @@ async def read_composition(chronicle_id: int, composition_id: int):
     if result.is_ready:
         # Convert pickled data before responding
         data = pickle.loads(result.data)
-        score = create_text_score(result.title, data)
+        score = create_text_score(data)
     else:
         data = None
         score = None
@@ -406,8 +406,8 @@ async def print_composition(chronicle_id: int, composition_id: int):
     try:
         from tinychronicler.io import print_score
         data = pickle.loads(composition.data)
-        score = create_text_score(composition.title, data)
-        print_score(score)
+        score = create_text_score(data)
+        print_score(composition, score)
     except Exception as err:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,

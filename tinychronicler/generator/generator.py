@@ -46,7 +46,7 @@ def generate_composition(files: List[schemas.File], language: str):
     elif not has_images and not has_videos:
         movements = MOVEMENTS_WITHOUT_VIDEO_AND_PHOTO
     parameters = generate_parameters(
-        module_indices[0], movements, video_files, image_files)
+        module_indices, movements, video_files, image_files)
 
     return {
         "notes": notes,
