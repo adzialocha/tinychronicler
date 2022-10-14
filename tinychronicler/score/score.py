@@ -31,13 +31,18 @@ def create_text_score(composition_data: schemas.CompositionData):
     temp_lines = []
     offset = int(MODULE_BREAK / 2)
 
-    # Helper method to bring both voices together into one line
+    # Helper method to bring voices underneath each other
     def bring_voices_together():
         if len(temp_lines) > 0:
             for index in range(0, offset):
-                lines.append("{}{}".format(
-                    temp_lines[index + offset],
-                    temp_lines[index]))
+                if len(temp_lines) - 1 > index + offset:
+                    lines.append("{}{}".format(
+                        temp_lines[index + offset],
+                        temp_lines[index]))
+                elif len(temp_lines) - 1 > index:
+                    lines.append("{}{}".format(
+                        "        ",
+                        temp_lines[index]))
             temp_lines.clear()
             lines.append("")
 
