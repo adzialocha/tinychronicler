@@ -81,7 +81,8 @@ async def read_chronicle(chronicle_id: int):
         404: {"model": CustomResponse},
     },
 )
-async def update_chronicle(chronicle_id: int, chronicle: schemas.ChronicleUpdateIn):
+async def update_chronicle(chronicle_id: int,
+                           chronicle: schemas.ChronicleUpdateIn):
     result = await crud.update_chronicle(chronicle_id, chronicle)
     if not result:
         raise HTTPException(
