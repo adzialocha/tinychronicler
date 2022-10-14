@@ -20,11 +20,13 @@ function check_open_port() {
 }
 
 # Make sure all required programs are installed
+check_command $POETRY_BIN
+check_command chromium-browser
 check_command git
 check_command ping
-check_command $POETRY_BIN
 check_command puredata
 check_command tmux
+check_command unclutter
 
 # Move into the tinychronicler folder
 cd $BASE_DIR
@@ -78,7 +80,7 @@ tmux kill-session -t $SESSION
 tmux new-session -d -s $SESSION
 tmux split-window -h -t $SESSION
 tmux split-window -v -t $SESSION
-tmux send-keys -t $SESSION:0.0 "$POETRY_BIN run python tinychronicler -- --port $HTTP_PORT" Enter
+tmux send-keys -t $SESSION:0.0 "$POETRY_BIN run python tinychronicler --port $HTTP_PORT --log-level debug" Enter
 tmux send-keys -t $SESSION:0.1 "puredata -inchannels 0 -nogui ./tinychronicler.pd" Enter
 check_open_port # Wait until http server is ready
 tmux send-keys -t $SESSION:0.2 "chromium-browser http://localhost:$HTTP_PORT/#/kiosk --kiosk --incognito --noerrdialogs --disable-translate --no-first-run --fast --fast-start --disable-infobars --disable-features=TranslateUI --disk-cache-dir=/dev/null --password-store=basic" Enter
