@@ -74,7 +74,7 @@ const CompositionsShow = () => {
   return loading ? (
     <Hourglass />
   ) : (
-    <Window style={{ maxWidth: 800, minWidth: 800 }}>
+    <Window style={{ maxWidth: 800, width: '100%' }}>
       <WindowHeader>{composition.title}</WindowHeader>
       <WindowContent>
         <Fieldset label="Preview">

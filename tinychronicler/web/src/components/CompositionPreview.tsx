@@ -10,7 +10,7 @@ const Line = styled.p`
 `;
 
 const Character = styled.span`
-  width: 50px;
+  width: 25px;
   text-align: center;
 `;
 
@@ -54,7 +54,8 @@ const CompositionPreview = ({ composition }: { composition: Composition }) => {
       style={{
         backgroundColor: '#fff',
         height: '200px',
-        width: '700px',
+        maxWidth: '700px',
+        width: '100%',
       }}
     >
       <PreviewBox composition={composition} />
