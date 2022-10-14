@@ -27,6 +27,7 @@ def print_score(composition: schemas.Composition, score: str):
     printer.out(composition.title, double_height=True)
     printer.out(composition.created_at.strftime(
         "%d.%m.%Y %H:%M"))
+    printer.feed()
     for line in score.splitlines():
         printer.out(line, rotate=True)
     printer.feed(4)
