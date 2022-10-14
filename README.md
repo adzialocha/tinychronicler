@@ -1,5 +1,7 @@
 # Tiny Chronicler `@( * O * )@`
 
+<img src="https://raw.githubusercontent.com/adzialocha/tinychronicler/main/tc.jpg" width="200" />
+
 Tiny Chronicler is a travelling music robot. It runs on a RaspberryPi computer equipped with an web interface to upload images, audio recordings and video files to generate intermedial musical compositions based on the uploaded material. Every composition can be printed as a score with a small thermal printer. The pieces are performed live with MIDI instruments and the Tiny Chronicler together who shows videos, makes sounds, shines with LED lights and sings.
 
 ## Hardware
@@ -16,7 +18,8 @@ Tiny Chronicler is a travelling music robot. It runs on a RaspberryPi computer e
 
 - Python 3.8.11
 - [Poetry](https://python-poetry.org)
-- PureData
+- PureData w. freeverb extension
+- Chromium (for kiosk mode)
 
 ## Setup
 
