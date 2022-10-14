@@ -7,10 +7,20 @@ import type { Composition } from '~/types';
 const Line = styled.p`
   display: flex;
   justify-content: space-between;
+
+  span:nth-child(8n) {
+    margin-left: 20px;
+    border-left: 2px solid black;
+  }
+
+  span:nth-child(16n) {
+    margin-left: 0;
+    border-left: 0;
+  }
 `;
 
 const Character = styled.span`
-  width: 25px;
+  width: 20px;
   text-align: center;
 `;
 
@@ -54,7 +64,7 @@ const CompositionPreview = ({ composition }: { composition: Composition }) => {
       style={{
         backgroundColor: '#fff',
         height: '200px',
-        maxWidth: '700px',
+        maxWidth: '400px',
         width: '100%',
       }}
     >

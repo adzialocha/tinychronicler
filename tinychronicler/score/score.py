@@ -1,7 +1,7 @@
-from tinychronicler.database import schemas
 from tinychronicler.constants import MIDI_MODULES_1, MIDI_MODULES_2
+from tinychronicler.database import schemas
 
-
+SILENCE_MODULE = 0
 MODULE_BREAK = 8  # Make a visual break every x modules
 
 # Character Table:
@@ -35,18 +35,15 @@ def create_text_score(composition_data: schemas.CompositionData):
     def bring_voices_together():
         if len(temp_lines) > 0:
             for index in range(0, offset):
-                if len(temp_lines) - 1 > index + offset:
-                    lines.append("{}{}".format(
-                        temp_lines[index + offset],
-                        temp_lines[index]))
-                elif len(temp_lines) - 1 > index:
-                    lines.append("{}{}".format(
-                        "        ",
-                        temp_lines[index]))
+                if len(temp_lines) - 1 >= index + offset:
+                    lines.append("{}{}".format(temp_lines[index + offset],
+                                               temp_lines[index]))
+                elif len(temp_lines) - 1 >= index:
+                    lines.append("{}{}".format("        ",
+                                               temp_lines[index]))
             temp_lines.clear()
             lines.append("")
 
-    # Print score
     while current_module_index < total_modules:
         if current_module_index % MODULE_BREAK == 0:
             bring_voices_together()
@@ -60,8 +57,8 @@ def create_text_score(composition_data: schemas.CompositionData):
         video = "VIDEO" in parameters
         photo = "PHOTO" in parameters
         audio = "NARRATOR" in parameters
-        human = "VOICE_1" in parameters
-        robot = "VOICE_2" in parameters
+        human = "HUMAN" in parameters
+        robot = "ROBOT" in parameters
 
         visual_char = " "
         if photo:
@@ -73,12 +70,21 @@ def create_text_score(composition_data: schemas.CompositionData):
         if audio:
             audio_char = AUDIO_CHAR
 
-        temp_lines.append("{} {} {} {} ".format(
-            MIDI_MODULES_2[id_2 - 1]["character"] if robot else TACET_CHAR,
-            MIDI_MODULES_1[id_1 - 1]["character"] if human else TACET_CHAR,
-            visual_char,
-            audio_char,
-        ))
+        robot_char = " "
+        if id_2 != SILENCE_MODULE:
+            chara = MIDI_MODULES_2[id_2 - 1]["character"]
+            robot_char = chara if robot else TACET_CHAR
+
+        human_char = " "
+        if id_1 != SILENCE_MODULE:
+            chara = MIDI_MODULES_1[id_1 - 1]["character"]
+            human_char = chara if human else TACET_CHAR
+
+        temp_lines.append("{} {} {} {} ".format(robot_char,
+                                                human_char,
+                                                visual_char,
+                                                audio_char,
+                                                ))
 
         current_module_index += 1
 

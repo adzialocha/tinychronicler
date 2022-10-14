@@ -9,9 +9,8 @@ PARAMETERS = to_dict("parameters", [
     "NARRATOR",
     "PHOTO",
     "VIDEO",
-    # "VIDEO_W_SOUND", # Currently not supported
-    "VOICE_1",
-    "VOICE_2",
+    "HUMAN",
+    "ROBOT",
 ])
 
 SCENES = {
@@ -22,73 +21,73 @@ SCENES = {
     # ==================================
     "TUTTI": [
         PARAMETERS["NARRATOR"],
-        PARAMETERS["VOICE_1"],
-        PARAMETERS["VOICE_2"],
+        PARAMETERS["HUMAN"],
+        PARAMETERS["ROBOT"],
     ],
     "TUTTI_W_VIDEO": [
         PARAMETERS["NARRATOR"],
-        PARAMETERS["VOICE_1"],
-        PARAMETERS["VOICE_2"],
+        PARAMETERS["HUMAN"],
+        PARAMETERS["ROBOT"],
         PARAMETERS["VIDEO"],
     ],
     "TUTTI_W_PHOTO": [
         PARAMETERS["NARRATOR"],
-        PARAMETERS["VOICE_1"],
-        PARAMETERS["VOICE_2"],
+        PARAMETERS["HUMAN"],
+        PARAMETERS["ROBOT"],
         PARAMETERS["PHOTO"],
     ],
     # ==================================
-    "N_VOICE_1": [
+    "N_HUMAN": [
         PARAMETERS["NARRATOR"],
-        PARAMETERS["VOICE_1"],
+        PARAMETERS["HUMAN"],
     ],
-    "N_VOICE_1_W_VIDEO": [
+    "N_HUMAN_W_VIDEO": [
         PARAMETERS["NARRATOR"],
-        PARAMETERS["VOICE_1"],
+        PARAMETERS["HUMAN"],
         PARAMETERS["VIDEO"],
     ],
-    "N_VOICE_1_W_PHOTO": [
+    "N_HUMAN_W_PHOTO": [
         PARAMETERS["NARRATOR"],
-        PARAMETERS["VOICE_1"],
+        PARAMETERS["HUMAN"],
         PARAMETERS["PHOTO"],
     ],
     # ==================================
-    "N_VOICE_2": [
+    "N_ROBOT": [
         PARAMETERS["NARRATOR"],
-        PARAMETERS["VOICE_2"],
+        PARAMETERS["ROBOT"],
     ],
-    "N_VOICE_2_W_VIDEO": [
+    "N_ROBOT_W_VIDEO": [
         PARAMETERS["NARRATOR"],
-        PARAMETERS["VOICE_2"],
+        PARAMETERS["ROBOT"],
         PARAMETERS["VIDEO"],
     ],
-    "N_VOICE_2_W_PHOTO": [
+    "N_ROBOT_W_PHOTO": [
         PARAMETERS["NARRATOR"],
-        PARAMETERS["VOICE_2"],
+        PARAMETERS["ROBOT"],
         PARAMETERS["PHOTO"],
     ],
     # ==================================
-    "VOICE_1_SOLO": [
-        PARAMETERS["VOICE_1"],
+    "HUMAN_SOLO": [
+        PARAMETERS["HUMAN"],
     ],
-    "VOICE_1_SOLO_W_VIDEO": [
-        PARAMETERS["VOICE_1"],
+    "HUMAN_SOLO_W_VIDEO": [
+        PARAMETERS["HUMAN"],
         PARAMETERS["VIDEO"],
     ],
-    "VOICE_1_SOLO_W_PHOTO": [
-        PARAMETERS["VOICE_1"],
+    "HUMAN_SOLO_W_PHOTO": [
+        PARAMETERS["HUMAN"],
         PARAMETERS["PHOTO"],
     ],
     # ==================================
-    "VOICE_2_SOLO": [
-        PARAMETERS["VOICE_2"],
+    "ROBOT_SOLO": [
+        PARAMETERS["ROBOT"],
     ],
-    "VOICE_2_SOLO_W_VIDEO": [
-        PARAMETERS["VOICE_2"],
+    "ROBOT_SOLO_W_VIDEO": [
+        PARAMETERS["ROBOT"],
         PARAMETERS["VIDEO"],
     ],
-    "VOICE_2_SOLO_W_PHOTO": [
-        PARAMETERS["VOICE_2"],
+    "ROBOT_SOLO_W_PHOTO": [
+        PARAMETERS["ROBOT"],
         PARAMETERS["PHOTO"],
     ],
     # ==================================
@@ -161,8 +160,18 @@ MOVEMENTS = [
                 "scenes": [
                     {
                         "name": "MOVEMENT_2_SECTION_1_SCENE_1",
-                        "percentage": 1,
+                        "percentage": 0.2,
                         "parameters": SCENES["TUTTI_W_VIDEO"],
+                    },
+                    {
+                        "name": "MOVEMENT_2_SECTION_1_SCENE_1",
+                        "percentage": 0.3,
+                        "parameters": SCENES["HUMAN_SOLO_W_VIDEO"],
+                    },
+                    {
+                        "name": "MOVEMENT_2_SECTION_1_SCENE_1",
+                        "percentage": 0.5,
+                        "parameters": SCENES["TUTTI"],
                     },
                 ]
             },

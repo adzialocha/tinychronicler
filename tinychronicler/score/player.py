@@ -5,13 +5,28 @@ from loguru import logger
 from tinychronicler.constants import MODULE_DURATION
 from tinychronicler.database import schemas
 from tinychronicler.io import (
-    play_video, show_image, play_audio, stop_video_or_image,
-    mute_audio, unmute_audio, play_note, stop_audio)
+    mute_audio,
+    play_audio,
+    play_note,
+    play_video,
+    show_image,
+    stop_audio,
+    stop_video_or_image,
+    unmute_audio,
+)
 from tinychronicler.io.led import (
-    reset_all, print_left_eye, print_right_eye,
-    reset_mouth, reset_eyes, print_mouth, print_background)
+    print_background,
+    print_left_eye,
+    print_mouth,
+    print_right_eye,
+    reset_all,
+    reset_eyes,
+    reset_mouth,
+)
 
 tasks = set()
+
+SILENCE_MODULE = 0
 
 
 def trigger_audio(media: str):
@@ -171,22 +186,22 @@ async def perform(audio_file_path: str,
                 mute_narrator()
 
             # Performance state machine for demo mode
-            if ("VOICE_1" in parameters and not human_voice_enabled):
+            if ("HUMAN" in parameters and not human_voice_enabled):
                 human_voice_enabled = True
-            elif ("VOICE_1" not in parameters and human_voice_enabled):
+            elif ("HUMAN" not in parameters and human_voice_enabled):
                 human_voice_enabled = False
 
-            if ("VOICE_2" in parameters and not robot_voice_enabled):
+            if ("ROBOT" in parameters and not robot_voice_enabled):
                 robot_voice_enabled = True
-            elif ("VOICE_2" not in parameters and robot_voice_enabled):
+            elif ("ROBOT" not in parameters and robot_voice_enabled):
                 robot_voice_enabled = False
 
             # Trigger notes as well in demo mode
             if is_demo:
-                if human_voice_enabled:
+                if human_voice_enabled and id_1 != SILENCE_MODULE:
                     prepare_voice_performance("human", notes_human,
                                               start_time, end_time)
-                if robot_voice_enabled:
+                if robot_voice_enabled and id_2 != SILENCE_MODULE:
                     prepare_voice_performance("robot", notes_robot,
                                               start_time, end_time)
 

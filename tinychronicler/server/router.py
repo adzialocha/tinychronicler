@@ -24,7 +24,10 @@ from tinychronicler.constants import (
 )
 from tinychronicler.database import database, models, schemas
 from tinychronicler.score import (
-    perform_composition, stop_composition, create_text_score)
+    create_text_score,
+    perform_composition,
+    stop_composition,
+)
 from tinychronicler.version import version
 
 from . import crud, tasks
@@ -428,14 +431,24 @@ async def run_io_test(test: schemas.IOTest):
     except Exception as err:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Could not execute this test: {}".format(err),
+            detail="Could not execute this test: {}".format(str(err)),
         )
     return Response(status_code=status.HTTP_202_ACCEPTED)
 
 
-@router.post("/api/settings/stop")
+@router.post(
+    "/api/settings/stop",
+    responses={409: {"model": CustomResponse}},
+)
 async def stop_player():
-    stop_composition()
+    try:
+        stop_composition()
+    except Exception as err:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=str(err)
+        )
+
     return Response(status_code=status.HTTP_202_ACCEPTED)
 
 

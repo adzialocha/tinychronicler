@@ -1,6 +1,3 @@
-import base64
-import io
-
 from loguru import logger
 from PIL import Image
 from serial.serialutil import SerialException

@@ -5,7 +5,7 @@ from tinychronicler.constants import (
 )
 from tinychronicler.server.files import random_file
 
-from .audio import play_audio, stop_audio, play_note, mute_audio, unmute_audio
+from .audio import mute_audio, play_audio, play_note, stop_audio, unmute_audio
 from .led import run_test_sequence
 from .osc import send_message
 from .printer import print_score, print_test_page

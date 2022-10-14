@@ -17,11 +17,13 @@ except SerialException as err:
 
 def send_command(command_id: int):
     if ser is None:
-        raise Exception("Arduino is not set up")
+        return
     ser.write(str(command_id).encode('utf-8'))
 
 
 async def run_test_sequence():
+    if ser is None:
+        raise Exception("Arduino is not set up")
     print_background()
     await asyncio.sleep(1)
     print_left_eye()
