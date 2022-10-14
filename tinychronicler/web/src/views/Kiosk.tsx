@@ -22,13 +22,10 @@ type VisualState =
 type VideoArgs = {
   url: string;
   seek: number;
-  duration: number;
-  muted: boolean;
 };
 
 type ImageArgs = {
   url: string;
-  duration: number;
 };
 
 type Visible = {
@@ -209,13 +206,11 @@ const Kiosk = () => {
     });
 
     osc.on('/video', (message: OSC.Message) => {
-      const [url, seek, duration] = message.args;
+      const [url, seek] = message.args;
 
       onVideo({
         url: url as string,
         seek: seek as number,
-        duration: duration as number,
-        muted: true,
       });
     });
 
@@ -224,11 +219,10 @@ const Kiosk = () => {
     });
 
     osc.on('/image', (message: OSC.Message) => {
-      const [url, duration] = message.args;
+      const [url] = message.args;
 
       onImage({
         url: url as string,
-        duration: duration as number,
       });
     });
 

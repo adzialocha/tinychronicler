@@ -5,13 +5,14 @@ from tinychronicler.constants import (
 )
 from tinychronicler.server.files import random_file
 
-from .audio import play_audio, stop_audio
+from .audio import play_audio, stop_audio, play_note, mute_audio, unmute_audio
 from .led import run_test_sequence
 from .osc import send_message
-from .printer import print_composition, print_test_page
+from .printer import print_score, print_test_page
 from .video import play_video, show_image, stop_video_or_image
 
-__all__ = ["print_composition", "send_message",
+__all__ = ["print_score", "send_message", "play_note",
+           "mute_audio", "unmute_audio",
            "play_video", "play_audio", "run_test"]
 
 

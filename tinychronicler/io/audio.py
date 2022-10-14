@@ -20,5 +20,5 @@ def unmute_audio():
     send_message("/audio/mute")
 
 
-def play_note(instrument: str, note: int):
-    send_message("/note/{}".format(str), note)
+def play_note(voice: str, note: int):
+    send_message("/note/{}".format(voice), int(note))

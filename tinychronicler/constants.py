@@ -86,9 +86,7 @@ class LanguageEnum(str, Enum):
 # Grid size of the composition (in seconds)
 GRID_SIZE = 0.0625  # 32th note in 120bpm (quarters)
 
-# Define the MIDI modules for the first voice. We manually specify the duration
-# as guessing it is always somewhat not working when we want to end with a
-# pause.
+# Duration of each module
 #
 # Maybe this little chart helps:
 #
@@ -101,18 +99,23 @@ GRID_SIZE = 0.0625  # 32th note in 120bpm (quarters)
 # 8    0.25
 # 16   0.125
 # 32   0.0625
+MODULE_DURATION = 0.375  # @TODO 2 bars, 120bpm (quarters)
+
+# Define the MIDI modules for the first voice. We manually specify the duration
+# as guessing it is always somewhat not working when we want to end with a
+# pause.
 MIDI_MODULES_1 = [
     {
         "file": "module-3notes-1.mid",
-        "duration": 0.375,
+        "duration": MODULE_DURATION,
     },
     {
         "file": "module-3notes-2.mid",
-        "duration": 0.375,
+        "duration": MODULE_DURATION,
     },
     {
         "file": "module-3notes-3.mid",
-        "duration": 0.375,
+        "duration": MODULE_DURATION,
     },
 ]
 
@@ -120,18 +123,18 @@ MIDI_MODULES_1 = [
 MIDI_MODULES_2 = [
     {
         "file": "module-3notes-4.mid",
-        "duration": 0.375,
+        "duration": MODULE_DURATION,
     },
     {
         "file": "module-3notes-5.mid",
-        "duration": 0.375,
+        "duration": MODULE_DURATION,
     },
     {
         "file": "module-3notes-6.mid",
-        "duration": 0.375,
+        "duration": MODULE_DURATION,
     },
     {
         "file": "module-3notes-7.mid",
-        "duration": 0.375,
+        "duration": MODULE_DURATION,
     },
 ]

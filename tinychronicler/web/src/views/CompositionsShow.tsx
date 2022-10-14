@@ -63,6 +63,14 @@ const CompositionsShow = () => {
     }
   };
 
+  const onStop = async () => {
+    try {
+      await request(['settings', 'stop'], undefined, 'POST');
+    } catch (error) {
+      window.alert(error);
+    }
+  };
+
   return loading ? (
     <Hourglass />
   ) : (
@@ -85,6 +93,7 @@ const CompositionsShow = () => {
           <Button onClick={() => onPrint()}>🖨️ Print score</Button>
           <Button onClick={() => onPlay(true)}>🧪 Simulation</Button>
           <Button onClick={() => onPlay()}>🏓 Play composition</Button>
+          <Button onClick={() => onStop()}>✋ Stop performance</Button>
         </Fieldset>
       </WindowContent>
     </Window>

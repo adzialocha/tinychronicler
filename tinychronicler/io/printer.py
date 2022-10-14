@@ -11,16 +11,18 @@ except SerialException as err:
     logger.error("Could not set up printer serial connection: {}".format(err))
 
 
-def print_composition():
+def print_score(text: str):
     if printer is None:
         raise Exception("Printer is not set up")
-    # @TODO
+    printer.feed(3)
+    for line in text.splitlines():
+        printer.out(line)
+    printer.feed(3)
 
 
 def print_test_page():
     if printer is None:
         raise Exception("Printer is not set up")
-
     printer.out("╔══════════════════════════════╗")
     printer.out("║ Hello,                       ║")
     printer.out("║           Tiny Chronicler!   ║")

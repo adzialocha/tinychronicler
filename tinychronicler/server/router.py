@@ -23,6 +23,8 @@ from tinychronicler.constants import (
     TEMPLATES_DIR,
 )
 from tinychronicler.database import database, models, schemas
+from tinychronicler.score import (
+    perform_composition, stop_composition, create_text_score)
 from tinychronicler.version import version
 
 from . import crud, tasks
@@ -352,7 +354,27 @@ async def play_composition(chronicle_id: int,
             status_code=status.HTTP_409_CONFLICT,
             detail="Composition is not ready yet",
         )
-    # @TODO
+
+    try:
+        # Get audio file
+        files = await crud.get_files(chronicle_id)
+        audio_files = [
+            f.path for f in files if f.mime in ALLOWED_MIME_TYPES_AUDIO]
+        assert len(audio_files) == 1
+        audio_file_path = audio_files[0]
+
+        # Play it!
+        data = pickle.loads(composition.data)
+        perform_composition(composition.title,
+                            audio_file_path,
+                            data,
+                            player_configuration.is_demo)
+    except Exception as err:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=str(err),
+        )
+
     return Response(status_code=status.HTTP_202_ACCEPTED)
 
 
@@ -377,7 +399,17 @@ async def print_composition(chronicle_id: int, composition_id: int):
             status_code=status.HTTP_409_CONFLICT,
             detail="Composition is not ready yet",
         )
-    # @TODO
+
+    try:
+        from tinychronicler.io import print_score
+        score = create_text_score(composition)
+        print_score(score)
+    except Exception as err:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=str(err),
+        )
+
     return Response(status_code=status.HTTP_202_ACCEPTED)
 
 
@@ -399,7 +431,7 @@ async def run_io_test(test: schemas.IOTest):
 
 @router.post("/api/settings/stop")
 async def stop_player():
-    # @TODO
+    stop_composition()
     return Response(status_code=status.HTTP_202_ACCEPTED)
 
 
