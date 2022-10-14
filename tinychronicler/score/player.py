@@ -85,13 +85,15 @@ def prepare_voice_performance(voice: str, notes, start_time, end_time):
 async def perform_metronome():
     # Play 2 times 4 quarter notes (2 bars)
     for _ in range(0, 2):
+        reset_eyes(0)
         print_right_eye()
-        await asyncio.sleep(0.5)
-        reset_eyes()
         await asyncio.sleep(0.5)
         print_left_eye()
         await asyncio.sleep(0.5)
-        reset_eyes()
+        reset_eyes(0)
+        print_left_eye()
+        await asyncio.sleep(0.5)
+        print_right_eye()
         await asyncio.sleep(0.5)
 
 
@@ -122,12 +124,12 @@ async def perform(audio_file_path: str,
     # Prepare stage
     trigger_photo_and_video_stop()
     unmute_narrator()
-    play_audio(audio_file_path)
     print_background()
 
     # Count in!
     prepare_metronome()
     await asyncio.sleep(MODULE_DURATION)
+    play_audio(audio_file_path)
     print_mouth()
 
     # Play score!
@@ -226,6 +228,7 @@ def perform_composition(title: str,
 
 
 def stop_composition():
+    reset_all()
     trigger_audio_stop()
 
     for task in tasks:
