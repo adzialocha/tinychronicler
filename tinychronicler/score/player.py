@@ -6,7 +6,7 @@ from tinychronicler.constants import MODULE_DURATION
 from tinychronicler.database import schemas
 from tinychronicler.io import (
     play_video, show_image, play_audio, stop_video_or_image,
-    mute_audio, unmute_audio, play_note)
+    mute_audio, unmute_audio, play_note, stop_audio)
 
 tasks = set()
 
@@ -14,6 +14,11 @@ tasks = set()
 def trigger_audio(media: str):
     logger.debug("Trigger audio: {} {}", media)
     play_audio(media)
+
+
+def trigger_audio_stop():
+    logger.debug("Trigger audio stop")
+    stop_audio()
 
 
 def trigger_video(media: str, media_from: float):
@@ -187,5 +192,7 @@ def perform_composition(title: str,
 
 
 def stop_composition():
+    trigger_audio_stop()
+
     for task in tasks:
         task.cancel()
