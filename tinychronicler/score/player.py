@@ -7,6 +7,9 @@ from tinychronicler.database import schemas
 from tinychronicler.io import (
     play_video, show_image, play_audio, stop_video_or_image,
     mute_audio, unmute_audio, play_note, stop_audio)
+from tinychronicler.io.led import (
+    reset_all, print_left_eye, print_right_eye,
+    reset_mouth, reset_eyes, print_mouth, print_background)
 
 tasks = set()
 
@@ -39,11 +42,13 @@ def trigger_photo_and_video_stop():
 def mute_narrator():
     logger.debug("Mute narrator")
     mute_audio()
+    reset_mouth()
 
 
 def unmute_narrator():
     logger.debug("Unmute narrator")
     unmute_audio()
+    print_mouth()
 
 
 def trigger_note(voice: str, note: int):
@@ -77,6 +82,25 @@ def prepare_voice_performance(voice: str, notes, start_time, end_time):
         task.add_done_callback(tasks.discard)
 
 
+async def perform_metronome():
+    # Play 2 times 4 quarter notes (2 bars)
+    for _ in range(0, 2):
+        print_right_eye()
+        await asyncio.sleep(0.5)
+        reset_eyes()
+        await asyncio.sleep(0.5)
+        print_left_eye()
+        await asyncio.sleep(0.5)
+        reset_eyes()
+        await asyncio.sleep(0.5)
+
+
+def prepare_metronome():
+    task = asyncio.create_task(perform_metronome())
+    tasks.add(task)
+    task.add_done_callback(tasks.discard)
+
+
 async def perform(audio_file_path: str,
                   composition_data: schemas.CompositionData,
                   is_demo=False):
@@ -99,6 +123,12 @@ async def perform(audio_file_path: str,
     trigger_photo_and_video_stop()
     unmute_narrator()
     play_audio(audio_file_path)
+    print_background()
+
+    # Count in!
+    prepare_metronome()
+    await asyncio.sleep(MODULE_DURATION)
+    print_mouth()
 
     # Play score!
     try:
@@ -159,6 +189,9 @@ async def perform(audio_file_path: str,
                     prepare_voice_performance("robot", notes_robot,
                                               start_time, end_time)
 
+            # Metronome
+            prepare_metronome()
+
             # Wait for next module
             await asyncio.sleep(MODULE_DURATION)
             current_module_index += 1
@@ -167,6 +200,7 @@ async def perform(audio_file_path: str,
     finally:
         logger.debug("Finish performance")
         trigger_photo_and_video_stop()
+        reset_all()
 
 
 def perform_composition(title: str,
