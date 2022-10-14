@@ -36,8 +36,10 @@ def setup_logging(log_level: str):
         logging.getLogger(name).handlers.clear()
         logging.getLogger(name).propagate = True
 
-    # Intercept everything at the root logger and redirect to loguru
-    logging.basicConfig(handlers=[InterceptHandler()], level=0)
+    # Intercept everything at the root logger and redirect to loguru, but only
+    # when TRACE level is set
+    if log_level == "trace":
+        logging.basicConfig(handlers=[InterceptHandler()], level=0)
 
     # Configure loguru
     config = {
