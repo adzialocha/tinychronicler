@@ -99,6 +99,7 @@ class CompositionData(BaseModel):
 class CompositionDataOut(CompositionBase, BaseModel):
     created_at: datetime
     data: Optional[CompositionData] = None
+    score: str
     id: int
 
 

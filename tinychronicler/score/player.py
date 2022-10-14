@@ -119,8 +119,7 @@ async def perform(audio_file_path: str,
             elif "PHOTO" in parameters and photo is None:
                 photo = media
                 trigger_photo(media)
-
-            if ("VIDEO" not in parameters
+            elif ("VIDEO" not in parameters
                     and "PHOTO" not in parameters
                     and (video is not None or photo is not None)):
                 video = None
@@ -128,8 +127,10 @@ async def perform(audio_file_path: str,
                 trigger_photo_and_video_stop()
 
             if ("NARRATOR" in parameters and not audio_enabled):
+                audio_enabled = True
                 unmute_narrator()
             elif ("NARRATOR" not in parameters and audio_enabled):
+                audio_enabled = False
                 mute_narrator()
 
             # Performance state machine for demo mode

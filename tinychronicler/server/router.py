@@ -294,11 +294,14 @@ async def read_composition(chronicle_id: int, composition_id: int):
     if result.is_ready:
         # Convert pickled data before responding
         data = pickle.loads(result.data)
+        score = create_text_score(result.title, data)
     else:
         data = None
+        score = None
     return {
         "created_at": result.created_at,
         "data": data,
+        "score": score,
         "id": result.id,
         "is_ready": result.is_ready,
         "title": result.title,
@@ -402,7 +405,8 @@ async def print_composition(chronicle_id: int, composition_id: int):
 
     try:
         from tinychronicler.io import print_score
-        score = create_text_score(composition)
+        data = pickle.loads(composition.data)
+        score = create_text_score(composition.title, data)
         print_score(score)
     except Exception as err:
         raise HTTPException(
