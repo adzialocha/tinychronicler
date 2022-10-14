@@ -99,49 +99,194 @@ GRID_SIZE = 0.0625  # 32th note in 120bpm (quarters)
 # 8    0.25
 # 16   0.125
 # 32   0.0625
-MODULE_DURATION = 0.375  # @TODO 2 bars, 120bpm (quarters)
+MODULE_DURATION = 4.0  # 2 bars, 120bpm (quarters)
 
 # Define the MIDI modules for the first voice. We manually specify the duration
 # as guessing it is always somewhat not working when we want to end with a
 # pause.
 MIDI_MODULES_1 = [
     {
-        "file": "module-3notes-1.mid",
+        "file": "human/Mod-1.mid",
         "duration": MODULE_DURATION,
         "character": "A",
     },
     {
-        "file": "module-3notes-2.mid",
+        "file": "human/Mod-2.mid",
         "duration": MODULE_DURATION,
         "character": "B",
     },
     {
-        "file": "module-3notes-3.mid",
+        "file": "human/Mod-3.mid",
         "duration": MODULE_DURATION,
         "character": "C",
+    },
+    {
+        "file": "human/Mod-4.mid",
+        "duration": MODULE_DURATION,
+        "character": "D",
+    },
+    {
+        "file": "human/Mod-5.mid",
+        "duration": MODULE_DURATION,
+        "character": "E",
+    },
+    {
+        "file": "human/Mod-6.mid",
+        "duration": MODULE_DURATION,
+        "character": "F",
+    },
+    {
+        "file": "human/Mod-7.mid",
+        "duration": MODULE_DURATION,
+        "character": "G",
+    },
+    {
+        "file": "human/Mod-8.mid",
+        "duration": MODULE_DURATION,
+        "character": "H",
+    },
+    {
+        "file": "human/Mod-9.mid",
+        "duration": MODULE_DURATION,
+        "character": "I",
+    },
+    {
+        "file": "human/Mod-10.mid",
+        "duration": MODULE_DURATION,
+        "character": "J",
+    },
+    {
+        "file": "human/Mod-11.mid",
+        "duration": MODULE_DURATION,
+        "character": "K",
+    },
+    {
+        "file": "human/Mod-12.mid",
+        "duration": MODULE_DURATION,
+        "character": "L",
+    },
+    {
+        "file": "human/Mod-13.mid",
+        "duration": MODULE_DURATION,
+        "character": "M",
+    },
+    {
+        "file": "human/Mod-14.mid",
+        "duration": MODULE_DURATION,
+        "character": "N",
+    },
+    {
+        "file": "human/Mod-15.mid",
+        "duration": MODULE_DURATION,
+        "character": "O",
+    },
+    {
+        "file": "human/Mod-16.mid",
+        "duration": MODULE_DURATION,
+        "character": "P",
+    },
+    {
+        "file": "human/Mod-17.mid",
+        "duration": MODULE_DURATION,
+        "character": "Q",
+    },
+    {
+        "file": "human/Mod-18.mid",
+        "duration": MODULE_DURATION,
+        "character": "R",
     },
 ]
 
 # Define the MIDI modules for the second voice
 MIDI_MODULES_2 = [
     {
-        "file": "module-3notes-4.mid",
+        "file": "robot/TC-Mod-1.mid",
         "duration": MODULE_DURATION,
-        "character": "D",
+        "character": "S",
     },
     {
-        "file": "module-3notes-5.mid",
+        "file": "robot/TC-Mod-2.mid",
         "duration": MODULE_DURATION,
-        "character": "E",
+        "character": "T",
     },
     {
-        "file": "module-3notes-6.mid",
+        "file": "robot/TC-Mod-3.mid",
         "duration": MODULE_DURATION,
-        "character": "F",
+        "character": "U",
     },
     {
-        "file": "module-3notes-7.mid",
+        "file": "robot/TC-Mod-4.mid",
         "duration": MODULE_DURATION,
-        "character": "G",
+        "character": "V",
+    },
+    {
+        "file": "robot/TC-Mod-5.mid",
+        "duration": MODULE_DURATION,
+        "character": "W",
+    },
+    {
+        "file": "robot/TC-Mod-6.mid",
+        "duration": MODULE_DURATION,
+        "character": "X",
+    },
+    {
+        "file": "robot/TC-Mod-7.mid",
+        "duration": MODULE_DURATION,
+        "character": "Y",
+    },
+    {
+        "file": "robot/TC-Mod-8.mid",
+        "duration": MODULE_DURATION,
+        "character": "Z",
+    },
+    {
+        "file": "robot/TC-Mod-9.mid",
+        "duration": MODULE_DURATION,
+        "character": "1",
+    },
+    {
+        "file": "robot/TC-Mod-10.mid",
+        "duration": MODULE_DURATION,
+        "character": "2",
+    },
+    {
+        "file": "robot/TC-Mod-11.mid",
+        "duration": MODULE_DURATION,
+        "character": "3",
+    },
+    {
+        "file": "robot/TC-Mod-12.mid",
+        "duration": MODULE_DURATION,
+        "character": "4",
+    },
+    {
+        "file": "robot/TC-Mod-13.mid",
+        "duration": MODULE_DURATION,
+        "character": "5",
+    },
+    {
+        "file": "robot/TC-Mod-14.mid",
+        "duration": MODULE_DURATION,
+        "character": "6",
+    },
+    {
+        "file": "robot/TC-Mod-15.mid",
+        "duration": MODULE_DURATION,
+        "character": "7",
+    },
+    {
+        "file": "robot/TC-Mod-16.mid",
+        "duration": MODULE_DURATION,
+        "character": "8",
+    },
+    {
+        "file": "robot/TC-Mod-17.mid",
+        "duration": MODULE_DURATION,
+        "character": "9",
+    },
+    {
+        "file": "robot/TC-Mod-18.mid",
+        "duration": MODULE_DURATION,
+        "character": "0",
     },
 ]
