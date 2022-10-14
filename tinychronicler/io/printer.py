@@ -24,8 +24,9 @@ def print_score(composition: schemas.Composition, score: str):
     printer.feed(3)
     printer.out("Tiny Chronicler @( * O * )@")
     printer.feed()
-    printer.image(Image.open(TINY_CHRONICLER_IMAGE))
-    printer.feed()
+    img = Image.open(TINY_CHRONICLER_IMAGE)
+    img.thumbnail((128, 128))
+    printer.image(img)
     printer.out(composition.title, double_height=True)
     printer.out(composition.created_at.strftime(
         "%d.%m.%Y %H:%M"))
