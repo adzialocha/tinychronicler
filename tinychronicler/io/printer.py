@@ -32,7 +32,7 @@ def print_score(composition: schemas.Composition, score: str):
         "%d.%m.%Y %H:%M"))
     for line in score.splitlines():
         printer.out(line, rotate=True)
-    printer.feed(3)
+    printer.feed(4)
 
 
 def print_test_page():

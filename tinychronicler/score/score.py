@@ -28,19 +28,23 @@ def create_text_score(composition_data: schemas.CompositionData):
     modules = composition_data["parameters"]
     total_modules = len(modules)
 
-    # Print score
     temp_lines = []
+    offset = int(MODULE_BREAK / 2)
+
+    # Helper method to bring both voices together into one line
+    def bring_voices_together():
+        if len(temp_lines) > 0:
+            for index in range(0, offset):
+                lines.append("{}{}".format(
+                    temp_lines[index + offset],
+                    temp_lines[index]))
+            temp_lines.clear()
+            lines.append("")
+
+    # Print score
     while current_module_index < total_modules:
         if current_module_index % MODULE_BREAK == 0:
-            offset = int(MODULE_BREAK / 2)
-            if len(temp_lines) > 0:
-                for index in range(0, offset):
-                    lines.append("{}{}".format(
-                        temp_lines[index + offset],
-                        temp_lines[index]))
-
-            temp_lines = []
-            lines.append("")
+            bring_voices_together()
 
         # Get composition data for next module
         module = modules[current_module_index]
@@ -72,5 +76,7 @@ def create_text_score(composition_data: schemas.CompositionData):
         ))
 
         current_module_index += 1
+
+    bring_voices_together()
 
     return '\n'.join(lines)
