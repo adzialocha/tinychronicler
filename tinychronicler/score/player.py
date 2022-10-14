@@ -85,12 +85,12 @@ def prepare_voice_performance(voice: str, notes, start_time, end_time):
 async def perform_metronome():
     # Play 2 times 4 quarter notes (2 bars)
     for _ in range(0, 2):
-        reset_eyes(0)
+        reset_eyes()
         print_right_eye()
         await asyncio.sleep(0.5)
         print_left_eye()
         await asyncio.sleep(0.5)
-        reset_eyes(0)
+        reset_eyes()
         print_left_eye()
         await asyncio.sleep(0.5)
         print_right_eye()
