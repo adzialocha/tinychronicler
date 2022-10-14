@@ -241,6 +241,8 @@ Read more: https://sylvaindurand.org/launch-chromium-in-kiosk-mode/
     sudo apt-get install unclutter
     ```
 
+Maybe use the downgraded version as there is problems w. 92.0.4515.98~buster-rpt2: https://forums.raspberrypi.com/viewtopic.php?t=320424
+
 2. Open `chromium-browser` and make sure that "Sound" is allowed in the "Site Permissions"
 
 ## 9. Compile and upload Arduino program
