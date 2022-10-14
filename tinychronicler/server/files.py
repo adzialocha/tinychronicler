@@ -6,9 +6,9 @@ import uuid
 from typing import List
 
 import aiofiles
-from loguru import logger
 from fastapi import File
 from ffmpeg import FFmpeg
+from loguru import logger
 from PIL import Image
 
 from tinychronicler.constants import (
