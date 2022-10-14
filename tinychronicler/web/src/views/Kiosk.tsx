@@ -86,7 +86,6 @@ const Kiosk = () => {
   const [visualState, setVisualState] = useState<VisualState>({
     mode: 'black',
   });
-  const [imageLoaded, setImageLoaded] = useState(false);
 
   const startVideo = (args: VideoArgs) => {
     if (!videoRef.current) {
@@ -128,12 +127,7 @@ const Kiosk = () => {
       image.src = '';
     }
 
-    setImageLoaded(false);
-
     image.src = args.url;
-    image.onload = () => {
-      setImageLoaded(true);
-    };
   };
 
   const hideImage = () => {
@@ -259,10 +253,7 @@ const Kiosk = () => {
         <VideoPlayer ref={videoRef} visible={visualState.mode === 'video'} />
       </Container>
       <Container>
-        <ImageView
-          ref={imageRef}
-          visible={visualState.mode === 'image' && imageLoaded}
-        />
+        <ImageView ref={imageRef} visible={visualState.mode === 'image'} />
       </Container>
     </StyledKiosk>
   );
