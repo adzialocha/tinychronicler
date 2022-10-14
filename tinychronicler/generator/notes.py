@@ -14,6 +14,7 @@ from tinychronicler.constants import (
     MIDI_MODULES_1,
     MIDI_MODULES_2,
     MODEL_PATHS,
+    MODULE_DURATION,
 )
 
 from .midi import load_midi_modules
@@ -30,7 +31,7 @@ SAMPLE_RATE = 16000
 BUFFER_SIZE = 4000
 
 # Allow silence of this length (in seconds)
-SILENCE_DURATION = 0.250  # 8th note
+SILENCE_DURATION = MODULE_DURATION
 
 
 def times_from_range(times, start, end):
