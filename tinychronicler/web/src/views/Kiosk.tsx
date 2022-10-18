@@ -188,7 +188,7 @@ const Kiosk = () => {
       if (window.location.host === 'tinychronicler.local') {
         osc.open({
           host: 'tinychronicler.local',
-          port: '80/ws',
+          port: '8000/ws',
         });
       } else {
         osc.open({
