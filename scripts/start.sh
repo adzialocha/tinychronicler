@@ -84,4 +84,4 @@ tmux send-keys -t $SESSION:0.0 "$POETRY_BIN run python tinychronicler --port $HT
 tmux send-keys -t $SESSION:0.1 "puredata -inchannels 0 -nogui ./tinychronicler.pd" Enter
 check_open_port # Wait until http server is ready
 sleep 2 # And wait a little bit more ...
-tmux send-keys -t $SESSION:0.2 "DISPLAY=:0.0 chromium-browser http://localhost:$HTTP_PORT/#/kiosk --kiosk --incognito --noerrdialogs --disable-translate --no-first-run --fast --fast-start --disable-infobars --disable-features=TranslateUI --disk-cache-dir=/dev/null --password-store=basic" Enter
+tmux send-keys -t $SESSION:0.2 "DISPLAY=:0.0 chromium-browser http://tinychronicler.local/#/kiosk --kiosk --incognito --noerrdialogs --disable-translate --no-first-run --fast --fast-start --disable-infobars --disable-features=TranslateUI --disk-cache-dir=/dev/null --password-store=basic" Enter
