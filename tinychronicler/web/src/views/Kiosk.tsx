@@ -193,7 +193,7 @@ const Kiosk = () => {
       } else {
         osc.open({
           host: '127.0.0.1',
-          port: '8080/ws',
+          port: '8000/ws',
         });
       }
     };
