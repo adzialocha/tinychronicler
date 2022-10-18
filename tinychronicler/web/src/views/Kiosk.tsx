@@ -2,9 +2,6 @@ import React, { useEffect, useState, useMemo, useRef } from 'react';
 import styled from 'styled-components';
 import OSC from 'osc-js';
 
-const OSC_ENDPOINT = '127.0.0.1';
-const OSC_PORT = '8000/ws';
-
 const RECONNECTION_ATTEMPT_INTERVAL = 5000;
 const TRANSITION_DURATION = '100ms';
 
@@ -188,10 +185,17 @@ const Kiosk = () => {
     const connect = () => {
       console.info('OSC client trying to connect ..');
 
-      osc.open({
-        host: OSC_ENDPOINT,
-        port: OSC_PORT,
-      });
+      if (window.location.host === 'tinychronicler.local') {
+        osc.open({
+          host: 'tinychronicler.local',
+          port: '80/ws',
+        });
+      } else {
+        osc.open({
+          host: '127.0.0.1',
+          port: '8080/ws',
+        });
+      }
     };
 
     osc.on('open', () => {
