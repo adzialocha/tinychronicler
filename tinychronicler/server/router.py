@@ -328,11 +328,6 @@ async def delete_composition(chronicle_id: int, composition_id: int):
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Composition does not belong to chronicle",
         )
-    if not composition.is_ready:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Can't delete composition which is not ready yet",
-        )
     await crud.delete_composition(composition_id)
     return Response(status_code=status.HTTP_200_OK)
 

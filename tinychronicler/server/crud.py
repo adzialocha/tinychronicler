@@ -39,11 +39,6 @@ async def update_chronicle(chronicle_id: int, chronicle: schemas.ChronicleIn):
 async def delete_chronicle(chronicle_id: int):
     # Delete related compositions
     compositions = await get_compositions(chronicle_id)
-    # Check first if compositions are still being generated
-    for composition in compositions:
-        if not composition.is_ready:
-            raise Exception(
-                "Can not delete chronicle while composition is generated")
     for composition in compositions:
         await delete_composition(composition.id)
     # Delete related files
