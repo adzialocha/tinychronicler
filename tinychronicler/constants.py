@@ -58,6 +58,7 @@ MIDI_MODULES_DIR = "midi"
 
 # Paths to trained machine learning model for speech recognition
 MODEL_PATHS = {
+    "ar": "models/vosk-model-ar-mgb2-0.4",
     "cn": "models/vosk-model-small-cn-0.22",
     "de": "models/vosk-model-small-de-0.15",
     "en": "models/vosk-model-small-en-us-0.15",
@@ -72,6 +73,7 @@ MODEL_PATHS = {
 
 class LanguageEnum(str, Enum):
     # Enum of possible language selections
+    arabic = "ar"
     chinese = "cn"
     german = "de"
     english = "en"
