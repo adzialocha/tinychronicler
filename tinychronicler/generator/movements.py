@@ -13,7 +13,7 @@ PARAMETERS = to_dict("parameters", [
     "ROBOT",
 ])
 
-SCENES = {
+PARAM_GROUPS = {
     # ==================================
     "ONLY_NARRATOR": [
         PARAMETERS["NARRATOR"],
@@ -112,7 +112,7 @@ MOVEMENTS = [
                     {
                         "name": "MOVEMENT_1_SECTION_1_SCENE_1",
                         "percentage": 1,
-                        "parameters": SCENES["ONLY_NARRATOR"],
+                        "parameters": PARAM_GROUPS["ONLY_NARRATOR"],
                     },
                 ]
             },
@@ -123,17 +123,17 @@ MOVEMENTS = [
                     {
                         "name": "MOVEMENT_1_SECTION_2_SCENE_1",
                         "percentage": 0.2,
-                        "parameters": SCENES["ONLY_NARRATOR"],
+                        "parameters": PARAM_GROUPS["ONLY_NARRATOR"],
                     },
                     {
                         "name": "MOVEMENT_1_SECTION_2_SCENE_2",
                         "percentage": 0.5,
-                        "parameters": SCENES["TUTTI"],
+                        "parameters": PARAM_GROUPS["TUTTI"],
                     },
                     {
                         "name": "MOVEMENT_1_SECTION_2_SCENE_3",
                         "percentage": 0.3,
-                        "parameters": SCENES["TUTTI_W_PHOTO"],
+                        "parameters": PARAM_GROUPS["TUTTI_W_PHOTO"],
                     }
                 ]
             },
@@ -144,7 +144,7 @@ MOVEMENTS = [
                     {
                         "name": "MOVEMENT_1_SECTION_3_SCENE_1",
                         "percentage": 1,
-                        "parameters": SCENES["ONLY_NARRATOR"],
+                        "parameters": PARAM_GROUPS["ONLY_NARRATOR"],
                     },
                 ]
             },
@@ -161,17 +161,17 @@ MOVEMENTS = [
                     {
                         "name": "MOVEMENT_2_SECTION_1_SCENE_1",
                         "percentage": 0.2,
-                        "parameters": SCENES["TUTTI_W_VIDEO"],
+                        "parameters": PARAM_GROUPS["TUTTI_W_VIDEO"],
                     },
                     {
                         "name": "MOVEMENT_2_SECTION_1_SCENE_1",
                         "percentage": 0.3,
-                        "parameters": SCENES["HUMAN_SOLO_W_VIDEO"],
+                        "parameters": PARAM_GROUPS["HUMAN_SOLO_W_VIDEO"],
                     },
                     {
                         "name": "MOVEMENT_2_SECTION_1_SCENE_1",
                         "percentage": 0.5,
-                        "parameters": SCENES["TUTTI"],
+                        "parameters": PARAM_GROUPS["TUTTI"],
                     },
                 ]
             },
