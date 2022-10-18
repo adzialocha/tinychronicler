@@ -5,6 +5,7 @@ MODELS_DIR="models"
 MODELS_URL="https://alphacephei.com/vosk/models"
 
 models=(
+    "vosk-model-ar-mgb2-0.4.zip"
     "vosk-model-small-cn-0.22.zip"
     "vosk-model-small-de-0.15.zip"
     "vosk-model-small-en-us-0.15.zip"

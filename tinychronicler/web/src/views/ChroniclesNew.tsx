@@ -16,6 +16,7 @@ import {
 import request from '~/utils/api';
 
 const LANGUAGES = {
+  Arabic: 'ar',
   Chinese: 'cn',
   German: 'de',
   English: 'en',
