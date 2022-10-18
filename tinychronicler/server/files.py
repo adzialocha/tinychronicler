@@ -130,6 +130,7 @@ async def convert_video(input_path: str, output_path: str):
             # "preset": "slow",
             # "crf": 20,
             # "b:a": "160k",
+            "movflags": "+faststart", # Allow streaming
             "vcodec": "libx264",
             "acodec": "aac",
             "ar": 44100,
