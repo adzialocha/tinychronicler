@@ -27,6 +27,15 @@ from tinychronicler.io.led import (
 tasks = set()
 
 SILENCE_MODULE = 0
+HUMAN_PARAMETERS = ["HUMAN_1", "HUMAN_2", "HUMAN_3", "HUMAN_4"]
+ROBOT_PARAMETERS = ["ROBOT_1", "ROBOT_2", "ROBOT_BASS"]
+
+
+def contains(a, b):
+    for item in a:
+        if item in b:
+            return True
+    return False
 
 
 def trigger_audio(media: str):
@@ -186,14 +195,18 @@ async def perform(audio_file_path: str,
                 mute_narrator()
 
             # Performance state machine for demo mode
-            if ("HUMAN" in parameters and not human_voice_enabled):
+            if (contains(HUMAN_PARAMETERS, parameters)
+                    and not human_voice_enabled):
                 human_voice_enabled = True
-            elif ("HUMAN" not in parameters and human_voice_enabled):
+            elif (not contains(HUMAN_PARAMETERS, parameters)
+                    and human_voice_enabled):
                 human_voice_enabled = False
 
-            if ("ROBOT" in parameters and not robot_voice_enabled):
+            if (contains(ROBOT_PARAMETERS, parameters)
+                    and not robot_voice_enabled):
                 robot_voice_enabled = True
-            elif ("ROBOT" not in parameters and robot_voice_enabled):
+            elif (not contains(ROBOT_PARAMETERS, parameters)
+                    and robot_voice_enabled):
                 robot_voice_enabled = False
 
             # Trigger notes as well in demo mode

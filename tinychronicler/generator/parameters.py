@@ -27,6 +27,7 @@ def check_movements(config):
             for scene in section['scenes']:
                 scenes_total_percentage += scene['percentage']
             if scenes_total_percentage != 1:
+                print(scenes_total_percentage)
                 raise Exception("Invalid scene total percentage (not 100%)")
         if sections_total_percentage != 1:
             raise Exception("Invalid sections total percentage (not 100%)")

@@ -110,62 +110,62 @@ MIDI_MODULES_1 = [
     {
         "file": "human/Mod-1.mid",
         "duration": MODULE_DURATION,
-        "character": "a",
+        "character": "A",
     },
     {
         "file": "human/Mod-2.mid",
         "duration": MODULE_DURATION,
-        "character": "b",
+        "character": "B",
     },
     {
         "file": "human/Mod-3.mid",
         "duration": MODULE_DURATION,
-        "character": "c",
+        "character": "C",
     },
     {
         "file": "human/Mod-4.mid",
         "duration": MODULE_DURATION,
-        "character": "d",
+        "character": "D",
     },
     {
         "file": "human/Mod-5.mid",
         "duration": MODULE_DURATION,
-        "character": "e",
+        "character": "E",
     },
     {
         "file": "human/Mod-6.mid",
         "duration": MODULE_DURATION,
-        "character": "f",
+        "character": "F",
     },
     {
         "file": "human/Mod-7.mid",
         "duration": MODULE_DURATION,
-        "character": "g",
+        "character": "G",
     },
     {
         "file": "human/Mod-8.mid",
         "duration": MODULE_DURATION,
-        "character": "h",
+        "character": "H",
     },
     {
         "file": "human/Mod-9.mid",
         "duration": MODULE_DURATION,
-        "character": "i",
+        "character": "I",
     },
     {
         "file": "human/Mod-10.mid",
         "duration": MODULE_DURATION,
-        "character": "j",
+        "character": "J",
     },
     {
         "file": "human/Mod-11.mid",
         "duration": MODULE_DURATION,
-        "character": "k",
+        "character": "K",
     },
     {
         "file": "human/Mod-12.mid",
         "duration": MODULE_DURATION,
-        "character": "l",
+        "character": "L",
     },
 ]
 

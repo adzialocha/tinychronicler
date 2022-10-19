@@ -1,181 +1,291 @@
-def to_dict(namespace, arr):
-    vals = {}
-    for index, key in enumerate(arr):
-        vals[key] = key
-    return vals
-
-
-PARAMETERS = to_dict("parameters", [
-    "NARRATOR",
-    "PHOTO",
-    "VIDEO",
-    "HUMAN",
-    "ROBOT",
-])
-
-PARAM_GROUPS = {
-    # ==================================
-    "ONLY_NARRATOR": [
-        PARAMETERS["NARRATOR"],
-    ],
-    # ==================================
-    "TUTTI": [
-        PARAMETERS["NARRATOR"],
-        PARAMETERS["HUMAN"],
-        PARAMETERS["ROBOT"],
-    ],
-    "TUTTI_W_VIDEO": [
-        PARAMETERS["NARRATOR"],
-        PARAMETERS["HUMAN"],
-        PARAMETERS["ROBOT"],
-        PARAMETERS["VIDEO"],
-    ],
-    "TUTTI_W_PHOTO": [
-        PARAMETERS["NARRATOR"],
-        PARAMETERS["HUMAN"],
-        PARAMETERS["ROBOT"],
-        PARAMETERS["PHOTO"],
-    ],
-    # ==================================
-    "N_HUMAN": [
-        PARAMETERS["NARRATOR"],
-        PARAMETERS["HUMAN"],
-    ],
-    "N_HUMAN_W_VIDEO": [
-        PARAMETERS["NARRATOR"],
-        PARAMETERS["HUMAN"],
-        PARAMETERS["VIDEO"],
-    ],
-    "N_HUMAN_W_PHOTO": [
-        PARAMETERS["NARRATOR"],
-        PARAMETERS["HUMAN"],
-        PARAMETERS["PHOTO"],
-    ],
-    # ==================================
-    "N_ROBOT": [
-        PARAMETERS["NARRATOR"],
-        PARAMETERS["ROBOT"],
-    ],
-    "N_ROBOT_W_VIDEO": [
-        PARAMETERS["NARRATOR"],
-        PARAMETERS["ROBOT"],
-        PARAMETERS["VIDEO"],
-    ],
-    "N_ROBOT_W_PHOTO": [
-        PARAMETERS["NARRATOR"],
-        PARAMETERS["ROBOT"],
-        PARAMETERS["PHOTO"],
-    ],
-    # ==================================
-    "HUMAN_SOLO": [
-        PARAMETERS["HUMAN"],
-    ],
-    "HUMAN_SOLO_W_VIDEO": [
-        PARAMETERS["HUMAN"],
-        PARAMETERS["VIDEO"],
-    ],
-    "HUMAN_SOLO_W_PHOTO": [
-        PARAMETERS["HUMAN"],
-        PARAMETERS["PHOTO"],
-    ],
-    # ==================================
-    "ROBOT_SOLO": [
-        PARAMETERS["ROBOT"],
-    ],
-    "ROBOT_SOLO_W_VIDEO": [
-        PARAMETERS["ROBOT"],
-        PARAMETERS["VIDEO"],
-    ],
-    "ROBOT_SOLO_W_PHOTO": [
-        PARAMETERS["ROBOT"],
-        PARAMETERS["PHOTO"],
-    ],
-    # ==================================
-    "BLACK": [],
-    "TACET_W_VIDEO": [
-        PARAMETERS["VIDEO"],
-    ],
-    "TACET_W_PHOTO": [
-        PARAMETERS["PHOTO"],
-    ],
-}
-
 MOVEMENTS = [
     {
-        "name": "MOVEMENT_1",
+        "name": "1",
         "percentage": 0.2,
         "sections": [
             {
-                "name": "MOVEMENT_1_SECTION_1",
+                "name": "1.1",
                 "percentage": 0.15,
                 "scenes": [
                     {
-                        "name": "MOVEMENT_1_SECTION_1_SCENE_1",
+                        "name": "1.1.1",
                         "percentage": 1,
-                        "parameters": PARAM_GROUPS["ONLY_NARRATOR"],
+                        "parameters": ["NARRATOR"],
                     },
                 ]
             },
             {
-                "name": "MOVEMENT_1_SECTION_2",
-                "percentage": 0.8,
+                "name": "1.2",
+                "percentage": 0.80,
                 "scenes": [
                     {
-                        "name": "MOVEMENT_1_SECTION_2_SCENE_1",
+                        "name": "1.2.1",
                         "percentage": 0.2,
-                        "parameters": PARAM_GROUPS["ONLY_NARRATOR"],
+                        "parameters": ["NARRATOR", "HUMAN_3"],
                     },
                     {
-                        "name": "MOVEMENT_1_SECTION_2_SCENE_2",
+                        "name": "1.2.2",
                         "percentage": 0.5,
-                        "parameters": PARAM_GROUPS["TUTTI"],
+                        "parameters": ["ROBOT_1", "HUMAN_3"],
                     },
                     {
-                        "name": "MOVEMENT_1_SECTION_2_SCENE_3",
+                        "name": "1.2.3",
                         "percentage": 0.3,
-                        "parameters": PARAM_GROUPS["TUTTI_W_PHOTO"],
-                    }
+                        "parameters": ["NARRATOR"],
+                    },
                 ]
             },
             {
-                "name": "MOVEMENT_1_SECTION_3",
+                "name": "1.3",
                 "percentage": 0.05,
                 "scenes": [
                     {
-                        "name": "MOVEMENT_1_SECTION_3_SCENE_1",
+                        "name": "1.3.1",
                         "percentage": 1,
-                        "parameters": PARAM_GROUPS["ONLY_NARRATOR"],
+                        "parameters": ["NARRATOR"],
                     },
                 ]
             },
         ],
     },
     {
-        "name": "MOVEMENT_2",
-        "percentage": 0.8,
+        "name": "2",
+        "percentage": 0.2,
         "sections": [
             {
-                "name": "MOVEMENT_2_SECTION_1",
-                "percentage": 1,
+                "name": "2.1",
+                "percentage": 0.2,
                 "scenes": [
                     {
-                        "name": "MOVEMENT_2_SECTION_1_SCENE_1",
-                        "percentage": 0.2,
-                        "parameters": PARAM_GROUPS["TUTTI_W_VIDEO"],
-                    },
-                    {
-                        "name": "MOVEMENT_2_SECTION_1_SCENE_1",
-                        "percentage": 0.3,
-                        "parameters": PARAM_GROUPS["HUMAN_SOLO_W_VIDEO"],
-                    },
-                    {
-                        "name": "MOVEMENT_2_SECTION_1_SCENE_1",
-                        "percentage": 0.5,
-                        "parameters": PARAM_GROUPS["TUTTI"],
+                        "name": "2.1.1",
+                        "percentage": 1,
+                        "parameters": ["NARRATOR", "PHOTO"],
                     },
                 ]
             },
-        ],
+            {
+                "name": "2.2",
+                "percentage": 0.6,
+                "scenes": [
+                    {
+                        "name": "2.2.1",
+                        "percentage": 0.16,
+                        "parameters": ["VIDEO", "HUMAN_1"],
+                    },
+                    {
+                        "name": "2.2.2",
+                        "percentage": 0.16,
+                        "parameters": ["ROBOT_1", "HUMAN_4", "LEGATO"],
+                    },
+                    {
+                        "name": "2.2.3",
+                        "percentage": 0.2,
+                        "parameters": [
+                            "ROBOT_1",
+                            "HUMAN_1",
+                            "ROBOT_BASS",
+                            "LEGATO"
+                        ],
+                    },
+                    {
+                        "name": "2.2.4",
+                        "percentage": 0.16,
+                        "parameters": ["ROBOT_1", "HUMAN_3", "VIDEO"],
+                    },
+                    {
+                        "name": "2.2.5",
+                        "percentage": 0.16,
+                        "parameters": ["LEGATO", "HUMAN_2", "VIDEO"],
+                    },
+                    {
+                        "name": "2.2.6",
+                        "percentage": 0.16,
+                        "parameters": ["LEGATO",
+                                       "HUMAN_2",
+                                       "ROBOT_BASS",
+                                       "VIDEO"],
+                    },
+                ]
+            },
+            {
+                "name": "2.3",
+                "percentage": 0.2,
+                "scenes": [
+                    {
+                        "name": "2.3.1",
+                        "percentage": 0.5,
+                        "parameters": ["NARRATOR", "VIDEO"],
+                    },
+                    {
+                        "name": "2.3.2",
+                        "percentage": 0.5,
+                        "parameters": ["NARRATOR"],
+                    },
+                ]
+            },
+        ]
+    },
+    {
+        "name": "3",
+        "percentage": 0.2,
+        "sections": [
+            {
+                "name": "3.1",
+                "percentage": 0.2,
+                "scenes": [
+                    {
+                        "name": "3.1.1",
+                        "percentage": 1,
+                        "parameters": ["NARRATOR", "ROBOT_1"],
+                    },
+                ]
+            },
+            {
+                "name": "3.2",
+                "percentage": 0.3,
+                "scenes": [
+                    {
+                        "name": "3.2.1",
+                        "percentage": 0.36,
+                        "parameters": ["NARRATOR", "ROBOT_1", "PHOTO"],
+                    },
+                    {
+                        "name": "3.2.2",
+                        "percentage": 0.34,
+                        "parameters": ["HUMAN_4", "ROBOT_2", "PHOTO"],
+                    },
+                    {
+                        "name": "3.2.3",
+                        "percentage": 0.3,
+                        "parameters": ["HUMAN_4", "ROBOT_2"],
+                    },
+                ]
+            },
+            {
+                "name": "3.3",
+                "percentage": 0.5,
+                "scenes": [
+                    {
+                        "name": "3.3.1",
+                        "percentage": 1,
+                        "parameters": ["VIDEO"],
+                    },
+                ]
+            },
+        ]
+    },
+    {
+        "name": "4",
+        "percentage": 0.2,
+        "sections": [
+            {
+                "name": "4.1",
+                "percentage": 0.3,
+                "scenes": [
+                    {
+                        "name": "4.1.1",
+                        "percentage": 1,
+                        "parameters": ["HUMAN_2", "VIDEO"],
+                    },
+                ]
+            },
+            {
+                "name": "4.2",
+                "percentage": 0.1,
+                "scenes": [
+                    {
+                        "name": "4.2.1",
+                        "percentage": 1,
+                        "parameters": ["HUMAN_2"],
+                    },
+                ]
+            },
+            {
+                "name": "4.3",
+                "percentage": 0.3,
+                "scenes": [
+                    {
+                        "name": "4.3.1",
+                        "percentage": 0.3,
+                        "parameters": ["NARRATOR", "HUMAN_3"],
+                    },
+                    {
+                        "name": "4.3.2",
+                        "percentage": 0.34,
+                        "parameters": ["NARRATOR", "VIDEO"],
+                    },
+                    {
+                        "name": "4.3.3",
+                        "percentage": 0.36,
+                        "parameters": ["NARRATOR"],
+                    },
+                ]
+            },
+            {
+                "name": "4.4",
+                "percentage": 0.3,
+                "scenes": [
+                    {
+                        "name": "4.4.1",
+                        "percentage": 0.34,
+                        "parameters": [
+                            "NARRATOR",
+                            "HUMAN_4",
+                            "ROBOT_1",
+                            "PHOTO"
+                        ],
+                    },
+                    {
+                        "name": "4.4.2",
+                        "percentage": 0.3,
+                        "parameters": ["NARRATOR", "HUMAN_4", "ROBOT_2"],
+                    },
+                    {
+                        "name": "4.4.3",
+                        "percentage": 0.36,
+                        "parameters": ["NARRATOR", "ROBOT_1"],
+                    },
+                ]
+            },
+        ]
+    },
+    {
+        "name": "5",
+        "percentage": 0.2,
+        "sections": [
+            {
+                "name": "5.1",
+                "percentage": 0.3,
+                "scenes": [
+                    {
+                        "name": "5.1.1",
+                        "percentage": 0.5,
+                        "parameters": ["HUMAN_4", "ROBOT_1"],
+                    },
+                    {
+                        "name": "5.1.2",
+                        "percentage": 0.5,
+                        "parameters": ["HUMAN_3", "ROBOT_2", "PHOTO"],
+                    },
+                ]
+            },
+            {
+                "name": "5.2",
+                "percentage": 0.7,
+                "scenes": [
+                    {
+                        "name": "5.2.1",
+                        "percentage": 0.5,
+                        "parameters": ["HUMAN_1", "LEGATO"],
+                    },
+                    {
+                        "name": "5.2.2",
+                        "percentage": 0.5,
+                        "parameters": ["HUMAN_1", "ROBOT_1", "LEGATO"],
+                    },
+                ]
+            },
+        ]
     },
 ]
 
