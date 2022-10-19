@@ -167,128 +167,68 @@ MIDI_MODULES_1 = [
         "duration": MODULE_DURATION,
         "character": "l",
     },
-    {
-        "file": "human/Mod-13.mid",
-        "duration": MODULE_DURATION,
-        "character": "m",
-    },
-    {
-        "file": "human/Mod-14.mid",
-        "duration": MODULE_DURATION,
-        "character": "n",
-    },
-    {
-        "file": "human/Mod-15.mid",
-        "duration": MODULE_DURATION,
-        "character": "o",
-    },
-    {
-        "file": "human/Mod-16.mid",
-        "duration": MODULE_DURATION,
-        "character": "p",
-    },
-    {
-        "file": "human/Mod-17.mid",
-        "duration": MODULE_DURATION,
-        "character": "q",
-    },
-    {
-        "file": "human/Mod-18.mid",
-        "duration": MODULE_DURATION,
-        "character": "r",
-    },
 ]
 
 # Define the MIDI modules for the second voice
 MIDI_MODULES_2 = [
     {
-        "file": "robot/TC-Mod-1.mid",
+        "file": "robot/TC-1.mid",
         "duration": MODULE_DURATION,
         "character": "A",
     },
     {
-        "file": "robot/TC-Mod-2.mid",
+        "file": "robot/TC-2.mid",
         "duration": MODULE_DURATION,
         "character": "B",
     },
     {
-        "file": "robot/TC-Mod-3.mid",
+        "file": "robot/TC-3.mid",
         "duration": MODULE_DURATION,
         "character": "C",
     },
     {
-        "file": "robot/TC-Mod-4.mid",
+        "file": "robot/TC-4.mid",
         "duration": MODULE_DURATION,
         "character": "D",
     },
     {
-        "file": "robot/TC-Mod-5.mid",
+        "file": "robot/TC-5.mid",
         "duration": MODULE_DURATION,
         "character": "E",
     },
     {
-        "file": "robot/TC-Mod-6.mid",
+        "file": "robot/TC-6.mid",
         "duration": MODULE_DURATION,
         "character": "F",
     },
     {
-        "file": "robot/TC-Mod-7.mid",
+        "file": "robot/TC-7.mid",
         "duration": MODULE_DURATION,
         "character": "G",
     },
     {
-        "file": "robot/TC-Mod-8.mid",
+        "file": "robot/TC-8.mid",
         "duration": MODULE_DURATION,
         "character": "H",
     },
     {
-        "file": "robot/TC-Mod-9.mid",
+        "file": "robot/TC-9.mid",
         "duration": MODULE_DURATION,
         "character": "I",
     },
     {
-        "file": "robot/TC-Mod-10.mid",
+        "file": "robot/TC-10.mid",
         "duration": MODULE_DURATION,
         "character": "J",
     },
     {
-        "file": "robot/TC-Mod-11.mid",
+        "file": "robot/TC-11.mid",
         "duration": MODULE_DURATION,
         "character": "K",
     },
     {
-        "file": "robot/TC-Mod-12.mid",
+        "file": "robot/TC-12.mid",
         "duration": MODULE_DURATION,
         "character": "L",
-    },
-    {
-        "file": "robot/TC-Mod-13.mid",
-        "duration": MODULE_DURATION,
-        "character": "M",
-    },
-    {
-        "file": "robot/TC-Mod-14.mid",
-        "duration": MODULE_DURATION,
-        "character": "N",
-    },
-    {
-        "file": "robot/TC-Mod-15.mid",
-        "duration": MODULE_DURATION,
-        "character": "O",
-    },
-    {
-        "file": "robot/TC-Mod-16.mid",
-        "duration": MODULE_DURATION,
-        "character": "P",
-    },
-    {
-        "file": "robot/TC-Mod-17.mid",
-        "duration": MODULE_DURATION,
-        "character": "Q",
-    },
-    {
-        "file": "robot/TC-Mod-18.mid",
-        "duration": MODULE_DURATION,
-        "character": "R",
     },
 ]
