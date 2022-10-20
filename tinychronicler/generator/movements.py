@@ -270,7 +270,7 @@ MOVEMENTS = [
             },
             {
                 "name": "5.2",
-                "percentage": 0.7,
+                "percentage": 0.5,
                 "scenes": [
                     {
                         "name": "5.2.1",
@@ -281,6 +281,27 @@ MOVEMENTS = [
                         "name": "5.2.2",
                         "percentage": 0.5,
                         "parameters": ["HUMAN_1", "ROBOT_1", "LEGATO"],
+                    },
+                ]
+            },
+            {
+                "name": "5.3",
+                "percentage": 0.2,
+                "scenes": [
+                    {
+                        "name": "5.3.1",
+                        "percentage": 0.5,
+                        "parameters": ["NARRATOR"],
+                    },
+                    {
+                        "name": "5.3.2",
+                        "percentage": 0.5,
+                        "parameters": [
+                            "HUMAN_1",
+                            "ROBOT_1",
+                            "LEGATO",
+                            "NARRATOR"
+                        ],
                     },
                 ]
             },
