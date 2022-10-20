@@ -69,19 +69,18 @@ MOVEMENTS = [
                 "scenes": [
                     {
                         "name": "2.2.1",
-                        "percentage": 0.16,
+                        "percentage": 0.1,
                         "parameters": ["VIDEO", "HUMAN_1"],
                     },
                     {
                         "name": "2.2.2",
-                        "percentage": 0.16,
+                        "percentage": 0.1,
                         "parameters": ["ROBOT_1", "HUMAN_4", "LEGATO"],
                     },
                     {
                         "name": "2.2.3",
-                        "percentage": 0.2,
+                        "percentage": 0.5,
                         "parameters": [
-                            "ROBOT_1",
                             "HUMAN_1",
                             "ROBOT_BASS",
                             "LEGATO"
@@ -89,17 +88,17 @@ MOVEMENTS = [
                     },
                     {
                         "name": "2.2.4",
-                        "percentage": 0.16,
+                        "percentage": 0.1,
                         "parameters": ["ROBOT_1", "HUMAN_3", "VIDEO"],
                     },
                     {
                         "name": "2.2.5",
-                        "percentage": 0.16,
+                        "percentage": 0.1,
                         "parameters": ["LEGATO", "HUMAN_2", "VIDEO"],
                     },
                     {
                         "name": "2.2.6",
-                        "percentage": 0.16,
+                        "percentage": 0.1,
                         "parameters": ["LEGATO",
                                        "HUMAN_2",
                                        "ROBOT_BASS",
@@ -142,7 +141,7 @@ MOVEMENTS = [
             },
             {
                 "name": "3.2",
-                "percentage": 0.3,
+                "percentage": 0.4,
                 "scenes": [
                     {
                         "name": "3.2.1",
@@ -157,13 +156,13 @@ MOVEMENTS = [
                     {
                         "name": "3.2.3",
                         "percentage": 0.3,
-                        "parameters": ["HUMAN_4", "ROBOT_2"],
+                        "parameters": ["NARRATOR", "HUMAN_4", "ROBOT_2"],
                     },
                 ]
             },
             {
                 "name": "3.3",
-                "percentage": 0.5,
+                "percentage": 0.4,
                 "scenes": [
                     {
                         "name": "3.3.1",
@@ -185,7 +184,7 @@ MOVEMENTS = [
                     {
                         "name": "4.1.1",
                         "percentage": 1,
-                        "parameters": ["HUMAN_2", "VIDEO"],
+                        "parameters": ["HUMAN_2", "VIDEO", "NARRATOR"],
                     },
                 ]
             },
@@ -196,7 +195,7 @@ MOVEMENTS = [
                     {
                         "name": "4.2.1",
                         "percentage": 1,
-                        "parameters": ["HUMAN_2"],
+                        "parameters": ["HUMAN_2", "NARRATOR"],
                     },
                 ]
             },
