@@ -25,8 +25,7 @@ def print_score(composition: schemas.Composition, score: str):
     img.thumbnail((192, 192))
     printer.image(img)
     printer.out(composition.title, double_height=True)
-    printer.out(composition.created_at.strftime(
-        "%d.%m.%Y %H:%M"))
+    printer.out("Date:                           ", underline=True)
     printer.feed()
     for line in score.splitlines():
         printer.out(line, rotate=True)
