@@ -1,4 +1,5 @@
 import asyncio
+import random
 
 from loguru import logger
 
@@ -7,6 +8,8 @@ from tinychronicler.database import schemas
 from tinychronicler.io import (
     mute_audio,
     play_audio,
+    play_beat,
+    play_count_in,
     play_note,
     play_video,
     show_image,
@@ -106,21 +109,27 @@ def prepare_voice_performance(voice: str, notes, start_time, end_time):
         task.add_done_callback(tasks.discard)
 
 
-async def perform_metronome():
-    reset_eyes()
-    print_right_eye()
-    await asyncio.sleep(1)
-    print_left_eye()
-    await asyncio.sleep(1)
-    reset_eyes()
-    print_left_eye()
-    await asyncio.sleep(1)
-    print_right_eye()
-    await asyncio.sleep(1)
+async def perform_metronome(metronome=False, count_in=False):
+    # Audible metronome
+    if count_in:
+        play_count_in()
+    elif metronome:
+        play_beat()
+
+    # Visual fun
+    if random.random() > 0.8:
+        reset_eyes()
+    if random.random() > 0.8:
+        print_right_eye()
+        await asyncio.sleep(random.random())
+    if random.random() > 0.8:
+        print_left_eye()
+        await asyncio.sleep(random.random())
 
 
-def prepare_metronome():
-    task = asyncio.create_task(perform_metronome())
+def prepare_metronome(metronome: bool, count_in: bool):
+    task = asyncio.create_task(perform_metronome(metronome,
+                                                 count_in))
     tasks.add(task)
     task.add_done_callback(tasks.discard)
 
@@ -142,6 +151,7 @@ async def perform(audio_file_path: str,
     audio_enabled = True
     human_voice_enabled = True
     robot_voice_enabled = True
+    count_in = True
 
     # Prepare stage
     trigger_photo_and_video_stop()
@@ -149,7 +159,7 @@ async def perform(audio_file_path: str,
     print_background()
 
     # Count in!
-    prepare_metronome()
+    prepare_metronome(False, True)
     await asyncio.sleep(MODULE_DURATION)
     play_audio(audio_file_path)
     print_mouth()
@@ -193,7 +203,7 @@ async def perform(audio_file_path: str,
                 audio_enabled = False
                 mute_narrator()
 
-            # Performance state machine for demo mode
+            # Performance state machine for voices (and demo mode)
             if (contains(HUMAN_PARAMETERS, parameters)
                     and not human_voice_enabled):
                 human_voice_enabled = True
@@ -218,7 +228,17 @@ async def perform(audio_file_path: str,
                                               start_time, end_time)
 
             # Metronome
-            prepare_metronome()
+            count_in = False
+            if current_module_index + 1 < total_modules:
+                next_module = modules[current_module_index + 1]
+                next_parameters = next_module["parameters"]
+                if ((contains(HUMAN_PARAMETERS, next_parameters)
+                        and not human_voice_enabled) or
+                        (contains(ROBOT_PARAMETERS, next_parameters)
+                            and not robot_voice_enabled)):
+                    count_in = True
+            prepare_metronome(
+                human_voice_enabled or robot_voice_enabled, count_in)
 
             # Wait for next module
             await asyncio.sleep(MODULE_DURATION)

@@ -22,3 +22,11 @@ def unmute_audio():
 
 def play_note(voice: str, note: int):
     send_message("/note/{}".format(voice), int(note))
+
+
+def play_beat():
+    send_message("/metronome/beat")
+
+
+def play_count_in():
+    send_message("/metronome/count")
