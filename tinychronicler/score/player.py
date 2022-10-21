@@ -109,27 +109,20 @@ def prepare_voice_performance(voice: str, notes, start_time, end_time):
         task.add_done_callback(tasks.discard)
 
 
-async def perform_metronome(metronome=False, count_in=False):
-    # Audible metronome
-    if count_in:
-        play_count_in()
-    elif metronome:
-        play_beat()
-
+async def perform_blinking():
     # Visual fun
-    if random.random() > 0.8:
+    if random.random() > 0.2:
         reset_eyes()
-    if random.random() > 0.8:
+    if random.random() > 0.2:
         print_right_eye()
         await asyncio.sleep(random.random())
-    if random.random() > 0.8:
+    if random.random() > 0.2:
         print_left_eye()
         await asyncio.sleep(random.random())
 
 
-def prepare_metronome(metronome: bool, count_in: bool):
-    task = asyncio.create_task(perform_metronome(metronome,
-                                                 count_in))
+def prepare_blinking():
+    task = asyncio.create_task(perform_blinking())
     tasks.add(task)
     task.add_done_callback(tasks.discard)
 
@@ -159,7 +152,7 @@ async def perform(audio_file_path: str,
     print_background()
 
     # Count in!
-    prepare_metronome(False, True)
+    play_count_in()
     await asyncio.sleep(MODULE_DURATION)
     play_audio(audio_file_path)
     print_mouth()
@@ -227,6 +220,9 @@ async def perform(audio_file_path: str,
                     prepare_voice_performance("robot", notes_robot,
                                               start_time, end_time)
 
+            # Tiny Chronicler is blinking with its eyes sometimes
+            prepare_blinking()
+
             # Metronome
             count_in = False
             if current_module_index + 1 < total_modules:
@@ -237,8 +233,10 @@ async def perform(audio_file_path: str,
                         (contains(ROBOT_PARAMETERS, next_parameters)
                             and not robot_voice_enabled)):
                     count_in = True
-            prepare_metronome(
-                human_voice_enabled or robot_voice_enabled, count_in)
+            if count_in:
+                play_count_in()
+            elif human_voice_enabled or robot_voice_enabled:
+                play_beat()
 
             # Wait for next module
             await asyncio.sleep(MODULE_DURATION)
