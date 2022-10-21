@@ -129,7 +129,8 @@ async def perform_blinking(count_in: bool):
             reset_eyes()
     else:
         reset_all()
-        for _ in range(0, 4):
+        await asyncio.sleep(2)
+        for _ in range(0, 2):
             print_both_eyes()
             print_mouth()
             await asyncio.sleep(0.5)
