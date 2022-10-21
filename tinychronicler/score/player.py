@@ -19,6 +19,7 @@ from tinychronicler.io import (
 )
 from tinychronicler.io.led import (
     print_background,
+    print_both_eyes,
     print_left_eye,
     print_mouth,
     print_right_eye,
@@ -113,12 +114,18 @@ async def perform_blinking():
     # Visual fun
     if random.random() > 0.2:
         reset_eyes()
+        await asyncio.sleep(random.uniform(0.1, 1))
+    if random.random() > 0.6:
+        print_both_eyes()
+        await asyncio.sleep(random.uniform(0.1, 1))
     if random.random() > 0.1:
         print_right_eye()
-        await asyncio.sleep(random.random())
+        await asyncio.sleep(random.uniform(0.1, 1))
     if random.random() > 0.1:
         print_left_eye()
-        await asyncio.sleep(random.random())
+        await asyncio.sleep(random.uniform(0.1, 1))
+    if random.random() > 0.6:
+        reset_eyes()
 
 
 def prepare_blinking():
