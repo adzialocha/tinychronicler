@@ -110,26 +110,36 @@ def prepare_voice_performance(voice: str, notes, start_time, end_time):
         task.add_done_callback(tasks.discard)
 
 
-async def perform_blinking():
-    # Visual fun
-    if random.random() > 0.2:
-        reset_eyes()
-        await asyncio.sleep(random.uniform(0.1, 1))
-    if random.random() > 0.6:
-        print_both_eyes()
-        await asyncio.sleep(random.uniform(0.1, 1))
-    if random.random() > 0.1:
-        print_right_eye()
-        await asyncio.sleep(random.uniform(0.1, 1))
-    if random.random() > 0.1:
-        print_left_eye()
-        await asyncio.sleep(random.uniform(0.1, 1))
-    if random.random() > 0.6:
-        reset_eyes()
+async def perform_blinking(count_in: bool):
+    if not count_in:
+        # Visual fun
+        if random.random() > 0.2:
+            reset_eyes()
+            await asyncio.sleep(random.uniform(0.1, 1))
+        if random.random() > 0.6:
+            print_both_eyes()
+            await asyncio.sleep(random.uniform(0.1, 1))
+        if random.random() > 0.1:
+            print_right_eye()
+            await asyncio.sleep(random.uniform(0.1, 1))
+        if random.random() > 0.1:
+            print_left_eye()
+            await asyncio.sleep(random.uniform(0.1, 1))
+        if random.random() > 0.6:
+            reset_eyes()
+    else:
+        reset_all()
+        for _ in range(0, 4):
+            print_both_eyes()
+            print_mouth()
+            await asyncio.sleep(0.5)
+            reset_all()
+            await asyncio.sleep(0.5)
+        print_background()
 
 
-def prepare_blinking():
-    task = asyncio.create_task(perform_blinking())
+def prepare_blinking(count_in: bool):
+    task = asyncio.create_task(perform_blinking(count_in))
     tasks.add(task)
     task.add_done_callback(tasks.discard)
 
@@ -227,9 +237,6 @@ async def perform(audio_file_path: str,
                     prepare_voice_performance("robot", notes_robot,
                                               start_time, end_time)
 
-            # Tiny Chronicler is blinking with its eyes sometimes. Beep beep.
-            prepare_blinking()
-
             # Metronome and count in whenever we come from tacet and enter
             # robot or human voice module next
             count_in = False
@@ -245,6 +252,9 @@ async def perform(audio_file_path: str,
                 play_count_in()
             elif human_voice_enabled or robot_voice_enabled:
                 play_beat()
+
+            # Tiny Chronicler is blinking with its eyes sometimes. Beep beep.
+            prepare_blinking(count_in)
 
             # Wait for next module
             await asyncio.sleep(MODULE_DURATION)
