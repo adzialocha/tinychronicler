@@ -113,10 +113,10 @@ async def perform_blinking():
     # Visual fun
     if random.random() > 0.2:
         reset_eyes()
-    if random.random() > 0.2:
+    if random.random() > 0.1:
         print_right_eye()
         await asyncio.sleep(random.random())
-    if random.random() > 0.2:
+    if random.random() > 0.1:
         print_left_eye()
         await asyncio.sleep(random.random())
 
@@ -220,18 +220,19 @@ async def perform(audio_file_path: str,
                     prepare_voice_performance("robot", notes_robot,
                                               start_time, end_time)
 
-            # Tiny Chronicler is blinking with its eyes sometimes
+            # Tiny Chronicler is blinking with its eyes sometimes. Beep beep.
             prepare_blinking()
 
-            # Metronome
+            # Metronome and count in whenever we come from tacet and enter
+            # robot or human voice module next
             count_in = False
             if current_module_index + 1 < total_modules:
                 next_module = modules[current_module_index + 1]
                 next_parameters = next_module["parameters"]
                 if ((contains(HUMAN_PARAMETERS, next_parameters)
-                        and not human_voice_enabled) or
-                        (contains(ROBOT_PARAMETERS, next_parameters)
-                            and not robot_voice_enabled)):
+                        or contains(ROBOT_PARAMETERS, next_parameters))
+                        and (not human_voice_enabled and
+                             not robot_voice_enabled)):
                     count_in = True
             if count_in:
                 play_count_in()
