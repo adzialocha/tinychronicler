@@ -172,7 +172,6 @@ async def perform(audio_file_path: str,
     print_background()
 
     # Count in!
-    play_count_in()
     await asyncio.sleep(MODULE_DURATION)
     play_audio(audio_file_path)
     print_mouth()
