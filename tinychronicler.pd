@@ -972,8 +972,8 @@
 #X obj 1029 955 *~;
 #X obj 1059 956 *~;
 #X text 1204 509 METRONOME;
-#X msg 1103 361 open samples/TC-11.wav \, 1;
-#X msg 1028 403 open samples/TC-10.wav \, 1;
+#X msg 1028 403 open samples/Beat.wav \, 1;
+#X msg 1103 361 open samples/Count-In.wav \, 1;
 #X connect 1 0 26 0;
 #X connect 1 1 27 0;
 #X connect 2 0 0 0;
@@ -1062,8 +1062,8 @@
 #X connect 75 0 61 0;
 #X connect 75 1 63 0;
 #X connect 75 2 76 0;
-#X connect 76 0 89 0;
-#X connect 76 1 88 0;
+#X connect 76 0 88 0;
+#X connect 76 1 89 0;
 #X connect 77 0 78 0;
 #X connect 77 1 79 0;
 #X connect 78 0 0 0;
@@ -1078,5 +1078,5 @@
 #X connect 84 1 86 0;
 #X connect 85 0 0 0;
 #X connect 86 0 0 1;
-#X connect 88 0 77 0;
-#X connect 89 0 84 0;
+#X connect 88 0 84 0;
+#X connect 89 0 77 0;
