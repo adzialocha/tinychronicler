@@ -6,6 +6,8 @@ Tiny Chronicler is a travelling music robot. It runs on a RaspberryPi computer e
 
 ## Hardware
 
+<img src="https://raw.githubusercontent.com/adzialocha/tinychronicler/main/box.jpg" width="500" />
+
 - Raspberry Pi 4 Model B w. HDMI output
 - Sound card for Raspberry Pi ([HifiBerry DAC2 Pro](https://www.hifiberry.com/shop/boards/hifiberry-dac2-pro/))
 - 32x32 Pixel LED matrix ([Adafruit](https://learn.adafruit.com/adafruit-rgb-matrix-bonnet-for-raspberry-pi/))
